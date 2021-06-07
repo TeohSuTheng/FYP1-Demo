@@ -12,6 +12,6 @@ urlpatterns = [
     path('form/delete/<int:pk>',views.deletePost,name='delete_form'),
     path('register-form/',views.UserRegister,name='user_reg'),
     path('login-form/',views.UserLogin,name='user_login'),
-    path('logout/',views.logoutUser,name='user_logout'),
     path('user-home/',views.userHome,name='user_home'),
+    path("logout", views.logout_request, name="logout"),
 ]

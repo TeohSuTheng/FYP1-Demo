@@ -4,6 +4,8 @@ from django.views.generic import UpdateView
 from . import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from .models import Usage, Plant, Plant_Usage
 from django.contrib import messages
 #from django.db.models import Q
@@ -41,7 +43,8 @@ def displaySearchResults(request):
         return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results})
     else:
         return render(request,'PlantWebApp/index.html',{})
-    
+
+@login_required(login_url='user_login')    
 def displayPlantForm(request):
     use = Usage.objects.all() #Get usage_tags data from Usage table 
     
@@ -197,33 +200,41 @@ def deletePost(request,pk):
     return render(request, 'PlantWebApp/delete-form.html',context)
 
 def UserRegister(request):
-    form = forms.CreateUserForm()
-    if request.method == "POST":
-        form = forms.CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username') #only get user name
-            messages.success(request,('Account was created for '+user))
-            return redirect('user_login')
-    return render(request, 'PlantWebApp/register-form.html',{'form':form})
+    if request.user.is_authenticated:
+        return redirect('user_home')
+    else:
+        form = forms.CreateUserForm()
+        if request.method == "POST":
+            form = forms.CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username') #only get user name
+                messages.success(request,('Account was created for '+user))
+                return redirect('user_login')
+        return render(request, 'PlantWebApp/register-form.html',{'form':form})
 
 def UserLogin(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password = password)
+    if request.user.is_authenticated:
+        return redirect('user_home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password = password)
 
-        if user is not None:
-            login(request,user)
-            return redirect('user_home')
-        else:
-            messages.info(request, 'Username or password is incorrect.')
+            if user is not None:
+                login(request,user)
+                return redirect('user_home')
+            else:
+                messages.info(request, 'Username or password is incorrect.')
 
-    return render(request, 'PlantWebApp/login-form.html',{})
+        return render(request, 'PlantWebApp/login-form.html',{})
 
-def logoutUser(request):
+def logout_request(request):
     logout(request)
-    return redirect(request,'user_login')
+    messages.info(request, "Logged out successfully!")
+    return redirect("home")
 
+@login_required(login_url='user_login')
 def userHome(request):
     return render(request, 'PlantWebApp/user_home.html',{})
