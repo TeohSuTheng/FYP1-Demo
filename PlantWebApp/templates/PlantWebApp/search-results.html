@@ -1,10 +1,22 @@
 {% extends "PlantWebApp/base.html" %}
 
 {% block content%}
-<h2 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h2>
+<h3 align="center">Plant Search</h3>
+<br>
+<form method="GET" action="{%url 'display_SearchResults' %}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+        <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+    </div>
+</form>
+<br><br><br>
+
+
+<h3 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h3>
     {% if searchquery %}
-        <h4>{{results.count}} result{{results|pluralize}} found </h4> <!--Pluralize-->
-        
+        <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
+        <br>
         <div class="card">
             <h6 class="card-header">
                 <div class="row align-items-start">

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, date
+#from django.contrib.auth.models import User
 
 # Create your models here.
 class Usage(models.Model):
@@ -19,7 +20,7 @@ class Plant(models.Model):
         through="Plant_Usage",
         blank=True
     )
-    #user = models.ForeignKey(User) #when we delete user, data still remains o - session
+    #user = models.ForeignKey(User,on_delete=models.CASCADE) #when we delete user, data still remains o - session
     voucher_no = models.CharField(max_length=100, null=True, blank=True)
     plantDist = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

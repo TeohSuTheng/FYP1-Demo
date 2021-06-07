@@ -1,0 +1,49 @@
+{% extends "PlantWebApp/base.html" %}
+
+{% block content%}
+
+<h3 align="center">Plant Search</h3>
+<br>
+<form method="GET" action="{%url 'display_SearchResults' %}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+        <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+    </div>
+</form>
+<br><br><br>
+
+<h3 align="center">List of Plants</h3>
+<div class="card">
+    <h6 class="card-header">
+        <div class="row align-items-start">
+        <div class="col">
+            Scientific Name
+          </div>
+          <div class="col-8">
+              Common Name
+          </div>
+          <div class="col">
+          </div>
+        </div>
+    </h6>
+    <div class="card-body">
+        {% for plant in plant_list%}
+        <div class="row align-items-start">
+            <div class="col">
+                <p class="card-text">{{plant.plantScientificName}}</p>
+            </div>
+            <div class="col-8">
+                <p class="card-text">{{plant.plantLocalName}}</p>
+            </div>
+            <div class="col">
+                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+            </div>
+            <br><br><br>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock content %}

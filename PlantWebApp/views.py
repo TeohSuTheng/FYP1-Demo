@@ -233,8 +233,12 @@ def UserLogin(request):
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("home")
+    return redirect("browse")
 
 @login_required(login_url='user_login')
 def userHome(request):
     return render(request, 'PlantWebApp/user_home.html',{})
+
+def browse(request):
+    plant_list = Plant.objects.all().order_by('plantScientificName')
+    return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
