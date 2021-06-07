@@ -1,0 +1,114 @@
+{% extends "PlantWebApp/base.html" %}
+
+{% block content%}
+<h1>Add Plant Information</h1>
+
+    <form method="POST" enctype="multipart/form-data" action="{%url 'display_form' %}">  <!--url name-->
+    <!--Can validate form using Bootstrap-->
+        {% csrf_token %}  <!--Token to prevent hackers from hijacking-->
+        <div class="container">
+            <div class="mb-3">
+                <label class="form-label" >Voucher / Specimen Number (if any)</label>
+                <input type="text" class="form-control" name="voucher_no" value="{{voucher_no}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" >Plant Scientific Name</label>
+                <input required type="text" class="form-control" name="plantScientificName" value="{{plantScientificName}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Plant Local Name</label>
+                <input type="text" class="form-control" name="plantLocalName" value="{{plantLocalName}}">
+            </div>
+
+            <label class="form-label">Plant Morphology</label>
+            
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Add Stem Morphology" id="floatingTextarea" name="pmStem" >{{pmStem}}</textarea>
+                <label for="floatingTextarea">Stem</label>
+            </div><br>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Add Leaf Morphology" id="floatingTextarea" name="pmLeaf" >{{pmLeaf}}</textarea>
+                <label for="floatingTextarea">Leaf</label>
+            </div><br>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Add Fruit Morphology" id="floatingTextarea" name="pmFruit" >{{pmFruit}}</textarea>
+                <label for="floatingTextarea">Fruit</label>
+            </div><br>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Add Flower Morphology" id="floatingTextarea" name="pmFlower" >{{pmFlower}}</textarea>
+                <label for="floatingTextarea">Flower</label>
+            </div><br>
+
+            <div class="mb-3">
+                <label class="form-label">Plant Distribution</label>
+                <input type="text" class="form-control" name="plantDist" value="{{plantDist}}">
+            </div>
+
+            <!--div class="mb-3">
+                <label for="inputState" class="form-label">Ethnobotanical Uses</label>
+                <textarea class="form-control" placeholder="Add ethnobotanical uses" id="floatingTextarea" name="usetemp" >{{usetemp}}</textarea>
+            </div-->
+
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Ethnobotanical Uses</label>
+                    <select id="mySelect2" class="form-select" name="usage" multiple="multiple">
+                        {% for uses in use %}
+                            <option value="{{ uses.id }}">{{ uses.usage_tag }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+
+        <!--Javascript Add eventlistener , confirm , POST form, django can add multiple entries?-->
+        <div class="mb-3">
+            <p>
+            <small>Cannot find the uses? </small>
+            <a class="btn btn-light" align-items="center" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <!--a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"-->
+              Add uses
+            </a>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Add usage tags.." aria-label="Recipient's username" aria-describedby="button-addon2" name="usage_tag">
+                        <button class="btn btn-secondary" type="submit" id="button-addon2">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="mb-3">
+                <label for="inputState" class="form-label">References <!--small>(in APA format)</small--></label>
+                <textarea class="form-control" placeholder="Add references" id="floatingTextarea" name="plantref" >{{plantref}}</textarea>
+            </div>
+            <br>
+
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Plant Image Upload</label>
+                <input class="form-control" type="file" id="formFile" name="plantImg">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        
+    </form>
+
+    <script type="text/javascript">
+        // In your Javascript (external .js resource or <script> tag) 
+        
+        $(document).ready(function() {
+            $(document).ready(function() {
+                $('#mySelect2').select2({
+                    'placeholder':'Choose...',
+                    //tags: true,
+                });
+            });
+        });
+
+        //$("#mySelect2").val(Array.from("{{usearr|safe}}"));
+        var tempstr = "{{usearr|safe}}".replace(/[^0-9,]/g, '').split(",");
+        $("#mySelect2").val(tempstr);
+        
+    </script>
+{% endblock content %}

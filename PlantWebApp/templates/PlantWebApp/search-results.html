@@ -1,0 +1,44 @@
+{% extends "PlantWebApp/base.html" %}
+
+{% block content%}
+<h2 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h2>
+    {% if searchquery %}
+        <h4>{{results.count}} result{{results|pluralize}} found </h4> <!--Pluralize-->
+        
+        <div class="card">
+            <h6 class="card-header">
+                <div class="row align-items-start">
+                <div class="col">
+                    Scientific Name
+                  </div>
+                  <div class="col-8">
+                      Common Name
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+            </h6>
+            <div class="card-body">
+                {% for plant in results%}
+                <div class="row align-items-start">
+                    <div class="col">
+                        <p class="card-text">{{plant.plantScientificName}}</p>
+                    </div>
+                    <div class="col-8">
+                        <p class="card-text">{{plant.plantLocalName}}</p>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                    </div>
+                    <br><br><br>
+                </div>
+                {% endfor %}
+    
+            </div>
+        </div>
+    
+    {% else %}
+        <p> Please enter a search query.. </p>
+    {% endif %}
+
+{% endblock content%}

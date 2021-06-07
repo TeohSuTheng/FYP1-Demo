@@ -1,0 +1,15 @@
+{% extends "PlantWebApp/base.html" %}
+
+{% block content %}
+
+
+<p>Are you sure you want to delete <strong>"{{plantScientificName}}"</strong> ?</p>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    <a href="{% url 'display_glossary' %}" class="btn btn-light">Cancel</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+
+</form>
+
+{% endblock content %}
