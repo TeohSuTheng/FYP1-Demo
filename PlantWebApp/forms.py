@@ -9,9 +9,9 @@ from django import forms
 class PlantForm(ModelForm):
     class Meta:
         model = Plant
-        fields = '__all__'  
-        #fields = ('plant_genus','plant_species','plant_localName',) #usage
-
+        #fields = '__all__'  
+        fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
+        'pmFruit','plantImg','usage','voucher_no','plantDist','plantref',)
     # Widgets
 
 class UsageForm(ModelForm):

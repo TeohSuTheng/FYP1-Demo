@@ -1,3 +1,4 @@
+from django.db.models.query import RawQuerySet
 from django.shortcuts import render,redirect, get_object_or_404
 from django.views.generic import UpdateView
 
@@ -80,7 +81,11 @@ def displayPlantForm(request):
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
+            plantdat = plant_form.save(commit=False)
+            plantdat.user = request.user
+            plantdat.save()
             plant_form.save()
+            
             messages.success(request,('Your form has been submitted successfully.'))
             #get plant_id pass to another view method?
             return render(request,'PlantWebApp/plant-form.html',{'use': use})
@@ -168,8 +173,9 @@ def UpdatePostView(request,pk):
         # Verify data
         elif plant_form.is_valid() and use_form.is_valid()==False:
             plant_form.save()
+            plant_list = Plant.objects.filter(user_id=request.user)
             messages.success(request,('Updated successfully.'))
-            return render(request, 'PlantWebApp/index.html',{})
+            return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
     
     context = {
         'plantScientificName':plantdata.plantScientificName,
@@ -192,7 +198,8 @@ def deletePost(request,pk):
 
     if request.method == "POST":
         plantdata.delete()
-        return render(request, 'PlantWebApp/index.html',{})
+        plant_list = Plant.objects.filter(user_id=request.user)
+        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
     context = {
         'plantScientificName':plantdata.plantScientificName,
@@ -224,8 +231,7 @@ def UserRegister(request):
                 #assign user to profile
                 profile.user = user_main
                 profile.save()
-                #profile.user = User.objects.latest('id')
-                
+
                 user = form.cleaned_data.get('username') #only get user name
                 messages.success(request,('Account was created for '+user))
                 return redirect('user_login')

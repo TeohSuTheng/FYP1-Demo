@@ -38,15 +38,15 @@ class Plant(models.Model):
     pmFlower = models.TextField(null=True, blank=True)
     pmFruit = models.TextField(null=True, blank=True)
     plantImg = models.ImageField(blank=True,upload_to='plantImg/',default='default.jpeg') #'images/'
-    #usetemp = models.TextField(null=True, blank=True)
     usage = models.ManyToManyField(
         Usage,
         through="Plant_Usage",
         blank=True
     )
-    user = models.ForeignKey(
+    user= models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True,
     )
     voucher_no = models.CharField(max_length=100, null=True, blank=True)
     plantDist = models.TextField(null=True, blank=True)
