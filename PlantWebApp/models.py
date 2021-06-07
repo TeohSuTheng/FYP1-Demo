@@ -1,8 +1,32 @@
 from django.db import models
 from datetime import datetime, date
-#from django.contrib.auth.models import User
+from django.conf import settings
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    role = models.CharField(max_length=255)
+    dept = models.CharField(max_length=255)
+    institution = models.CharField(max_length=255)
+
+'''
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+'''
+
 class Usage(models.Model):
     usage_tag = models.CharField(max_length=255)
 
@@ -14,17 +38,21 @@ class Plant(models.Model):
     pmFlower = models.TextField(null=True, blank=True)
     pmFruit = models.TextField(null=True, blank=True)
     plantImg = models.ImageField(blank=True,upload_to='plantImg/',default='default.jpeg') #'images/'
-    usetemp = models.TextField(null=True, blank=True)
+    #usetemp = models.TextField(null=True, blank=True)
     usage = models.ManyToManyField(
         Usage,
         through="Plant_Usage",
         blank=True
     )
-    #user = models.ForeignKey(User,on_delete=models.CASCADE) #when we delete user, data still remains o - session
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     voucher_no = models.CharField(max_length=100, null=True, blank=True)
     plantDist = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
+    publish = models.BooleanField(default=False)
     #planttemp = models.TextField(null=True, blank=True)
     #**#ref
     #publish = False (by default)
@@ -34,4 +62,6 @@ class Plant(models.Model):
 class Plant_Usage(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     usageID = models.ForeignKey(Usage,on_delete=models.CASCADE)
+
+
 

@@ -1,4 +1,4 @@
-{% extends "PlantWebApp/base.html" %}
+{% extends "PlantWebApp/base-no-nav.html" %}
 
 {% block content%}
 <br>
@@ -47,7 +47,7 @@
             <p>{{plant_info.plantDist}}</p><br>
             <h4>Reference</h4>
             <p>{{plant_info.plantref|linebreaks}}</p><br><br>
-            <p class="h6">Created on: {{plant_info.created_at.date}}</p>
+            <p class="h6">Created on: {{plant_info.created_at.date}} by {{plant_info.user.first_name}} {{plant_info.user.last_name}}</p>
         </div>
     </div>
 

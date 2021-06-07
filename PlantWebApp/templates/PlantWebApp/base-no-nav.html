@@ -1,4 +1,4 @@
-<!--Template inheritance: Base with nav bar for user-->
+<!--Template inheritance: Temporary base without nav bar for plant-info.html-->
 
 <!doctype html>
 <html lang="en">
@@ -16,40 +16,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <title>Digital Plant Herbarium</title>
-    <style>
-        .hello-msg{
-            font-size: 18px;
-            color: aliceblue;
-            margin-right: 20px;
-        }
-    </style>
   </head>
   
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
-      <div class="container-fluid">
-        <!--a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button-->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{%url 'user_home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{%url 'display_form' %}">Add Plant</a>
-            </li>
-            </ul>
-        </div>
-        <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
-        <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
-      </div>
-    </nav>
-
     <div class="container">
       <br>
       <!--Pop-up message-->

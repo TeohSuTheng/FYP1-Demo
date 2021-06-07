@@ -1,4 +1,4 @@
-{% extends "PlantWebApp/base.html" %}
+{% extends "PlantWebApp/base_user.html" %}
 
 {% block content %}
 
@@ -7,7 +7,7 @@
 
 <form method="POST" action="">
     {% csrf_token %}
-    <a href="{% url 'display_glossary' %}" class="btn btn-light">Cancel</a>
+    <a href="{% url 'user_home' %}" class="btn btn-light">Cancel</a>
     <button type="submit" class="btn btn-danger">Delete</button>
 
 </form>

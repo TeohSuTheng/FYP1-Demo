@@ -5,8 +5,9 @@ from . import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-from .models import Usage, Plant, Plant_Usage
+from .models import Profile, Usage, Plant, Plant_Usage
 from django.contrib import messages
 #from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchQuery
@@ -54,7 +55,6 @@ def displayPlantForm(request):
 
         # Verify data
         if use_form.is_valid():
-            
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
             
@@ -204,13 +204,34 @@ def UserRegister(request):
         return redirect('user_home')
     else:
         form = forms.CreateUserForm()
+
         if request.method == "POST":
             form = forms.CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
+            profile = forms.UserProfileForm(request.POST)
+            fname = request.POST['first_name']
+            lname = request.POST['last_name']
+            uname = request.POST['username']
+            email = request.POST['email']
+            profile_form = forms.UserProfileForm(request.POST)
+            
+            if form.is_valid() and profile_form.is_valid:
+                if any(i.isdigit() for i in fname) or any(i.isdigit() for i in lname):
+                    messages.info(request, "Incorrect format for name")
+                    return render(request, 'PlantWebApp/register-form.html',{'form':form,'username':uname,'email':email})
+                user_main = form.save()
+                profile = profile_form.save(commit=False)
+
+                #assign user to profile
+                profile.user = user_main
+                profile.save()
+                #profile.user = User.objects.latest('id')
+                
                 user = form.cleaned_data.get('username') #only get user name
                 messages.success(request,('Account was created for '+user))
                 return redirect('user_login')
+
+            return render(request, 'PlantWebApp/register-form.html',{'form':form,'first_name':fname,'last_name':lname, 'username':uname,'email':email})
+
         return render(request, 'PlantWebApp/register-form.html',{'form':form})
 
 def UserLogin(request):
@@ -237,7 +258,8 @@ def logout_request(request):
 
 @login_required(login_url='user_login')
 def userHome(request):
-    return render(request, 'PlantWebApp/user_home.html',{})
+    plant_list = Plant.objects.filter(user_id=request.user)
+    return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
 def browse(request):
     plant_list = Plant.objects.all().order_by('plantScientificName')
