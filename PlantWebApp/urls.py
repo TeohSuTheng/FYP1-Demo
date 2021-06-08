@@ -15,4 +15,5 @@ urlpatterns = [
     path('user-home/',views.userHome,name='user_home'),
     path("logout", views.logout_request, name="logout"),
     path('',views.browse,name='browse'),
+    path('use-chart',views.usage_chart,name='use-chart'),
 ]

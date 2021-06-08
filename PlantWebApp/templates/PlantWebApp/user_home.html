@@ -1,6 +1,8 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <h3 align="center">My Plant List</h3>
 <br>
 <div class="card">
@@ -36,4 +38,52 @@
 
     </div>
 </div>
+
+<br><br>
+<h3 align="center">Plants by User Based On Their Uses</h3><br><br>
+<div>
+    <canvas id="use-chart" data-url="{% url 'use-chart' %}"></canvas>
+</div>
+
+<script>
+        $(function () {
+
+        var $useChart = $("#use-chart");
+        $.ajax({
+        url: $useChart.data("url"),
+        success: function (data) {
+
+            var ctx = $useChart[0].getContext("2d");
+
+            new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                label: 'Plant record',
+                backgroundColor: 'green',
+                data: data.data
+                }]          
+            },
+            options: {
+                responsive: true,
+                legend: {
+                position: 'top',
+                },
+                title: {
+                display: true,
+                text: 'Bar Chart of Plants Based On Their Uses'
+                }
+            }
+            });
+
+        }
+        });
+
+        });
+
+</script>
+
+    </script>
+
 {% endblock content %}

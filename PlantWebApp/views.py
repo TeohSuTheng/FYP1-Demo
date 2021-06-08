@@ -10,9 +10,9 @@ from django.contrib.auth.models import User
 
 from .models import Profile, Usage, Plant, Plant_Usage
 from django.contrib import messages
-#from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery
-import json
+from django.http import JsonResponse
 
 def home(request):
     """
@@ -276,3 +276,39 @@ def browse(request):
     else:
         plant_list = Plant.objects.all().order_by('plantScientificName')
         return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
+
+def usage_chart(request):
+    label_id = []
+    labels = []
+    data = []
+
+    #plant_list = Plant.objects.filter(user_id=request.user).distinct('usage').values('usage') # get list of plant objects based on the user
+    #print(plant_list)
+    #tmp = []
+    #for entry in plant_list:
+    #    tmp.append(entry['usage'])
+    #tmplist = Usage.objects.filter(id__in=tmp).values('usage_tag')
+    #for entry in tmplist:
+    #    labels.append(entry['usage_tag'])
+    #print(labels)
+    
+    #1. Get a set of plants created by user
+    #2. Get usage field from plant object
+    #3. Count each field
+    plant_count = Plant.objects.filter(user_id=request.user).values('usage').annotate(Count('usage')) # get list of plant objects based on the user
+    print(plant_count)
+    for entry in plant_count:
+        label_id.append(entry['usage'])
+        data.append(entry['usage__count'])
+    #print(label_id)
+    #print(data)
+
+    # Get sets of usage_tag based on usage_id
+    tmplist = Usage.objects.filter(id__in=label_id).values('usage_tag')
+    for entry_lb in tmplist:
+        labels.append(entry_lb['usage_tag'])
+    
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })

@@ -55,7 +55,6 @@ class Plant(models.Model):
     publish = models.BooleanField(default=False)
     #planttemp = models.TextField(null=True, blank=True)
     #**#ref
-    #publish = False (by default)
     #published_at
     #updated_at = models.DateTimeField(auto_now=True)
 
