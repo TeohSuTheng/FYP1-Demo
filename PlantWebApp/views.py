@@ -136,6 +136,7 @@ def displayPlant(request,id):
     }
     return render(request, 'PlantWebApp/plant-info.html',context)
 
+@login_required(login_url='user_login')
 def UpdatePostView(request,pk):
     use = Usage.objects.all() #get uses_tags from Usage table
     plantdata = Plant.objects.get(id=pk) #get object from Plant table
@@ -152,7 +153,8 @@ def UpdatePostView(request,pk):
         if use_form.is_valid():
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
-            usearr.append(latest_use) #append the newly saved usage tag
+            usearr = request.POST.getlist('usage')#Added
+            usearr.append(latest_use) #append the newly saved usage tag ###
 
             context = {
             'plantScientificName':plantdata.plantScientificName,
@@ -193,6 +195,7 @@ def UpdatePostView(request,pk):
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 
+@login_required(login_url='user_login')
 def deletePost(request,pk):
     plantdata = Plant.objects.get(id=pk) #get object from Plant table
 
@@ -268,5 +271,8 @@ def userHome(request):
     return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
 def browse(request):
-    plant_list = Plant.objects.all().order_by('plantScientificName')
-    return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
+    if request.user.is_authenticated:
+        return redirect('user_home')
+    else:
+        plant_list = Plant.objects.all().order_by('plantScientificName')
+        return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
