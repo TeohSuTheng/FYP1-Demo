@@ -147,7 +147,7 @@ def displayPlant(request,id):
 @login_required(login_url='user_login')
 def UpdatePostView(request,pk):
     use = Usage.objects.all() #get uses_tags from Usage table
-    plantdata = Plant.objects.get(id=pk) #get object from Plant table
+    plantdata = Plant.objects.get(id=pk) #get particular plant object from Plant table
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
     plantUsageData = Plant_Usage.objects.filter(plantID=pk).values_list('usageID', flat=True)
@@ -204,7 +204,7 @@ def UpdatePostView(request,pk):
                 return render(request, 'PlantWebApp/update-form.html',context)
 
             plant_form.save()
-            plant_list = Plant.objects.filter(user_id=request.user)
+            plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
             messages.success(request,('Updated successfully.'))
             return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
     
@@ -230,7 +230,7 @@ def deletePost(request,pk):
 
     if request.method == "POST":
         plantdata.delete()
-        plant_list = Plant.objects.filter(user_id=request.user)
+        plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
         return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
     context = {
@@ -296,7 +296,7 @@ def logout_request(request):
 
 @login_required(login_url='user_login')
 def userHome(request):
-    plant_list = Plant.objects.filter(user_id=request.user)
+    plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
     return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
 def browse(request):
