@@ -81,6 +81,14 @@ def displayPlantForm(request):
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
+            
+            ## Check if usage tag is unique:
+            tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
+            
+            if tag_exist:
+                messages.success(request,('The plant usage entered already exists in our database.'))
+                return render(request,'PlantWebApp/plant-form.html',{'use': use})
+
             plantdat = plant_form.save(commit=False)
             plantdat.user = request.user
             plantdat.save()
@@ -172,8 +180,29 @@ def UpdatePostView(request,pk):
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
-        # Verify data
+        # Verify data # CHECK unique
         elif plant_form.is_valid() and use_form.is_valid()==False:
+            
+            ## Check if usage tag is unique:
+            tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
+            if tag_exist:
+                messages.success(request,('The plant usage entered already exists in our database.'))
+                context = {
+                    'plantScientificName':plantdata.plantScientificName,
+                    'plantLocalName':plantdata.plantLocalName,
+                    "pmStem":plantdata.pmStem,
+                    "pmLeaf":plantdata.pmLeaf,
+                    "pmFlower": plantdata.pmFlower,
+                    "pmFruit": plantdata.pmFruit,
+                    "plantImg": plantdata.plantImg,
+                    "voucher_no":plantdata.voucher_no,
+                    "plantDist":plantdata.plantDist,
+                    "plantref":plantdata.plantref,
+                    "usearr":usearr,
+                    'use': use
+                }
+                return render(request, 'PlantWebApp/update-form.html',context)
+
             plant_form.save()
             plant_list = Plant.objects.filter(user_id=request.user)
             messages.success(request,('Updated successfully.'))
@@ -281,16 +310,6 @@ def usage_chart(request):
     label_id = []
     labels = []
     data = []
-
-    #plant_list = Plant.objects.filter(user_id=request.user).distinct('usage').values('usage') # get list of plant objects based on the user
-    #print(plant_list)
-    #tmp = []
-    #for entry in plant_list:
-    #    tmp.append(entry['usage'])
-    #tmplist = Usage.objects.filter(id__in=tmp).values('usage_tag')
-    #for entry in tmplist:
-    #    labels.append(entry['usage_tag'])
-    #print(labels)
     
     #1. Get a set of plants created by user
     #2. Get usage field from plant object

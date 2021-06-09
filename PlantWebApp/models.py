@@ -28,7 +28,7 @@ def save_user_profile(sender, instance, **kwargs):
 '''
 
 class Usage(models.Model):
-    usage_tag = models.CharField(max_length=255)
+    usage_tag = models.CharField(max_length=255,unique=True)
 
 class Plant(models.Model):
     plantScientificName =  models.CharField(max_length=255,unique=True)
