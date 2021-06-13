@@ -300,11 +300,8 @@ def userHome(request):
     return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
 
 def browse(request):
-    if request.user.is_authenticated:
-        return redirect('user_home')
-    else:
-        plant_list = Plant.objects.all().order_by('plantScientificName')
-        return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
+    plant_list = Plant.objects.all().order_by('plantScientificName')
+    return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
 
 def usage_chart(request):
     label_id = []
