@@ -35,7 +35,13 @@ def displaySearchResults(request):
         # postgresql search vector
         #results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName')).filter(search=searchquery)
 
-        # postgresql search query - stemming algorithm - logical combination of terms #advanced search
+        # postgresql search query - stemming algorithm #advanced search
+        '''
+        SearchQuery translates the terms the user provides into a search query object that the 
+        database compares to a search vector. By default, all the words the user provides are 
+        passed through the stemming algorithms, and then it looks for matches for all of the
+        resulting terms.
+        '''
         results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no')).filter(search=SearchQuery(searchquery))
 
         # SearchRank
