@@ -1,0 +1,50 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.hero{
+    width:100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    position: relative;
+    overflow: hidden;
+}
+
+#text-wrapper{
+    color: white;
+    text-align: left;
+    padding: 50px;
+    width: 60%;
+}
+
+.headline{
+    font-size: 40px;
+    line-height: 1.5;
+}
+
+.parallax{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.partition-discover{
+    height:100vh;
+}
+
+.partition-background{
+    height:100vh;
+    background-color: #2D442F;
+}
+
+.partition-about{
+    height:100vh;
+}

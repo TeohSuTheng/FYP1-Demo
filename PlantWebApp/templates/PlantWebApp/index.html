@@ -1,8 +1,43 @@
-{% extends "PlantWebApp/base-no-nav.html" %}
+{% load static %}
 
-{% block content%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Plant Herbarium</title>
+    <link rel="stylesheet" href="{% static '/css/home.css' %}">
+    <!--Animate css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+    <section class="hero">
+        <img class="parallax" src="{% static '/images/Home-Header.jpg' %}" alt="">
+        <div class="animate__animated animate__fadeInDown animate__delay-1s" id="text-wrapper">
+            <h1 class="headline">Digital Plant Herbarium</h1>
+            <h4 class="subheader">A plant management system to store various medicinal plant information digitally for future research.</h4>
+        </div>
+    </section>
 
-<h3 align="center">Plant Search</h3>
+    <section class="partition-discover"><p>Discover</p></section>
+    <section class="partition-background"><p>Project Background</p></section>
+    <section class="partition-about"><p>About Us</p></section>
+
+
+    <script>
+        window.addEventListener('scroll',function(){
+            const parallax = document.querySelector('.parallax');
+            let scrollPosition = window.pageYOffset;
+            parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
+        })
+    </script>
+</body>
+</html>
+
+
+
+<!--h3 align="center">Plant Search</h3>
 <br>
 <form method="GET" action="{%url 'display_SearchResults' %}">
     {% csrf_token %}
@@ -12,7 +47,6 @@
     </div>
 </form>
 
-<!--
 <h3>Advanced search</h3> - boolean operators
 
 <h3>Search plant by usage tags</h3>
@@ -25,4 +59,3 @@
 </form>
 -->
 
-{% endblock content %}
