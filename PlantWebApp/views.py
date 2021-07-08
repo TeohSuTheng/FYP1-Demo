@@ -14,6 +14,8 @@ from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.http import JsonResponse
 
+from django.contrib.auth.models import User
+
 def home(request):
     """
     Display home page
@@ -302,8 +304,12 @@ def logout_request(request):
 
 @login_required(login_url='user_login')
 def userHome(request):
-    plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-    return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
+    if request.user.is_staff:
+        return render(request, 'PlantWebApp/plant-glossary.html',{})
+    else:
+        plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
+        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
+    ## if (is_staff==True) redirect to another page
 
 def browse(request):
     plant_list = Plant.objects.all().order_by('plantScientificName')
