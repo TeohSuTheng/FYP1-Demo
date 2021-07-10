@@ -52,7 +52,7 @@ class Plant(models.Model):
     plantDist = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
-    #publish = models.BooleanField(default=False)
+    publish = models.BooleanField(default=False)
     #planttemp = models.TextField(null=True, blank=True)
     #**#ref
     #published_at

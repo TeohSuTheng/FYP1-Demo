@@ -305,14 +305,16 @@ def logout_request(request):
 @login_required(login_url='user_login')
 def userHome(request):
     if request.user.is_staff:
-        return render(request, 'PlantWebApp/plant-glossary.html',{})
+        plant_list = Plant.objects.all().order_by('plantScientificName')
+        return render(request, 'PlantWebApp/admin-home.html',{})
     else:
         plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
         return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
     ## if (is_staff==True) redirect to another page
 
 def browse(request):
-    plant_list = Plant.objects.all().order_by('plantScientificName')
+    # Only pubish plants that are verified by admin
+    plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
     return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
 
 def usage_chart(request):
@@ -341,3 +343,26 @@ def usage_chart(request):
         'labels': labels,
         'data': data,
     })
+
+@login_required(login_url='user_login')
+def unpubList(request):
+    if request.user.is_staff:
+        # Arrange in the order from earliest to latest
+        plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
+        return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+@login_required(login_url='user_login')
+def publishAction(request,pk):
+    if request.user.is_staff:
+        plantdata = Plant.objects.get(id=pk)
+        plantdata.publish = True
+        plantdata.save(update_fields=['publish'])
+        # message **
+        
+        # unpubList
+        # Arrange in the order from earliest to latest
+        plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
+        return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+
+

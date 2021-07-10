@@ -16,4 +16,6 @@ urlpatterns = [
     path("logout", views.logout_request, name="logout"),
     path('',views.browse,name='browse'),
     path('use-chart',views.usage_chart,name='use-chart'),
+    path('unpublished-list',views.unpubList,name='unpubList'),
+    path('publish/<int:pk>',views.publishAction,name='publish'),
 ]
