@@ -10,7 +10,20 @@
             <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
             <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
           </p>
+          {% elif user.is_staff %}
+            {% if user.is_authenticated %}
+              {% if plant_info.publish == false %}
+                <p align="center">
+                  <a href="{% url 'publish' plant_info.id%}" class="btn btn-outline-success">Publish</a>
+                  <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
+                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Reject**</a>
+                </p>
+              {% else %}
+                <h1>Other - unpublish - update</h1>
+              {% endif %}
+            {% endif %}
           {% endif %}
+
         {% endif %}
         <br><br>
         <div class="row">

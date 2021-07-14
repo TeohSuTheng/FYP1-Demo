@@ -305,11 +305,15 @@ def logout_request(request):
 @login_required(login_url='user_login')
 def userHome(request):
     if request.user.is_staff:
+        #site admin - change to is_superuser if want
         plant_list = Plant.objects.all().order_by('plantScientificName')
         return render(request, 'PlantWebApp/admin-home.html',{})
     else:
-        plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
+        pub_list = Q(user_id=request.user) & Q(publish=True)
+        pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
+        unpub_list = Q(user_id=request.user) & Q(publish=False)
+        plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
+        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list})
     ## if (is_staff==True) redirect to another page
 
 def browse(request):
