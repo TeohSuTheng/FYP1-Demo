@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('test/',views.home,name='home'),
+
     path('search-results/',views.displaySearchResults,name='display_SearchResults'),
     path('form/',views.displayPlantForm,name='display_form'),
     path('glossary/',views.displayGlossary,name='display_glossary'),
@@ -18,4 +19,6 @@ urlpatterns = [
     path('use-chart',views.usage_chart,name='use-chart'),
     path('unpublished-list/',views.unpubList,name='unpubList'),
     path('publish/<int:pk>',views.publishAction,name='publish'),
+
+    path('country-settings/',views.country_settings,name='settings'),
 ]

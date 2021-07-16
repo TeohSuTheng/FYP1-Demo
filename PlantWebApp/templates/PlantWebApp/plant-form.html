@@ -39,10 +39,10 @@
                 <label for="floatingTextarea">Flower</label>
             </div><br>
 
-            <div class="mb-3">
+            <!--div class="mb-3">
                 <label class="form-label">Plant Distribution</label>
                 <input type="text" class="form-control" name="plantDist" value="{{plantDist}}">
-            </div>
+            </div-->
 
             <div class="mb-3">
                 <label for="inputState" class="form-label">Ethnobotanical Uses</label>
@@ -72,6 +72,15 @@
             </div>
         </div>
 
+        <div class="mb-3">
+            <label for="inputState" class="form-label">Plant Distribution</label>
+                <select id="selectDist" class="form-select" name="distribution" multiple="multiple">
+                    {% for dat in dist %}
+                        <option value="{{ dat.id }}">{{ dat.countryName }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
 
             <div class="mb-3">
                 <label for="inputState" class="form-label">References <!--small>(in APA format)</small--></label>
@@ -94,11 +103,14 @@
         // In your Javascript (external .js resource or <script> tag) 
         
         $(document).ready(function() {
-            $(document).ready(function() {
-                $('#mySelect2').select2({
+            $('#mySelect2').select2({
                     'placeholder':'Choose...',
                     //tags: true,
-                });
+            });
+
+            $('#selectDist').select2({
+                    'placeholder':'Choose...',
+                    //tags: true,
             });
         });
 

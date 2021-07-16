@@ -30,6 +30,10 @@ def save_user_profile(sender, instance, **kwargs):
 class Usage(models.Model):
     usage_tag = models.CharField(max_length=255,unique=True)
 
+class Distribution(models.Model):
+    country_alpha2 = models.CharField(max_length=2)
+    countryName = models.CharField(max_length=100)
+
 class Plant(models.Model):
     plantScientificName =  models.CharField(max_length=255,unique=True)
     plantLocalName = models.TextField(null=True, blank=True)
@@ -49,6 +53,12 @@ class Plant(models.Model):
         null=True,
     )
     voucher_no = models.CharField(max_length=100, null=True, blank=True)
+    distribution = models.ManyToManyField(
+        Distribution,
+        through="Plant_Distribution",
+        blank=True,
+        null=True
+    )
     plantDist = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
@@ -59,8 +69,12 @@ class Plant(models.Model):
     #updated_at = models.DateTimeField(auto_now=True)
     #usetemp = models.TextField(null=True, blank=True)
 
+# Bridge entity for plant and usage
 class Plant_Usage(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     usageID = models.ForeignKey(Usage,on_delete=models.CASCADE)
 
-
+# Bridge entity for plant and distribution
+class Plant_Distribution(models.Model):
+    plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
+    distID = models.ForeignKey(Distribution,on_delete=models.CASCADE)

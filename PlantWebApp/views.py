@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .models import Profile, Usage, Plant, Plant_Usage
+from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery
@@ -57,7 +57,8 @@ def displaySearchResults(request):
 @login_required(login_url='user_login')    
 def displayPlantForm(request):
     use = Usage.objects.all() #Get usage_tags data from Usage table 
-    
+    dist = Distribution.objects.all()
+
     if request.method == "POST":
         plant_form = forms.PlantForm(data=request.POST, files=request.FILES)
         use_form = forms.UsageForm(request.POST)
@@ -78,18 +79,16 @@ def displayPlantForm(request):
                 'pmLeaf':request.POST['pmLeaf'],
                 'pmFruit':request.POST['pmFruit'],
                 'pmFlower':request.POST['pmFlower'],
-                'plantDist': request.POST['plantDist'],
                 'voucher_no': request.POST['voucher_no'],
                 'use': use,
                 'usearr':usearr,
                 'plantref': request.POST['plantref'],
-                
+                'dist':dist,
             }
             
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
-            
             ## Check if usage tag is unique:
             tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
             
@@ -104,7 +103,7 @@ def displayPlantForm(request):
             
             messages.success(request,('Your form has been submitted successfully.'))
             #get plant_id pass to another view method?
-            return render(request,'PlantWebApp/plant-form.html',{'use': use})
+            return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist})
         else:
             plantScientificName = request.POST['plantScientificName']
             usearr = request.POST.getlist('usage')
@@ -116,12 +115,13 @@ def displayPlantForm(request):
                 'pmLeaf':request.POST['pmLeaf'],
                 'pmFruit':request.POST['pmFruit'],
                 'pmFlower':request.POST['pmFlower'],
-                'plantDist': request.POST['plantDist'],
                 'voucher_no': request.POST['voucher_no'],
                 'use': use,
                 'usearr':usearr,
                 'plantref': request.POST['plantref'],
+                'dist':dist,
             }
+            
             #if scientific name is not unique - means already exist
             plant_exist = Plant.objects.filter(plantScientificName=plantScientificName)
             if plant_exist:
@@ -130,25 +130,39 @@ def displayPlantForm(request):
                 messages.success(request,('There is an error in your form. Please try again.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)            
 
-    return render(request,'PlantWebApp/plant-form.html',{'use': use})
+    return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist})
 
 def displayGlossary(request):
     plant_list = Plant.objects.all().order_by('plantScientificName')
     return render(request, 'PlantWebApp/plant-glossary.html',{'plant_list':plant_list})
 
 def displayPlant(request,id):
-
     # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
+    countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
 
     use_list = []
     for i in plantUsageData:
         # [0] - to retrieve values inside the queryset
         use_list.append(Usage.objects.filter(id=i)[0].usage_tag)
+
+    country_list = []
+    for j in countryData:
+        country_list.append(Distribution.objects.filter(id=j)[0].country_alpha2)
+
+    country_name = []
+    for k in countryData:
+        country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
+
+    print(country_name)
+
     context = {
         'plant_info':get_object_or_404(Plant,pk=id),
         'plantUsageData':plantUsageData,
         'use_list':use_list,
+        'country_list':country_list,
+        'country_name':country_name,
+
     }
     return render(request, 'PlantWebApp/plant-info.html',context)
 
@@ -156,11 +170,16 @@ def displayPlant(request,id):
 def UpdatePostView(request,pk):
     use = Usage.objects.all() #get uses_tags from Usage table
     plantdata = Plant.objects.get(id=pk) #get particular plant object from Plant table
+    dist = Distribution.objects.all() #get distribution_country from Distribution table
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
     plantUsageData = Plant_Usage.objects.filter(plantID=pk).values_list('usageID', flat=True)
     usearr= list(plantUsageData)
     #print(usearr)
+
+    countryData = Plant_Distribution.objects.filter(plantID=pk).values_list('distID',flat=True)
+    countryarr = list(countryData)
+    print(countryarr)
 
     if request.method == "POST":
         use_form = forms.UsageForm(request.POST)
@@ -184,7 +203,9 @@ def UpdatePostView(request,pk):
             "plantDist":plantdata.plantDist,
             "plantref":plantdata.plantref,
             "usearr":usearr,
-            'use': use
+            'use': use,
+            'countryarr':countryarr,
+            'dist':dist,
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -207,7 +228,9 @@ def UpdatePostView(request,pk):
                     "plantDist":plantdata.plantDist,
                     "plantref":plantdata.plantref,
                     "usearr":usearr,
-                    'use': use
+                    'use': use,
+                    'countryarr':countryarr,
+                    'dist':dist,
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -228,7 +251,9 @@ def UpdatePostView(request,pk):
         "plantDist":plantdata.plantDist,
         "plantref":plantdata.plantref,
         "usearr":usearr,
-        'use': use
+        'use': use,
+        'countryarr':countryarr,
+        'dist':dist,
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -368,5 +393,12 @@ def publishAction(request,pk):
         plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
         return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
-
+def country_settings(request):
+    #login required
+    #request.user.is_staff
+    country_form = forms.DistributionForm(request.POST)
+    if request.method == "POST":
+        if country_form.is_valid:
+            country_form.save()
+    return render(request,'PlantWebApp/country-settings.html',{'country_form':country_form})
 

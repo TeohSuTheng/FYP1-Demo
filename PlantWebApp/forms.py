@@ -1,5 +1,5 @@
 from django.db.models import fields
-from .models import Plant, Usage, Profile
+from .models import Distribution, Plant, Usage, Profile
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -11,7 +11,7 @@ class PlantForm(ModelForm):
         model = Plant
         #fields = '__all__'  
         fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
-        'pmFruit','plantImg','usage','voucher_no','plantDist','plantref',)
+        'pmFruit','plantImg','usage','voucher_no','distribution','plantref',)
     # Widgets
 
 class UsageForm(ModelForm):
@@ -29,5 +29,7 @@ class UserProfileForm(ModelForm):
         model = Profile
         fields = ['institution','dept','role'] #'__all__' 
 
-
-
+class DistributionForm(ModelForm):
+    class Meta:
+        model = Distribution
+        fields = '__all__'
