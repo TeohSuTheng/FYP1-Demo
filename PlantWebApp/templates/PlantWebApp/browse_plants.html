@@ -11,6 +11,40 @@
         <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
     </div>
 </form>
+<br>
+
+<!--form method="GET" action="{%url 'display_SearchResults' %}" id="SearchKeywordForm">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" class="form-control" name="searchquery" placeholder="Search plant.." aria-label="Text input with segmented dropdown button">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+        <select type="button" id="choice" onchange="myFunction()" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <option selected="selected" value ="Keyword">By Keyword</option>
+            <option value="Use">By Usage</option>
+        </select>
+    </div>
+
+
+<form method="GET" action="{%url 'display_SearchResults' %}" id="SearchUseForm">
+    {% csrf_token %}
+    <div class="input-group">
+              
+        <select class="form-select" id="use-search" name="state">
+            <option value="AL">Alabama</option>
+              ...
+            <option value="WY">Wyoming</option>
+        </select>
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+</form>
+
+        <select type="button" id="choice" onchange="myFunction()" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <option selected="selected" value ="Use">By Usage</option>
+            <option value="Keyword">By Keyword</option>
+        </select>
+
+    </div-->
+
 <br><br><br>
 
 <h3 align="center">List of Plants</h3>
@@ -46,5 +80,32 @@
     </div>
 </div>
 <br><br><br>
+
+<!--script>
+    
+    /*If choice == Use - display select2js choices*/
+    function myFunction() {
+        var x = document.getElementById("choice").value;
+        alert(x);
+
+        if (x == "Use")
+        {
+            $('#SearchKeywordForm').hide();
+            $('#SearchUseForm').show();
+        }
+        else {
+            $('#SearchUseForm').hide();
+            $('#SearchKeywordForm').show();
+        }
+    }
+
+
+    $(document).ready(function() {
+        $('#use-search').select2({
+            'placeholder':'Select a plant etnobotanical use..',
+        });
+    });
+
+</script-->
 
 {% endblock content %}

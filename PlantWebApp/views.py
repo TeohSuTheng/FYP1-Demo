@@ -12,9 +12,12 @@ from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Dist
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from django.contrib.auth.models import User
+from tablib import Dataset
+
+from .resources import DistResource
 
 def home(request):
     """
@@ -44,13 +47,13 @@ def displaySearchResults(request):
         passed through the stemming algorithms, and then it looks for matches for all of the
         resulting terms.
         '''
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no')).filter(search=SearchQuery(searchquery))
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery))
 
         # SearchRank
 
         # raw sql -1.get usage id where tags = '' 2.get plants where usage.id = '1.'
 
-        return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results})
+        return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,})
     else:
         return render(request,'PlantWebApp/index.html',{})
 
@@ -393,7 +396,7 @@ def publishAction(request,pk):
         plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
         return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
-def country_settings(request):
+def country_settings1(request):
     #login required
     #request.user.is_staff
     country_form = forms.DistributionForm(request.POST)
@@ -402,3 +405,26 @@ def country_settings(request):
             country_form.save()
     return render(request,'PlantWebApp/country-settings.html',{'country_form':country_form})
 
+def country_settings(request):
+    if request.method == "POST":
+        dist_resource = DistResource()
+        dataset = Dataset()
+        new_dist = request.FILES['myfile']
+
+        if not new_dist.name.endswith('xlsx'):
+            messages.info(request,'Wrong format.')
+            return render(request,'PlantWebApp/country-settings.html',{})
+
+        imported_data = dataset.load(new_dist.read(), format='xlsx')
+        for data in imported_data:
+            value = Distribution(
+                data[0],
+                data[1],
+                data[2],
+            )
+            value.save()
+    return render(request,'PlantWebApp/country-settings.html',{})
+
+
+
+#def admin_upload(request)

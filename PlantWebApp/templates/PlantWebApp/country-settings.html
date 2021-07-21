@@ -7,10 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
+    <!--form action="" method="post">
         {% csrf_token %}
         {{ country_form.as_p }}
         <input type="submit" value="Submit">
+    </form-->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="myfile">
+        <button type="submit">Upload</button>
     </form>
 </body>
 </html>
