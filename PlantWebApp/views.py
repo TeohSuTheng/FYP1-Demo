@@ -23,7 +23,16 @@ def home(request):
     """
     Display home page
     """
-    return render(request,'PlantWebApp/index.html',{})
+    plant_pub = Plant.objects.filter(publish=True).count()
+    use_tag = Usage.objects.count()
+    user_no = User.objects.count()
+
+    context = {
+        'plant_pub':plant_pub,
+        'use_tag':use_tag,
+        'user_no' : user_no
+    }
+    return render(request,'PlantWebApp/index.html',context)
 
 def displaySearchResults(request):
     if request.method == "GET":
@@ -396,15 +405,6 @@ def publishAction(request,pk):
         plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
         return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
-def country_settings1(request):
-    #login required
-    #request.user.is_staff
-    country_form = forms.DistributionForm(request.POST)
-    if request.method == "POST":
-        if country_form.is_valid:
-            country_form.save()
-    return render(request,'PlantWebApp/country-settings.html',{'country_form':country_form})
-
 def country_settings(request):
     if request.method == "POST":
         dist_resource = DistResource()
@@ -425,6 +425,10 @@ def country_settings(request):
             value.save()
     return render(request,'PlantWebApp/country-settings.html',{})
 
+def browse_use(request):
+    return render(request,'PlantWebApp/browse-use.html',{})
 
+def browse_dist(request):
+    return render(request,'PlantWebApp/browse-dist.html',{})
 
 #def admin_upload(request)
