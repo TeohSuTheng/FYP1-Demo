@@ -6,6 +6,7 @@ from . import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 
 from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution
@@ -337,7 +338,7 @@ def UserLogin(request):
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("browse")
+    return redirect("home")
 
 @login_required(login_url='user_login')
 def userHome(request):
@@ -385,26 +386,25 @@ def usage_chart(request):
         'data': data,
     })
 
-@login_required(login_url='user_login')
+@staff_member_required(login_url='user_login')
 def unpubList(request):
-    if request.user.is_staff:
         # Arrange in the order from earliest to latest
         plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
         return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
-@login_required(login_url='user_login')
+@staff_member_required(login_url='user_login')
 def publishAction(request,pk):
-    if request.user.is_staff:
-        plantdata = Plant.objects.get(id=pk)
-        plantdata.publish = True
-        plantdata.save(update_fields=['publish'])
-        # message **
+    plantdata = Plant.objects.get(id=pk)
+    plantdata.publish = True
+    plantdata.save(update_fields=['publish'])
+    # message **
         
-        # unpubList
-        # Arrange in the order from earliest to latest
-        plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
-        return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+    # unpubList
+    # Arrange in the order from earliest to latest
+    plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
+    return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
+@staff_member_required(login_url='user_login')
 def country_settings(request):
     if request.method == "POST":
         dist_resource = DistResource()
@@ -425,10 +425,35 @@ def country_settings(request):
             value.save()
     return render(request,'PlantWebApp/country-settings.html',{})
 
-def browse_use(request):
-    return render(request,'PlantWebApp/browse-use.html',{})
+@staff_member_required(login_url='user_login')
+def rejectPostView(request,id):
+        # Get queryset of usageID filter by plantID from Plant_Usage table
+    plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
+    countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
 
-def browse_dist(request):
-    return render(request,'PlantWebApp/browse-dist.html',{})
+    use_list = []
+    for i in plantUsageData:
+        # [0] - to retrieve values inside the queryset
+        use_list.append(Usage.objects.filter(id=i)[0].usage_tag)
+
+    country_list = []
+    for j in countryData:
+        country_list.append(Distribution.objects.filter(id=j)[0].country_alpha2)
+
+    country_name = []
+    for k in countryData:
+        country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
+
+    print(country_name)
+
+    context = {
+        'plant_info':get_object_or_404(Plant,pk=id),
+        'plantUsageData':plantUsageData,
+        'use_list':use_list,
+        'country_list':country_list,
+        'country_name':country_name,
+
+    }
+    return render(request,'PlantWebApp/rejection-form.html',context)
 
 #def admin_upload(request)

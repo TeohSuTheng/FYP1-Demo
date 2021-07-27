@@ -10,6 +10,7 @@ urlpatterns = [
     path('plant/<int:id>',views.displayPlant,name='display_plant'),
     path('form/update/<int:pk>',views.UpdatePostView,name='update_form'),
     path('form/delete/<int:pk>',views.deletePost,name='delete_form'),
+    path('form/reject/<int:id>',views.rejectPostView,name='reject_form'),
     path('register-form/',views.UserRegister,name='user_reg'),
     path('login-form/',views.UserLogin,name='user_login'),
     path('user-home/',views.userHome,name='user_home'),

@@ -1,11 +1,10 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
 
 {% block content %}
-<p>Display Date Time Created;</p>
 <p>Verify -> Publish; Reject + Reason; Modify </p> *where to put verify button
 
-<h1 align="center">Admin Dashboard</h1>
-<h3 align="center">Admin Plant List</h3>
+<h2 align="center">Plant Records</h2>
+<h3 align="center">To Be Verified</h3>
 <br>
 <div class="card">
     <h6 class="card-header">
@@ -16,10 +15,10 @@
           <div class="col-2">
             Author
           </div>
-          <div class="col-3">
+          <div class="col-4">
             Datetime
           </div>
-          <div class="col-4">
+          <div class="col-3">
           </div>
         </div>
     </h6>
@@ -32,14 +31,14 @@
             <div class="col-2">
                 <p class="card-text">{{plant.user.first_name}} {{plant.user.last_name}}</p>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <p class="card-text">{{plant.created_at}}</p>
             </div>
-            <div class="col-4">
+            <div class="col-3">
+                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-primary">Details</a>
                 <a href="{% url 'publish' plant.id%}" class="btn btn-outline-success">Publish</a>
-                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Verify</a>
-                <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
-                <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a-->
+                <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-danger">Reject</a>
             </div>
             <br><br><br>
         </div>

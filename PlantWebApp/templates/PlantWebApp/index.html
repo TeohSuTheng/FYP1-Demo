@@ -96,6 +96,17 @@
             <h6 class="fw-normal" id="subheader">A plant management system to store various medicinal plant information digitally for future research.</h6>
         </div>
     </section>
+
+    <!--Pop-up message-->
+    {% if messages %}
+      {% for message in messages%}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
     <!--Discover Section-->
     <section class="partition-discover">
         <div class="discover-container">

@@ -1,8 +1,7 @@
-{% extends "PlantWebApp/base-no-nav.html" %}
+{% extends "PlantWebApp/base-dashboard.html" %}
 
 {% block content %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<div class="col py-3">
 <h1 align="center">Admin Dashboard</h1>
 <h3 align="center">Admin Plant List</h3>
 <br>
@@ -46,6 +45,7 @@
     <canvas id="use-chart" data-url="{% url 'use-chart' %}"></canvas>
 </div>
 <br><br><br>
+</div>
 
 <script>
         $(function () {

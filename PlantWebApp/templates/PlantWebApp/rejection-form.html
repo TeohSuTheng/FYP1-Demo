@@ -1,2 +1,97 @@
+{% extends "PlantWebApp/base-no-nav.html" %}
+
+{% block content%}
+<!--https://github.com/StephanWagner/svgMap-->
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet">
+
 <p>Please provide the reason for rejection</p>
 <p>Text box</p>
+
+<br>
+    <div class="container">
+        <h1 align="center">{{plant_info.plantScientificName}}</h1>
+        
+        <br><br>
+        <div class="row">
+            <div class="col">
+            <!--p>{{plant_info.plantImg.url}}</p-->
+            <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: 350px;"><img/>
+        </div>
+        <div class="col-8">
+            <p align="right"><small>Voucher No: {{plant_info.voucher_no}}</small></p>
+            <br>
+            <h4>Plant Local Name</h4>
+            <p>{{plant_info.plantLocalName}}</p><br>
+            <h4>Plant Morphology</h4><br>
+            <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <th scope="row">Stem</th>
+                    <td>{{plant_info.pmStem}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Leaf</th>
+                    <td>{{plant_info.pmLeaf}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Flower</th>
+                    <td>{{plant_info.pmFlower}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Fruit</th>
+                    <td>{{plant_info.pmFruit}}</td>
+                  </tr>
+                </tbody>
+            </table><br>    
+            <h4>Ethnobotanical Uses</h4>
+            <ul>
+            {% for i in use_list%}
+                <li>{{i}}</li>
+            {% endfor %}
+            </ul>
+            <br>
+            <h4>Plant Distribution</h4>
+            <p>
+            {% for j in country_name %}
+               {{j}}, 
+            {% endfor %}
+            </p>
+            <div id="svgMap"></div>
+            
+            <br>
+            <h4>Reference</h4>
+            <p>{{plant_info.plantref|linebreaks}}</p><br><br>
+            <p class="h6">Created on: {{plant_info.created_at.date}} by {{plant_info.user.first_name}} {{plant_info.user.last_name}}</p>
+        </div>
+    </div>
+
+    <script>
+      //Convert to array
+      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
+      var country_dict = {};
+      
+      for (let i = 0; i < country_list.length ; i++)
+      {
+        var tmp = country_list[i]
+        country_dict[tmp] = {'plant':''};
+      }
+
+      new svgMap({
+      targetElementID: 'svgMap',
+      data: {
+        data: {
+          plant: {
+            name: '',
+          },
+        },
+        applyData: 'plant',
+        values: country_dict
+      }
+    });
+
+    </script>
+
+
+{% endblock content %}

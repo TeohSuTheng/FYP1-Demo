@@ -63,12 +63,21 @@ class Plant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
     publish = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
+
     #planttemp = models.TextField(null=True, blank=True)
     #**#ref
     #published_at
     #updated_at = models.DateTimeField(auto_now=True)
     #usetemp = models.TextField(null=True, blank=True)
 
+class Rejection(models.Model):
+    plant = models.OneToOneField(
+        Plant,
+        on_delete=models.CASCADE,
+    )
+    reason = models.TextField(null=True, blank=True)
+    
 # Bridge entity for plant and usage
 class Plant_Usage(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
