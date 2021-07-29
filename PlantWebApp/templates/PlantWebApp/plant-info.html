@@ -23,8 +23,6 @@
                   <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
                   <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Reject**</a>
                 </p>
-              {% else %}
-                <h1>Other - unpublish - update</h1>
               {% endif %}
             {% endif %}
           {% endif %}

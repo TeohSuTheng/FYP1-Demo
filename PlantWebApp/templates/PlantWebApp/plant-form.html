@@ -3,7 +3,7 @@
 {% block content%}
 <h1>Add Plant Information</h1>
 
-    <form method="POST" enctype="multipart/form-data" action="{%url 'display_form' %}">  <!--url name-->
+    <form method="POST" enctype="multipart/form-data" action="{%url 'display_form' %}" id='p-form'>  <!--url name-->
     <!--Can validate form using Bootstrap-->
         {% csrf_token %}  <!--Token to prevent hackers from hijacking-->
         <div class="container">
@@ -86,22 +86,39 @@
                 <label for="inputState" class="form-label">References <!--small>(in APA format)</small--></label>
                 <textarea class="form-control" placeholder="Add references" id="floatingTextarea" name="plantref" >{{plantref}}</textarea>
             </div>
-            <br>
 
             <div class="mb-3">
                 <label for="formFile" class="form-label">Plant Image Upload</label>
                 <input class="form-control" type="file" id="formFile" name="plantImg">
             </div>
+
+            <div id="img-box"></div>
+
             <br>
   
             <button type="submit" class="btn btn-primary">Submit</button>
+            <br>
         </div>
         
     </form>
 
     <script type="text/javascript">
-        // In your Javascript (external .js resource or <script> tag) 
         
+        //ajax 
+        const imgBox = document.querySelector('#img-box');
+        //const form = document.getElementById('p-form')
+        const img = document.getElementById('formFile')
+        const csrf = document.getElementsByName('csrfmiddlewaretoken');
+        console.log(csrf)
+        
+        img.addEventListener('change',()=>{
+            const img_data = img.files[0]
+            const url = URL.createObjectURL(img_data)
+            console.log(url)
+            imgBox.innerHTML = '<img src="'+url+'" style="width:250px;height: 350px;">'
+        })
+
+        //Select2js - ethnobotanical usage tags
         $(document).ready(function() {
             $('#mySelect2').select2({
                     'placeholder':'Choose...',
@@ -113,7 +130,6 @@
                     //tags: true,
             });
         });
-
         //$("#mySelect2").val(Array.from("{{usearr|safe}}"));
         var tempstr = "{{usearr|safe}}".replace(/[^0-9,]/g, '').split(",");
         $("#mySelect2").val(tempstr);
