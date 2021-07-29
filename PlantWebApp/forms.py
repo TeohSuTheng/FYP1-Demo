@@ -1,5 +1,5 @@
 from django.db.models import fields
-from .models import Distribution, Plant, Usage, Profile
+from .models import Distribution, Plant, Rejection, Usage, Profile
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -13,6 +13,11 @@ class PlantForm(ModelForm):
         fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
         'pmFruit','plantImg','usage','voucher_no','distribution','plantref',)
     # Widgets
+
+class RejectForm(ModelForm):
+    class Meta:
+        model = Rejection
+        fields = ['reason']
 
 class UsageForm(ModelForm):
     class Meta:

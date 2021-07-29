@@ -350,7 +350,7 @@ def userHome(request):
         pub_list = Q(user_id=request.user) & Q(publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
         unpub_list = Q(user_id=request.user) & Q(publish=False)
-        plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
+        plant_list = Plant.objects.filter(unpub_list).filter(rejected=False).order_by('plantScientificName')
         return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list})
     ## if (is_staff==True) redirect to another page
 
@@ -389,7 +389,7 @@ def usage_chart(request):
 @staff_member_required(login_url='user_login')
 def unpubList(request):
         # Arrange in the order from earliest to latest
-        plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
+        plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
         return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
 @staff_member_required(login_url='user_login')
@@ -401,7 +401,7 @@ def publishAction(request,pk):
         
     # unpubList
     # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(publish=False).order_by('created_at') 
+    plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
     return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
 
 @staff_member_required(login_url='user_login')
@@ -427,24 +427,38 @@ def country_settings(request):
 
 @staff_member_required(login_url='user_login')
 def rejectPostView(request,id):
-        # Get queryset of usageID filter by plantID from Plant_Usage table
+    # ***Rejection Form*** # #Update plant form -> reject#
+    if request.method == "POST":
+        reject_form = forms.RejectForm(request.POST)
+
+        # Verify data
+        if reject_form.is_valid():
+            temp = reject_form.save(commit=False)
+            temp.plant_id = id
+            temp.save()
+
+            plantdata = Plant.objects.get(id=id)
+            plantdata.rejected = True
+            plantdata.save(update_fields=['rejected'])
+
+            # Back to unpublished list page #
+            plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
+            return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+    # ***Display plant data*** #
+    # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
     countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
-
     use_list = []
     for i in plantUsageData:
         # [0] - to retrieve values inside the queryset
         use_list.append(Usage.objects.filter(id=i)[0].usage_tag)
-
     country_list = []
     for j in countryData:
         country_list.append(Distribution.objects.filter(id=j)[0].country_alpha2)
-
     country_name = []
     for k in countryData:
         country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
-
-    print(country_name)
 
     context = {
         'plant_info':get_object_or_404(Plant,pk=id),
