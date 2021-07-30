@@ -10,11 +10,15 @@
     <div class="container">
         <h1 align="center">{{plant_info.plantScientificName}}</h1>
         {% if user.is_authenticated %}
-          {% if user.id == plant_info.user.id %}
-          <p align="center">
-            <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
-            <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
-          </p>
+          {% if plant_info.rejected %}
+            <p>Rejected</p>
+            <p>Reason of rejection:</p>
+            <p>{{ reject_info.reason }}</p>
+          {% elif user.id == plant_info.user.id %}
+            <p align="center">
+              <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
+              <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+            </p>
           {% elif user.is_staff %}
             {% if user.is_authenticated %}
               {% if plant_info.publish == false %}

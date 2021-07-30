@@ -11,7 +11,7 @@
 
 <h3 align="center">My Plant List</h3>
 <br>
-<h5>Published<small>Pagination</small></h5>
+<h5>Published<small>Pagination</small></h5> <br>
 <div class="card">
     <h6 class="card-header">
         <div class="row align-items-start">
@@ -21,7 +21,7 @@
           <div class="col-6">
               Common Name
           </div>
-          <div class="col">
+          <div class="col-4">
           </div>
         </div>
     </h6>
@@ -34,7 +34,7 @@
             <div class="col-6">
                 <p class="card-text">{{plant.plantLocalName}}</p>
             </div>
-            <div class="col">
+            <div class="col-4">
                 <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
                 <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
                 <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
@@ -47,7 +47,7 @@
 </div>
 <br>
 
-<h5>To be Verified</h5>
+<h5>To be Verified</h5><br>
 <div class="card">
     <h6 class="card-header">
         <div class="row align-items-start">
@@ -57,7 +57,7 @@
           <div class="col-6">
               Common Name
           </div>
-          <div class="col">
+          <div class="col-4">
           </div>
         </div>
     </h6>
@@ -70,7 +70,7 @@
             <div class="col-6">
                 <p class="card-text">{{plant.plantLocalName}}</p>
             </div>
-            <div class="col">
+            <div class="col-4">
                 <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
                 <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
                 <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
@@ -85,6 +85,39 @@
 
 <h5>Rejected</h5>
 <br>
+<div class="card">
+    <h6 class="card-header">
+        <div class="row align-items-start">
+        <div class="col">
+            Scientific Name
+          </div>
+          <div class="col-6">
+              Common Name
+          </div>
+          <div class="col-4">
+          </div>
+        </div>
+    </h6>
+    <div class="card-body">
+        {% for plant in reject_list%}
+        <div class="row align-items-start">
+            <div class="col">
+                <p class="card-text">{{plant.plantScientificName}}</p>
+            </div>
+            <div class="col-6">
+                <p class="card-text">{{plant.plantLocalName}}</p>
+            </div>
+            <div class="col-4">
+                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a-->
+                <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+            </div>
+            <br><br><br>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
 
 </div>
 </div>

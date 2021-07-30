@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 
-from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution
+from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery
@@ -169,8 +169,11 @@ def displayPlant(request,id):
 
     print(country_name)
 
+
+
     context = {
         'plant_info':get_object_or_404(Plant,pk=id),
+        'reject_info':get_object_or_404(Rejection,plant_id=id),
         'plantUsageData':plantUsageData,
         'use_list':use_list,
         'country_list':country_list,
@@ -349,9 +352,11 @@ def userHome(request):
     else:
         pub_list = Q(user_id=request.user) & Q(publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
-        unpub_list = Q(user_id=request.user) & Q(publish=False)
-        plant_list = Plant.objects.filter(unpub_list).filter(rejected=False).order_by('plantScientificName')
-        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list})
+        unpub_list = Q(user_id=request.user) & Q(publish=False) & Q(rejected=False) 
+        plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
+        reject_q = Q(user_id=request.user) & Q(rejected=True) 
+        reject_list = Plant.objects.filter(reject_q).order_by('plantScientificName')
+        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list, 'reject_list':reject_list})
     ## if (is_staff==True) redirect to another page
 
 def browse(request):
