@@ -17,6 +17,8 @@
     {% if searchquery %}
         <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
         <br>
+
+        {% if result %}
         <div class="card">
             <h6 class="card-header">
                 <div class="row align-items-start">
@@ -48,6 +50,43 @@
     
             </div>
         </div>
+        {% endif %}
+        <br>
+
+        {% if suggest %}
+            <h4>Do you mean?</h4>
+            <div class="card">
+                <h6 class="card-header">
+                    <div class="row align-items-start">
+                    <div class="col">
+                        Scientific Name
+                      </div>
+                      <div class="col-8">
+                          Common Name
+                      </div>
+                      <div class="col">
+                      </div>
+                    </div>
+                </h6>
+                <div class="card-body">
+                    {% for plant in suggest%}
+                    <div class="row align-items-start">
+                        <div class="col">
+                            <p class="card-text">{{plant.plantScientificName}}</p>
+                        </div>
+                        <div class="col-8">
+                            <p class="card-text">{{plant.plantLocalName}}</p>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                        </div>
+                        <br><br><br>
+                    </div>
+                    {% endfor %}
+        
+                </div>
+            </div>
+        {% endif %}
     
     {% else %}
         <p> Please enter a search query.. </p>

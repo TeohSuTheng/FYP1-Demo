@@ -12,8 +12,9 @@ from django.contrib.auth.models import User
 from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection
 from django.contrib import messages
 from django.db.models import Q, Count
-from django.contrib.postgres.search import SearchVector, SearchQuery
-from django.http import JsonResponse, HttpResponse
+from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
+
+from django.http import JsonResponse
 
 from django.contrib.auth.models import User
 from tablib import Dataset
@@ -38,7 +39,7 @@ def home(request):
 def displaySearchResults(request):
     if request.method == "GET":
         searchquery = request.GET['searchquery'] #is not None
-
+        suggest = []
         # Q
         #que = Q(plantScientificName__icontains=searchquery) | Q(plantLocalName__icontains=searchquery) 
         #results = Plant.objects.filter(que)
@@ -57,15 +58,26 @@ def displaySearchResults(request):
         passed through the stemming algorithms, and then it looks for matches for all of the
         resulting terms.
         '''
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery))
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
 
-        # SearchRank
+        if not results: #result queryset is empty
+            trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
+            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.3).order_by('-similarity')
+            # speed up: https://stackoverflow.com/questions/56538419/poor-performance-when-trigram-similarity-and-full-text-search-were-combined-with/56547280#56547280
 
-        # raw sql -1.get usage id where tags = '' 2.get plants where usage.id = '1.'
-
-        return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,})
+        return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,'suggest':suggest})
     else:
         return render(request,'PlantWebApp/index.html',{})
+
+def searchResultsAPI(request):
+        searchquery = request.GET.get('searchquery') #is not None
+        resultsdict = []
+
+        if searchquery:
+            results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
+            for result in results:
+                resultsdict.append(result)
+        return JsonResponse({'status':200, 'data':resultsdict})
 
 @login_required(login_url='user_login')    
 def displayPlantForm(request):
@@ -153,6 +165,7 @@ def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
     countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
+    reject = []
 
     use_list = []
     for i in plantUsageData:
@@ -169,11 +182,15 @@ def displayPlant(request,id):
 
     print(country_name)
 
-
+    plantdata = Plant.objects.get(id=id)
+    if plantdata.rejected:
+        reject = Rejection.objects.get(plant_id=id)
 
     context = {
-        'plant_info':get_object_or_404(Plant,pk=id),
-        'reject_info':get_object_or_404(Rejection,plant_id=id),
+        #'plant_info':get_object_or_404(Plant,pk=id),
+        #'reject_info':get_object_or_404(Rejection,plant_id=id),
+        'plant_info':plantdata,
+        'reject_info':reject,
         'plantUsageData':plantUsageData,
         'use_list':use_list,
         'country_list':country_list,
