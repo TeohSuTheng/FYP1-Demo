@@ -61,7 +61,8 @@
 
       {% else %}
 
-      <nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
+      <!--nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;"-->
+      <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom box-shadow mb-3">
         <div class="container-fluid">
           <!--a class="navbar-brand" href="#">Navbar</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +83,7 @@
                 <a class="nav-link active" href="{%url 'user_reg' %}">Register</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="{%url 'user-login' %}">Login</a>
+                <a class="nav-link active" href="{%url 'user_login' %}">Login</a>
               </li>
             </ul>
   
@@ -102,11 +103,12 @@
           </div>
         {% endfor %}
       {% endif %}
-  
+      <!---->
+      </div>
 
       {% block content %}
       {% endblock %}
-    </div>
+    
     
     <!-- Optional JavaScript; choose one of the two! -->
 
