@@ -19,7 +19,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from tablib import Dataset
 
-from .resources import DistResource
+from .resources import DistResource, PlantResource
 
 def home(request):
     """
@@ -61,8 +61,11 @@ def displaySearchResults(request):
         results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
 
         if not results: #result queryset is empty
+            print('ok')
+            suggest = []
             trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
-            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.3).order_by('-similarity')
+            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).order_by('-similarity')
+            print(suggest)
             # speed up: https://stackoverflow.com/questions/56538419/poor-performance-when-trigram-similarity-and-full-text-search-were-combined-with/56547280#56547280
 
         return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,'suggest':suggest})
@@ -492,4 +495,21 @@ def rejectPostView(request,id):
     }
     return render(request,'PlantWebApp/rejection-form.html',context)
 
-#def admin_upload(request)
+def data_upload(request):
+    if request.method == "POST":
+        plant_resource = PlantResource()
+        dataset = Dataset()
+        new_dist = request.FILES['myfile']
+
+        if not new_dist.name.endswith('xlsx'):
+            messages.info(request,'Wrong format.')
+            return render(request,'PlantWebApp/plant-data-upload.html',{})
+
+        imported_data = dataset.load(new_dist.read(), format='xlsx')
+        for data in imported_data:
+            value = Plant(
+                data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
+                data[8], data[9], data[10], data[11], data[12], data[13], 
+            )
+            value.save()
+    return render(request,'PlantWebApp/plant-data-upload.html',{})

@@ -19,23 +19,18 @@
               <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
               <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
             </p>
-          {% elif user.is_staff %}
-            {% if user.is_authenticated %}
-              {% if plant_info.publish == false %}
+          {% elif user.is_staff %} 
                 <p align="center">
                   <a href="{% url 'publish' plant_info.id%}" class="btn btn-outline-success">Publish</a>
                   <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
                   <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Reject**</a>
-                </p>
-              {% endif %}
-            {% endif %}
+                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+                </p> 
           {% endif %}
-
         {% endif %}
         <br><br>
         <div class="row">
             <div class="col">
-            <!--p>{{plant_info.plantImg.url}}</p-->
             <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: 350px;"><img/>
         </div>
         <div class="col-8">

@@ -1,6 +1,7 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
 
 {% block content%}
+<div class="container">
 <h1>Add Plant Information</h1>
 
     <form method="POST" enctype="multipart/form-data" action="{%url 'display_form' %}" id='p-form'>  <!--url name-->
@@ -101,6 +102,8 @@
         </div>
         
     </form>
+
+</div>
 
     <script type="text/javascript">
         
