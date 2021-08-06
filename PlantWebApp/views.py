@@ -513,3 +513,7 @@ def data_upload(request):
             )
             value.save()
     return render(request,'PlantWebApp/plant-data-upload.html',{})
+
+def displayPlantImage(request,id):
+    plant = Plant.objects.get(id=id)
+    return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
