@@ -88,13 +88,34 @@
                 <label for="formFile" class="form-label">Plant Image Upload</label>
                 <input class="form-control" type="file" id="formFile" name="plantImg">
             </div>
+
+            <div id="img-box">
+                <img src="{{plantImg.url}}" alt="" style="width:250px;height: 350px;">
+            </div>
+
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
-        </div-->
+        </div>
     </form>
 </div>
 
     <script type="text/javascript">
+
+        //ajax 
+        const imgBox = document.querySelector('#img-box');
+        //const form = document.getElementById('p-form')
+        const img = document.getElementById('formFile')
+        const csrf = document.getElementsByName('csrfmiddlewaretoken');
+        console.log(csrf)
+        
+        img.addEventListener('change',()=>{
+            const img_data = img.files[0]
+            const url = URL.createObjectURL(img_data)
+            console.log(url)
+            imgBox.innerHTML = '<img src="'+url+'" style="width:250px;height: 350px;">'
+        })
+
+
         // In your Javascript (external .js resource or <script> tag) 
         
         $(document).ready(function() {
