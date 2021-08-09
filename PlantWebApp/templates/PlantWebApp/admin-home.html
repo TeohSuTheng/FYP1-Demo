@@ -4,6 +4,11 @@
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
+<!--https://github.com/StephanWagner/svgMap-->
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet">
+
 <div class="col py-3">
 
     <!--Site Admin Content header-->
@@ -33,10 +38,11 @@
                   <div class="small-box" style="background-color: #d6f7e7;">
                       <div class="row">
                         <!--div class="inner"-->
-                        <div class="col-sm-4" style="margin-left: 20px;;">
+                        <div class="col-sm-4" style="margin-left: 20px;">
                             <br>
-                        <h3>{{total_plant}}</h3>
-        
+                            <div id="total_plant">
+                                <h3>{{total_plant}}</h3>
+                            </div>
                         <p>Records Stored</p>
                         </div>
                         <!--div class="icon"-->
@@ -54,9 +60,10 @@
                       <div class="row">
                         <!--div class="inner"-->
                         <div class="col-sm-4" style="margin-left: 20px;;">
-                            <br>
-                        <h3>{{plant_pub}}</h3>
-        
+                        <br>
+                            <div id="pub">
+                                <h3>{{plant_pub}}</h3>
+                            </div>
                         <p>Records Published</p>
                         </div>
                         <!--div class="icon"-->
@@ -75,7 +82,9 @@
                           <!--div class="inner"-->
                           <div class="col-sm-4" style="margin-left: 20px;;">
                               <br>
-                          <h3>{{use_tag}}</h3>
+                            <div id="use">
+                                <h3>{{use_tag}}</h3>
+                            </div>
           
                           <p>Ethnobotanical Uses</p>
                           </div>
@@ -95,8 +104,9 @@
                           <!--div class="inner"-->
                           <div class="col-sm-4" style="margin-left: 20px;;">
                               <br>
-                          <h3>{{user_no}}</h3>
-          
+                            <div id="user_no">
+                                <h3>{{user_no}}</h3>
+                            </div>
                           <p>Registered Users</p>
                           </div>
                           <!--div class="icon"-->
@@ -246,57 +256,34 @@
 </div>
 </section>
 
+<script>
+    //Convert to array
+    var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
+    var country_dict = {};
+    
+    for (let i = 0; i < country_list.length ; i++)
+    {
+      var tmp = country_list[i]
+      country_dict[tmp] = {'plant':''};
+    }
 
-<!--div class="col py-3">
-<h1 align="center">Admin Dashboard</h1>
-<h3 align="center">Admin Plant List</h3>
-<br>
-<div class="card">
-    <h6 class="card-header">
-        <div class="row align-items-start">
-        <div class="col">
-            Scientific Name
-          </div>
-          <div class="col-6">
-              Common Name
-          </div>
-          <div class="col">
-          </div>
-        </div>
-    </h6>
-    <div class="card-body">
-        {% for plant in plant_list%}
-        <div class="row align-items-start">
-            <div class="col">
-                <p class="card-text">{{plant.plantScientificName}}</p>
-            </div>
-            <div class="col-6">
-                <p class="card-text">{{plant.plantLocalName}}</p>
-            </div>
-            <div class="col">
-                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
-                <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
-                <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
-            </div>
-            <br><br><br>
-        </div>
-        {% endfor %}
+    new svgMap({
+    targetElementID: 'svgMap',
+    data: {
+      data: {
+        plant: {
+          name: '',
+        },
+      },
+      applyData: 'plant',
+      values: country_dict
+    }
+  });
 
-    </div>
-</div>
-
-<br><br>
-<h3 align="center">Plants by User Based On Their Uses</h3><br><br>
-<div>
-    <canvas id="use-chart" data-url="{% url 'use-chart' %}"></canvas>
-</div>
-<br><br><br>
-</div-->
-
+  </script>
 
 <script>
     $(function () {
-
     var $useChart = $("#use-chart");
     $.ajax({
     url: $useChart.data("url"),
@@ -331,6 +318,35 @@
 
     });
 
+    </script>
+
+<script>
+    var seconds = 5; // seconds, edit here
+    setInterval(refresh,seconds * 1000);
+
+
+    function refresh() {
+        console.log('get');
+        $.ajax({
+            url: "{% url 'user_home' %}",
+            success: function(dat) {
+                //$('#dashboard').html(data); // NOTE this
+                $('#total_plant').replaceWith($('#total_plant',dat));
+                $('#pub').replaceWith($('#pub',dat));
+                $('#use').replaceWith($('#use',dat));
+                $('#user_no').replaceWith($('#user_no',dat));
+            }
+        },
+        {
+            //chart-updates
+            url: "{% url 'use-chart' %}",
+            success: function(data) {
+                $('#use-chart').html(data); // NOTE this
+            }
+        }
+        );
+    }
 </script>
+
 
 {% endblock content %}

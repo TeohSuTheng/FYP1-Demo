@@ -304,7 +304,7 @@ def deletePost(request,pk):
     if request.method == "POST":
         plantdata.delete()
         plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
+        return userHome(request)
 
     context = {
         'plantScientificName':plantdata.plantScientificName,
@@ -375,6 +375,7 @@ def userHome(request):
         plant_pub = Plant.objects.filter(publish=True).count()
         use_tag = Usage.objects.count()
         user_no = User.objects.count()
+        
 
         context = {
             'total_plant':total_plant,
