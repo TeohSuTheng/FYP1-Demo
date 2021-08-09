@@ -15,11 +15,15 @@ from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
 
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import PlantSerializer
 
 from django.contrib.auth.models import User
 from tablib import Dataset
 
 from .resources import DistResource, PlantResource
+from PlantWebApp import serializers
 
 def home(request):
     """
@@ -367,8 +371,20 @@ def logout_request(request):
 def userHome(request):
     if request.user.is_staff:
         #site admin - change to is_superuser if want
-        plant_list = Plant.objects.all().order_by('plantScientificName')
-        return render(request, 'PlantWebApp/admin-home.html',{})
+        total_plant = Plant.objects.count()
+        plant_pub = Plant.objects.filter(publish=True).count()
+        use_tag = Usage.objects.count()
+        user_no = User.objects.count()
+
+        context = {
+            'total_plant':total_plant,
+            'plant_pub':plant_pub,
+            'use_tag':use_tag,
+            'user_no' : user_no
+        }
+
+        #plant_list = Plant.objects.all().order_by('plantScientificName')
+        return render(request, 'PlantWebApp/admin-home.html',context)
     else:
         pub_list = Q(user_id=request.user) & Q(publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
@@ -517,3 +533,23 @@ def data_upload(request):
 def displayPlantImage(request,id):
     plant = Plant.objects.get(id=id)
     return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
+
+#@api_view(['GET', 'POST'])
+@api_view(['GET'])
+def apiOverview(request):
+    api_urls = {
+        'List':'/plant-list/',
+        'Detail View':'/plant-detail/<str:pk>/',
+        'Create':'/task-create/',
+        'Update':'/task-update/<str:pk>/',
+        'Delete':'/task-delete/<str:pk>/',
+    }
+    return Response(api_urls)
+
+@api_view(['GET'])
+def plantListApi(request):
+    plants = Plant.objects.all()
+    serializer = PlantSerializer(plants,many=True)
+    return Response(serializer.data)
+
+
