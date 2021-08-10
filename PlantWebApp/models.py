@@ -59,7 +59,6 @@ class Plant(models.Model):
         blank=True,
         null=True
     )
-    plantDist = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
     publish = models.BooleanField(default=False)

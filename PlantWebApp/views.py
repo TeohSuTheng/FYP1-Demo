@@ -1,6 +1,6 @@
-from django.db.models.query import RawQuerySet
+#from django.db.models.query import RawQuerySet
 from django.shortcuts import render,redirect, get_object_or_404
-from django.views.generic import UpdateView
+#from django.views.generic import UpdateView
 
 from . import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -62,7 +62,8 @@ def displaySearchResults(request):
         passed through the stemming algorithms, and then it looks for matches for all of the
         resulting terms.
         '''
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','voucher_no','usage__usage_tag','distribution__countryName')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
+        print(results)
 
         if not results: #result queryset is empty
             print('ok')
@@ -74,7 +75,7 @@ def displaySearchResults(request):
 
         return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,'suggest':suggest})
     else:
-        return render(request,'PlantWebApp/index.html',{})
+        home(request)
 
 def searchResultsAPI(request):
         searchquery = request.GET.get('searchquery') #is not None
@@ -117,13 +118,12 @@ def displayPlantForm(request):
                 'plantref': request.POST['plantref'],
                 'dist':dist,
             }
-            
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
             ## Check if usage tag is unique:
             tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
-            
+
             if tag_exist:
                 messages.success(request,('The plant usage entered already exists in our database.'))
                 return render(request,'PlantWebApp/plant-form.html',{'use': use})
@@ -240,7 +240,6 @@ def UpdatePostView(request,pk):
             "pmFruit": plantdata.pmFruit,
             "plantImg": plantdata.plantImg,
             "voucher_no":plantdata.voucher_no,
-            "plantDist":plantdata.plantDist,
             "plantref":plantdata.plantref,
             "usearr":usearr,
             'use': use,
@@ -265,7 +264,6 @@ def UpdatePostView(request,pk):
                     "pmFruit": plantdata.pmFruit,
                     "plantImg": plantdata.plantImg,
                     "voucher_no":plantdata.voucher_no,
-                    "plantDist":plantdata.plantDist,
                     "plantref":plantdata.plantref,
                     "usearr":usearr,
                     'use': use,
@@ -275,9 +273,11 @@ def UpdatePostView(request,pk):
                 return render(request, 'PlantWebApp/update-form.html',context)
 
             plant_form.save()
+            '''
             plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
             messages.success(request,('Updated successfully.'))
-            return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})
+            return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})'''
+            return userHome(request)
     
     context = {
         'plantScientificName':plantdata.plantScientificName,
@@ -288,7 +288,6 @@ def UpdatePostView(request,pk):
         "pmFruit": plantdata.pmFruit,
         "plantImg": plantdata.plantImg,
         "voucher_no":plantdata.voucher_no,
-        "plantDist":plantdata.plantDist,
         "plantref":plantdata.plantref,
         "usearr":usearr,
         'use': use,
@@ -371,20 +370,39 @@ def logout_request(request):
 def userHome(request):
     if request.user.is_staff:
         #site admin - change to is_superuser if want
-        total_plant = Plant.objects.count()
-        plant_pub = Plant.objects.filter(publish=True).count()
-        use_tag = Usage.objects.count()
-        user_no = User.objects.count()
-        
+
+        total_plant = Plant.objects.count() # Get total number of plant records stored
+        plant_pub = Plant.objects.filter(publish=True).count() # Get total number of plant records published
+        use_tag = Usage.objects.count() # Get total number of usage tags stored
+        user_no = User.objects.count() # Get total number of users registered
+        countryData = Plant_Distribution.objects.all().values('distID').annotate(Count('distID')) # Get total number of plant records based on each country (plant distribution)
+
+        ## Prepare data for svg map ##
+        country_list = []
+        for j in countryData:
+            #print(j.get('distID')) #{'distID': 54, 'distID__count': 2}
+            country_list.append(Distribution.objects.filter(id=j.get('distID'))[0].country_alpha2)
+        #print(country_list)
+
+        country_name = []
+        for k in countryData:
+            country_name.append(Distribution.objects.filter(id=k.get('distID'))[0].countryName)
+        #print(country_name)
+
+        country_record = []
+        for l in countryData:
+            country_record.append(l['distID__count'])
+        #print(country_record)
 
         context = {
             'total_plant':total_plant,
             'plant_pub':plant_pub,
             'use_tag':use_tag,
-            'user_no' : user_no
+            'user_no' : user_no,
+            'country_list':country_list,
+            'country_name':country_name,
+            'country_record':country_record,
         }
-
-        #plant_list = Plant.objects.all().order_by('plantScientificName')
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:
         pub_list = Q(user_id=request.user) & Q(publish=True)
@@ -405,11 +423,14 @@ def usage_chart(request):
     label_id = []
     labels = []
     data = []
-    
+
+    if request.user.is_staff:
+        plant_count = Plant.objects.all().values('usage').annotate(Count('usage')).order_by('usage') # get list of plant objects based on the user
+    else:
+        plant_count = Plant.objects.filter(user_id=request.user).values('usage').annotate(Count('usage')).order_by('usage') # get list of plant objects based on the user
     #1. Get a set of plants created by user
     #2. Get usage field from plant object
     #3. Count each field
-    plant_count = Plant.objects.filter(user_id=request.user).values('usage').annotate(Count('usage')).order_by('usage') # get list of plant objects based on the user
     print(plant_count)
     for entry in plant_count:
         if entry['usage'] != None:
@@ -439,12 +460,9 @@ def publishAction(request,pk):
     plantdata = Plant.objects.get(id=pk)
     plantdata.publish = True
     plantdata.save(update_fields=['publish'])
-    # message **
-        
-    # unpubList
-    # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
-    return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+    # ** Add message - plant published
+    return unpubList(request)
 
 @staff_member_required(login_url='user_login')
 def country_settings(request):
@@ -484,8 +502,7 @@ def rejectPostView(request,id):
             plantdata.save(update_fields=['rejected'])
 
             # Back to unpublished list page #
-            plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
-            return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+            return unpubList(request)
 
     # ***Display plant data*** #
     # Get queryset of usageID filter by plantID from Plant_Usage table

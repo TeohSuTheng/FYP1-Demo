@@ -126,38 +126,12 @@
               <div class="card">
                 <div class="card-header border-0">
                   <div class="d-flex justify-content-between">
-                    <h5 class="card-title">Plant Records Based on Distribution</h5>
+                    <h5 class="card-title">Plant Records Based on Distribution (stored/pub)</h5>
                     <!--a href="javascript:void(0);">View Report</a-->
                   </div>
                 </div>
                 <div class="card-body">
-                  <!--div class="d-flex">
-                    <p class="d-flex flex-column">
-                      <span class="text-bold text-lg">820</span>
-                      <span>Visitors Over Time</span>
-                    </p>
-                    <p class="ml-auto d-flex flex-column text-right">
-                      <span class="text-success">
-                        <i class="fas fa-arrow-up"></i> 12.5%
-                      </span>
-                      <span class="text-muted">Since last week</span>
-                    </p>
-                  </div>
-                  <!-- /.d-flex -->
-  
-                  <div class="position-relative mb-4">
-                    <canvas id="visitors-chart" height="200"></canvas>
-                  </div>
-  
-                  <!--div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2">
-                      <i class="fas fa-square text-primary"></i> This Week
-                    </span>
-  
-                    <span>
-                      <i class="fas fa-square text-gray"></i> Last Week
-                    </span>
-                  </div-->
+                  <div id="svgMap"></div>
                 </div>
               </div>
             </div>
@@ -259,12 +233,14 @@
 <script>
     //Convert to array
     var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
+    var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
+    
     var country_dict = {};
     
     for (let i = 0; i < country_list.length ; i++)
     {
       var tmp = country_list[i]
-      country_dict[tmp] = {'plant':''};
+      country_dict[tmp] = {'plant':country_record_arr[i]};
     }
 
     new svgMap({
@@ -272,7 +248,8 @@
     data: {
       data: {
         plant: {
-          name: '',
+          name: 'Plant Record(s)',
+          format: '{0}'
         },
       },
       applyData: 'plant',
@@ -291,13 +268,17 @@
 
         var ctx = $useChart[0].getContext("2d");
 
+        var grd = ctx.createLinearGradient(0, 0, 700, 0);
+        grd.addColorStop(0, "#1e403f"); //#3b7d39
+        grd.addColorStop(1, "#fcb8b1");
+
         new Chart(ctx, {
         type: 'bar', 
         data: {
             labels: data.labels,
             datasets: [{
             label: 'Plant record',
-            backgroundColor: 'green',
+            backgroundColor: grd,
             data: data.data
             }]          
         },
