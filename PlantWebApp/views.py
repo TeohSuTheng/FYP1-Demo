@@ -25,6 +25,11 @@ from tablib import Dataset
 from .resources import DistResource, PlantResource
 from PlantWebApp import serializers
 
+# Import Pagination Libraries
+from django.core.paginator import Paginator
+
+# .order_by('?') - Plant of the day
+
 def home(request):
     """
     Display home page
@@ -303,7 +308,8 @@ def deletePost(request,pk):
     if request.method == "POST":
         plantdata.delete()
         plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-        return userHome(request)
+        #return userHome(request)
+        return home(request)
 
     context = {
         'plantScientificName':plantdata.plantScientificName,
@@ -392,7 +398,13 @@ def userHome(request):
         country_record = []
         for l in countryData:
             country_record.append(l['distID__count'])
-        #print(country_record)
+        
+        cc = {}
+        for m in range(0,len(countryData)):
+            #print(countryData[m])
+            cc[country_list[m]] = {'plant':country_record[m]}
+
+        print(cc)
 
         context = {
             'total_plant':total_plant,
@@ -402,6 +414,7 @@ def userHome(request):
             'country_list':country_list,
             'country_name':country_name,
             'country_record':country_record,
+            'cc':cc,
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:
@@ -417,7 +430,16 @@ def userHome(request):
 def browse(request):
     # Only pubish plants that are verified by admin
     plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
-    return render(request, 'PlantWebApp/browse_plants.html',{'plant_list':plant_list})
+
+    # Set up Pagination
+    p = Paginator(plant_list, 10)
+    page = request.GET.get('page')
+    plants = p.get_page(page)
+
+    # Hack Pagination 
+    page_num = 'a' * p.num_pages
+
+    return render(request, 'PlantWebApp/browse_plants.html',{'plants':plants,'page_num':page_num})
 
 def usage_chart(request):
     label_id = []
@@ -436,8 +458,6 @@ def usage_chart(request):
         if entry['usage'] != None:
             label_id.append(entry['usage'])
             data.append(entry['usage__count'])
-    #print(label_id)
-    #print(data)
 
     # Get sets of usage_tag based on usage_id #order by usage_id (same like plant table ^^)
     tmplist = Usage.objects.filter(id__in=label_id).values('usage_tag').order_by('id')

@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet">
 
-<div class="col py-3">
+<div class="col py-3" id='cool'>
 
     <!--Site Admin Content header-->
     <div class="content-header" style="padding-left:25px ;">
@@ -130,7 +130,9 @@
                     <!--a href="javascript:void(0);">View Report</a-->
                   </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="svgCard">
+                  <!--country_dict[tmp] = {'plant':country_record_arr[i]}-->
+                  <p id="cc">{{cc}}</p>
                   <div id="svgMap"></div>
                 </div>
               </div>
@@ -204,7 +206,7 @@
                   </div>
                   <!-- /.d-flex -->
   
-                  <div >
+                  <div class="use-chart">
                     <canvas id="use-chart" data-url="{% url 'use-chart' %}"></canvas>
                   </div>
   
@@ -230,11 +232,45 @@
 </div>
 </section>
 
+<!--svgMap.js-->
 <script>
+/* 
+  function map()
+  {
+    var $svgMap = $("#svgMap");
+    $.ajax({
+    url: $svgMap.data("url"), //?
+    success: function (data) {
+      //Convert to array
+      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
+      var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
+      var country_dict = {};
+      
+      for (let i = 0; i < country_list.length ; i++)
+      {
+        var tmp = country_list[i]
+        country_dict[tmp] = {'plant':country_record_arr[i]};
+      }
+
+      new svgMap({
+      targetElementID: 'svgMap',
+      data: {
+        data: {
+          plant: {
+            name: 'Plant Record(s)',
+            format: '{0}'
+          },
+        },
+        applyData: 'plant',
+        values: country_dict
+      }
+    });
+  }
+    })}*/
+
     //Convert to array
     var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
     var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
-    
     var country_dict = {};
     
     for (let i = 0; i < country_list.length ; i++)
@@ -243,7 +279,7 @@
       country_dict[tmp] = {'plant':country_record_arr[i]};
     }
 
-    new svgMap({
+    var map = new svgMap({
     targetElementID: 'svgMap',
     data: {
       data: {
@@ -257,10 +293,91 @@
     }
   });
 
-  </script>
+  function updateMap()
+  {
+    /*
+    $("div#svgMap").remove();
+    $("div#svgCard").append('<div id="svgMap"></div>');
+    map()*/
 
+    
+    var $svgMap = $("#svgMap");
+    $.ajax({
+    url: $svgMap.data("url"),
+    success: function (data) {
+      //console.log(data);
+      
+      //Convert to array
+      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
+      var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
+      var country_dict = {};
+      
+      for (let i = 0; i < country_list.length ; i++)
+      {
+        var tmp = country_list[i];
+        country_dict[tmp] = {'plant':country_record_arr[i]};
+      }
+      //map.options.data.values = data;
+      //console.log(map.options.data.values)
+      //update
+    }
+
+    })
+  }
+
+</script>
+
+<!--Chart.js-->
 <script>
-    $(function () {
+  function updateChart()
+  {
+    console.log(chart1);
+
+    //chart1.destroy();
+    //$("canvas#use-chart").remove();
+    //$("div.use-chart").append('<canvas id="use-chart" data-url="{% url "use-chart" %}"></canvas>');
+
+    var $useChart = $("#use-chart");
+    var ctx = $useChart[0].getContext("2d");
+
+    //Colour
+    var grd = ctx.createLinearGradient(0, 0, 700, 0);
+    grd.addColorStop(0, "#1e403f"); //#3b7d39
+    grd.addColorStop(1, "#fcb8b1");
+
+    $.ajax({
+    url: $useChart.data("url"),
+    success: function (data) {
+
+    chart1.data =  {
+            labels: data.labels,
+            datasets: [{
+            label: 'Plant record',
+            backgroundColor: grd,
+            data: data.data
+            }]          
+        }
+
+    chart1.options = {options: {
+            responsive: true,
+            legend: {
+            position: 'top',
+            },
+            title: {
+            display: true,
+            text: 'Bar Chart of Plants Based On Their Uses'
+            }
+            
+        }}
+      }})
+        
+    chart1.update('none');
+        
+  }
+
+    //global variable (to be used in dfferent functions - chartjs: create & update)
+    var chart1;
+    var GetChartData = function () {
     var $useChart = $("#use-chart");
     $.ajax({
     url: $useChart.data("url"),
@@ -272,7 +389,7 @@
         grd.addColorStop(0, "#1e403f"); //#3b7d39
         grd.addColorStop(1, "#fcb8b1");
 
-        new Chart(ctx, {
+        chart1 = new Chart(ctx, {
         type: 'bar', 
         data: {
             labels: data.labels,
@@ -291,42 +408,42 @@
             display: true,
             text: 'Bar Chart of Plants Based On Their Uses'
             }
+            
         }
         });
-
     }
     });
 
-    });
+    };
+    GetChartData();
+</script>
 
-    </script>
-
+<!--AJAX Refresh-->
 <script>
-    var seconds = 5; // seconds, edit here
-    setInterval(refresh,seconds * 1000);
-
-
     function refresh() {
+        updateChart();
+
         console.log('get');
         $.ajax({
             url: "{% url 'user_home' %}",
             success: function(dat) {
-                //$('#dashboard').html(data); // NOTE this
                 $('#total_plant').replaceWith($('#total_plant',dat));
                 $('#pub').replaceWith($('#pub',dat));
                 $('#use').replaceWith($('#use',dat));
                 $('#user_no').replaceWith($('#user_no',dat));
-            }
-        },
-        {
-            //chart-updates
-            url: "{% url 'use-chart' %}",
-            success: function(data) {
-                $('#use-chart').html(data); // NOTE this
+                $('#cc').replaceWith($('#cc',dat));
+                //console.log($('#svgMap'));
+                //var country_dict = country_dict;
+                //console.log(country_dict);
+                //console.log(cc);
+                //map.options.data.values = cc;
+                console.log(map.options.data.values)
             }
         }
         );
     }
+    var seconds = 5; // seconds, edit here
+    setInterval(refresh,seconds * 1000);
 </script>
 
 
