@@ -77,7 +77,7 @@
 
         <!--Buttons-->
         <p align="center">
-            <a href="#" class="btn btn-outline-primary">Update Account</a>
+            <a href="{% url 'user_profile_update' user.id %}" class="btn btn-outline-primary">Update Account</a>
             <!--a href="#" class="btn btn-outline-success">Change Password</a-->
             <a href="#" class="btn btn-outline-danger">Delete Account</a>
         </p>

@@ -24,63 +24,99 @@
 
       <!--Main Content-->
       <div class="container-fluid">
-        
-        <!--Basic Data-->
-        <div class="row" style="background-color: #90998E;">
-            <h4 style="color: white; display: flex; justify-content: center;">
-                Basic Data
-            </h4>
-        </div>
-        <br>
-            <div class="row">
-                <div class="col-sm-3">First Name:</div>
-                <div class="col-sm">{{user_info.first_name}}</div>
+        <form method="POST" action="" id='p-form'>
+            {% csrf_token %}
+            <!--Basic Data-->
+            <div class="row" style="background-color: #90998E;">
+                <h4 style="color: white; display: flex; justify-content: center;">
+                    Basic Data
+                </h4>
+            </div>
+            <br>
+                <div class="row">
+                    <div class="col-sm-3">First Name:</div>
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="first_name" value="{{user.first_name}}">
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-sm-3">Last Name:</div>
+                    <!--div class="col-sm">{{user_data.last_name}}</div-->
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="last_name" value="{{user.last_name}}">
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-sm-3">Username:</div>
+                    <!--div class="col-sm">{{user_data.username}}</div-->
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="username" value="{{user_data.username}}">
+                        </div>
+                    </div>
+                </div><br>
+
+            <!--Contact Information-->
+            <div class="row" style="background-color: #90998E;">
+                <h4 style="color: white; display: flex; justify-content: center;">
+                    Contact Information
+                </h4>
             </div><br>
             <div class="row">
-                <div class="col-sm-3">Last Name:</div>
-                <div class="col-sm">{{user_info.last_name}}</div>
+                <div class="col-sm-3">Email Address:</div>
+                <div class="col-sm">
+                  <div class="input-group input-group-sm mb-3">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="email" value="{{user_data.email}}">
+                  </div>
+                </div>
+            </div><br>
+
+            <!--Job Description-->
+            <div class="row" style="background-color: #90998E;">
+                <h4 style="color: white; display: flex; justify-content: center;">
+                    Job Description
+                </h4>
             </div><br>
             <div class="row">
-                <div class="col-sm-3">Username:</div>
-                <div class="col-sm">{{user_info.username}}</div>
+                <div class="col-sm-3">Institution:</div>
+                <div class="col-sm">
+                    <div class="input-group input-group-sm mb-3">
+                      <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="institution" value="{{user_profile.institution}}">
+                    </div>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Department:</div>
+                <div class="col-sm">
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="dept" value="{{user_profile.dept}}">
+                    </div>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Job Position:</div>
+                <div class="col-sm">
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="role" value="{{user_profile.role}}">
+                    </div>
+                </div>
             </div><br>
 
-         <!--Contact Information-->
-         <div class="row" style="background-color: #90998E;">
-            <h4 style="color: white; display: flex; justify-content: center;">
-                Contact Information
-            </h4>
-        </div><br>
-        <div class="row">
-            <div class="col-sm-3">Email Address:</div>
-            <div class="col-sm">{{user_info.email}}</div>
-        </div><br>
+            <p align="center">
+                <button type="submit" class="btn btn-outline-success">Save</button>
+            </p><br>
 
-        <!--Job Description-->
-        <div class="row" style="background-color: #90998E;">
-            <h4 style="color: white; display: flex; justify-content: center;">
-                Job Description
-            </h4>
-        </div><br>
-        <div class="row">
-            <div class="col-sm-3">Institution:</div>
-            <div class="col-sm">####</div>
-        </div><br>
-        <div class="row">
-            <div class="col-sm-3">Department:</div>
-            <div class="col-sm">####</div>
-        </div><br>
-        <div class="row">
-            <div class="col-sm-3">Job Position:</div>
-            <div class="col-sm">####</div>
-        </div><br><br>
-
-        <!--Buttons-->
-        <p align="center">
-            <a href="#" class="btn btn-outline-primary">Update Account</a>
-            <!--a href="#" class="btn btn-outline-success">Change Password</a-->
-            <a href="#" class="btn btn-outline-danger">Delete Account</a>
-        </p>
+            <!--Buttons-->
+            <p align="center">
+                <a href="{%url 'password_change' %}" class="btn btn-outline-primary">Change Password</a>
+                <!--a href="#" class="btn btn-outline-success">Change Password</a-->
+                <a href="#" class="btn btn-outline-danger">Delete Account</a>
+            </p>
+        </form>
 
       </div>
 

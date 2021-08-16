@@ -26,6 +26,9 @@ from tablib import Dataset
 
 from .resources import DistResource, PlantResource
 
+# Check errors
+from django.template import RequestContext
+
 # Import Pagination Libraries
 from django.core.paginator import Paginator
 
@@ -431,10 +434,24 @@ def userProfileView(request,id):
 def userProfileUpdate(request,id):
     user_data = User.objects.get(id=id)
     user_profile = Profile.objects.get(user_id=id)
-    context = {
 
+    if request.method == "POST":
+        u_form = forms.UserUpdateForm(request.POST, instance=user_data)
+        p_form = forms.UserProfileForm(request.POST, instance=user_profile)
+
+        if u_form.is_valid() and p_form.is_valid(): 
+            u_form.save()
+            p_form.save()
+            return userProfileView(request,id)
+            #return redirect
+
+        return userProfileView(request,id)
+        
+    context = {
+        'user_data' : user_data, #user_data = User.objects.get(id=id)
+        'user_profile' : user_profile,
     }
-    return render(request, 'PlantWebApp/user-profile.html',context)
+    return render(request, 'PlantWebApp/user-profile-update.html',context)
 
 def browse(request):
     # Only pubish plants that are verified by admin

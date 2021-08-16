@@ -38,3 +38,13 @@ class DistributionForm(ModelForm):
     class Meta:
         model = Distribution
         fields = '__all__'
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name','last_name','username','email',]
+
+'''class ProfileUpdateForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['institution','dept','role']'''
