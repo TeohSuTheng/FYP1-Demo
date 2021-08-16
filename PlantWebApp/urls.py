@@ -16,8 +16,11 @@ urlpatterns = [
     path('register-form/',views.UserRegister,name='user_reg'),
     path('login-form/',views.UserLogin,name='user_login'),
     path('user-home/',views.userHome,name='user_home'),
+    path('user-profile/<int:id>',views.userProfileView,name='user_profile'),
+    path('user-profile/update/<int:id>',views.userProfileUpdate,name='user_profile_update'),
     path("logout", views.logout_request, name="logout"),
     path('browse-name/',views.browse,name='browse'),
+
     #path('browse-use/',views.browse_use,name='browse_use'),
     #path('browse-dist/',views.browse_dist,name='browse_dist'),
     path('use-chart',views.usage_chart,name='use-chart'),

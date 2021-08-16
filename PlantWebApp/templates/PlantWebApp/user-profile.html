@@ -1,0 +1,90 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+
+{% block content%}
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+
+<div class="col py-3">
+
+        <!--Site Admin Content header-->
+        <div class="content-header" style="padding-left:25px ;">
+            <div class="row">
+              <div class="col-sm-9">
+                <h3 class="m-0">User Profile</h3>
+              </div><!-- /.col -->
+              <div class="col">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+                  <li class="breadcrumb-item active">User Profile</li>
+                </ol>
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+      </div><br>
+
+      <!--Main Content-->
+      <div class="container-fluid">
+        
+        <!--Basic Data-->
+        <div class="row" style="background-color: #90998E;">
+            <h4 style="color: white; display: flex; justify-content: center;">
+                Basic Data
+            </h4>
+        </div>
+        <br>
+            <div class="row">
+                <div class="col-sm-3">First Name:</div>
+                <div class="col-sm">{{user_info.first_name}}</div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Last Name:</div>
+                <div class="col-sm">{{user_info.last_name}}</div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Username:</div>
+                <div class="col-sm">{{user_info.username}}</div>
+            </div><br>
+
+         <!--Contact Information-->
+         <div class="row" style="background-color: #90998E;">
+            <h4 style="color: white; display: flex; justify-content: center;">
+                Contact Information
+            </h4>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-3">Email Address:</div>
+            <div class="col-sm">{{user_info.email}}</div>
+        </div><br>
+
+        <!--Job Description-->
+        <div class="row" style="background-color: #90998E;">
+            <h4 style="color: white; display: flex; justify-content: center;">
+                Job Description
+            </h4>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-3">Institution:</div>
+            <div class="col-sm">{{user_profile.institution}}</div>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-3">Department:</div>
+            <div class="col-sm">{{user_profile.dept}}</div>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-3">Job Position:</div>
+            <div class="col-sm">{{user_profile.role}}</div>
+        </div><br><br>
+
+        <!--Buttons-->
+        <p align="center">
+            <a href="#" class="btn btn-outline-primary">Update Account</a>
+            <!--a href="#" class="btn btn-outline-success">Change Password</a-->
+            <a href="#" class="btn btn-outline-danger">Delete Account</a>
+        </p>
+
+      </div>
+
+
+
+</div>   
+{% endblock %}

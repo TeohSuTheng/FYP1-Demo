@@ -15,15 +15,16 @@ from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
 
 from django.http import JsonResponse
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 from .serializers import PlantSerializer
 
 from django.contrib.auth.models import User
 from tablib import Dataset
 
 from .resources import DistResource, PlantResource
-from PlantWebApp import serializers
 
 # Import Pagination Libraries
 from django.core.paginator import Paginator
@@ -81,16 +82,6 @@ def displaySearchResults(request):
         return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,'suggest':suggest})
     else:
         home(request)
-
-def searchResultsAPI(request):
-        searchquery = request.GET.get('searchquery') #is not None
-        resultsdict = []
-
-        if searchquery:
-            results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','plantDist','voucher_no','usage__usage_tag')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
-            for result in results:
-                resultsdict.append(result)
-        return JsonResponse({'status':200, 'data':resultsdict})
 
 @login_required(login_url='user_login')    
 def displayPlantForm(request):
@@ -427,6 +418,24 @@ def userHome(request):
         return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list, 'reject_list':reject_list})
     ## if (is_staff==True) redirect to another page
 
+@login_required(login_url='user_login')
+def userProfileView(request,id):
+    user_profile = Profile.objects.get(user_id=id)
+    context = {
+        'user_info' : get_object_or_404(User,id=id), #user_data = User.objects.get(id=id)
+        'user_profile' : user_profile,
+    }
+    return render(request, 'PlantWebApp/user-profile.html',context)
+
+@login_required(login_url='user_login')
+def userProfileUpdate(request,id):
+    user_data = User.objects.get(id=id)
+    user_profile = Profile.objects.get(user_id=id)
+    context = {
+
+    }
+    return render(request, 'PlantWebApp/user-profile.html',context)
+
 def browse(request):
     # Only pubish plants that are verified by admin
     plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
@@ -589,5 +598,6 @@ def plantListApi(request):
     plants = Plant.objects.all()
     serializer = PlantSerializer(plants,many=True)
     return Response(serializer.data)
+
 
 
