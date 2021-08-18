@@ -301,7 +301,7 @@ def deletePost(request,pk):
 
     if request.method == "POST":
         plantdata.delete()
-        plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
+        #plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
         #return userHome(request)
         return home(request)
 
@@ -442,6 +442,7 @@ def userProfileUpdate(request,id):
         if u_form.is_valid() and p_form.is_valid(): 
             u_form.save()
             p_form.save()
+            messages.success(request,'Updated successfully.')
             return userProfileView(request,id)
             #return redirect
 
@@ -452,6 +453,14 @@ def userProfileUpdate(request,id):
         'user_profile' : user_profile,
     }
     return render(request, 'PlantWebApp/user-profile-update.html',context)
+
+def userProfileDelete(request,id):
+    if request.method == "POST":
+        request.user.delete()
+        messages.success(request,'Account deleted successfully.')
+        return redirect("home")
+
+    return render(request, 'PlantWebApp/user-delete.html',{})
 
 def browse(request):
     # Only pubish plants that are verified by admin

@@ -18,6 +18,7 @@ urlpatterns = [
     path('user-home/',views.userHome,name='user_home'),
     path('user-profile/<int:id>',views.userProfileView,name='user_profile'),
     path('user-profile-update/<int:id>',views.userProfileUpdate,name='user_profile_update'),
+    path('user-delete/<int:id>',views.userProfileDelete,name='user_delete'),
     path("logout", views.logout_request, name="logout"),
     path('browse-name/',views.browse,name='browse'),
 

@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
 
-<div class="col py-3">
+<!--div class="col py-3"-->
 
         <!--Site Admin Content header-->
         <div class="content-header" style="padding-left:25px ;">
@@ -79,12 +79,12 @@
         <p align="center">
             <a href="{% url 'user_profile_update' user.id %}" class="btn btn-outline-primary">Update Account</a>
             <!--a href="#" class="btn btn-outline-success">Change Password</a-->
-            <a href="#" class="btn btn-outline-danger">Delete Account</a>
+            <a href="{%url 'user_delete' user.id %}" class="btn btn-outline-danger">Delete Account</a>
         </p>
 
       </div>
 
 
 
-</div>   
+<!--/div-->   
 {% endblock %}
