@@ -462,6 +462,16 @@ def userProfileDelete(request,id):
 
     return render(request, 'PlantWebApp/user-delete.html',{})
 
+@staff_member_required(login_url='user_login')
+def siteUsersList(request):
+    userList = User.objects.filter(is_staff = False)
+    return render(request, 'PlantWebApp/site-users.html',{'userList':userList})
+
+@staff_member_required(login_url='user_login')
+def usageTagsSettings(request):
+    uses = Usage.objects.all().order_by('usage_tag')
+    return render(request, 'PlantWebApp/usage-tags-settings.html',{'uses':uses})
+
 def browse(request):
     # Only pubish plants that are verified by admin
     plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')

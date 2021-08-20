@@ -16,6 +16,7 @@ urlpatterns = [
     path('register-form/',views.UserRegister,name='user_reg'),
     path('login-form/',views.UserLogin,name='user_login'),
     path('user-home/',views.userHome,name='user_home'),
+    
     path('user-profile/<int:id>',views.userProfileView,name='user_profile'),
     path('user-profile-update/<int:id>',views.userProfileUpdate,name='user_profile_update'),
     path('user-delete/<int:id>',views.userProfileDelete,name='user_delete'),
@@ -26,6 +27,8 @@ urlpatterns = [
     #path('browse-dist/',views.browse_dist,name='browse_dist'),
     path('use-chart',views.usage_chart,name='use-chart'),
     path('unpublished-list/',views.unpubList,name='unpubList'),
+    path('site-users/',views.siteUsersList,name='siteUsersList'),
+    path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
     path('publish/<int:pk>',views.publishAction,name='publish'),
     path('country-settings/',views.country_settings,name='settings'),
     path('plant-data-upload/',views.data_upload,name='data-upload'),

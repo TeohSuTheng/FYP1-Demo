@@ -1,0 +1,57 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+
+{% block content%}
+<!--Site Admin Content header-->
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-9">
+        <h3 class="m-0">Ethnobotanical Usage Tags</h3>
+      </div><!-- /.col -->
+      <div class="col">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item active">Site Users</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+<div class="container">Search</div><br>
+
+<div class="container">
+    <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-3">
+                Id
+              </div>
+              <div class="col">
+                Usage Tag
+              </div>
+              <div class="col-3">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for use in uses%}
+            <div class="row align-items-start">
+                <div class="col-3">
+                    <p class="card-text">{{use.id}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{use.usage_tag}}</p>
+                </div>
+                <div class="col-3">
+                    <a href="#" class="btn btn-outline-success">Update</a>
+                    <a href="#" class="btn btn-outline-danger">Delete</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

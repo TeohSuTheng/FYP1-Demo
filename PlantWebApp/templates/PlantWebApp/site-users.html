@@ -1,0 +1,68 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+
+{% block content%}
+<!--Site Admin Content header-->
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-9">
+        <h3 class="m-0">Users</h3>
+      </div><!-- /.col -->
+      <div class="col">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item active">Site Users</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+<div class="container">Search</div><br>
+
+<div class="container">
+    <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-1">
+                Id
+              </div>
+              <div class="col">
+                Name
+              </div>
+              <div class="col">
+                Email
+              </div>
+              <div class="col">
+                Creation Date
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for siteUser in userList%}
+            <div class="row align-items-start">
+                <div class="col-1">
+                    <p class="card-text">{{siteUser.id}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.email}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.date_joined}}</p>
+                </div>
+                <div class="col">
+                    <a href="{% url 'user_profile' siteUser.id%}" class="btn btn-outline-success">Details</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
