@@ -1,6 +1,11 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
 {% block content%}
+<!--django-bootstrap-modal-forms-->
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+
 <!--Site Admin Content header-->
 <div class="content-header" style="padding-left:25px ;">
     <div class="row">
@@ -16,7 +21,7 @@
     </div><!-- /.row -->
 </div><br>
 
-<div class="container">Search</div><br>
+<div class="container">Search+Pagination+Add Tag</div><br>
 
 <div class="container">
     <div class="card">
@@ -43,8 +48,8 @@
                     <p class="card-text">{{use.usage_tag}}</p>
                 </div>
                 <div class="col-3">
-                    <a href="#" class="btn btn-outline-success">Update</a>
-                    <a href="#" class="btn btn-outline-danger">Delete</a>
+                    <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' use.id%}">Update</button>
+                    <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'usageTagsDelete' use.id%}">Delete</button>
                 </div>
                 <br><br><br>
             </div>
@@ -52,6 +57,29 @@
 
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+      </div>
+    </div>
+
 </div>
+
+<!--Javascript-->
+<script type="text/javascript">
+  $(function () {
+
+    $(".update-tag").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url")});
+    });
+
+    // Delete book buttons - formURL is retrieved from the data of the element
+    $(".delete-tag").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+
+    });
+</script>
 
 {% endblock %}

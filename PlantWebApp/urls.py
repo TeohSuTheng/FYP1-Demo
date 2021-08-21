@@ -28,7 +28,11 @@ urlpatterns = [
     path('use-chart',views.usage_chart,name='use-chart'),
     path('unpublished-list/',views.unpubList,name='unpubList'),
     path('site-users/',views.siteUsersList,name='siteUsersList'),
+
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
+    path('usage-tags-update-form/<int:pk>',views.UsageTagUpdateView.as_view(),name='usageTagsUpdate'),
+    path('usage-tags-del/<int:pk>',views.UsageTagDeleteView.as_view(),name='usageTagsDelete'),
+
     path('publish/<int:pk>',views.publishAction,name='publish'),
     path('country-settings/',views.country_settings,name='settings'),
     path('plant-data-upload/',views.data_upload,name='data-upload'),

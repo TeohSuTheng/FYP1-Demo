@@ -301,8 +301,6 @@ def deletePost(request,pk):
 
     if request.method == "POST":
         plantdata.delete()
-        #plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-        #return userHome(request)
         return home(request)
 
     context = {
@@ -458,6 +456,7 @@ def userProfileDelete(request,id):
     if request.method == "POST":
         request.user.delete()
         messages.success(request,'Account deleted successfully.')
+        ## + Del Profile
         return redirect("home")
 
     return render(request, 'PlantWebApp/user-delete.html',{})
@@ -636,4 +635,25 @@ def plantListApi(request):
     return Response(serializer.data)
 
 
+# Class Based Views
+from django.urls import reverse_lazy
+from bootstrap_modal_forms.generic import BSModalCreateView,BSModalUpdateView, BSModalDeleteView
 
+'''class UsageTagUpdateView(BSModalCreateView):
+    template_name = 'PlantWebApp/usage-tags-update.html'
+    form_class = forms.UseTagUpdateModelForm
+    success_message = 'Success: Plant Usage Tag updated.'
+    success_url = reverse_lazy('usageTagsSettings')'''
+
+class UsageTagUpdateView(BSModalUpdateView):
+    model = Usage
+    template_name = 'PlantWebApp/usage-tags-update.html'
+    form_class = forms.UseTagUpdateModelForm
+    success_message = 'Success: Plant Usage Tag updated.'
+    success_url = reverse_lazy('usageTagsSettings')
+
+class UsageTagDeleteView(BSModalDeleteView):
+    model = Usage
+    template_name = 'PlantWebApp/usage-tags-del.html'
+    success_message = 'Success: Plant Usage Tag deleted.'
+    success_url = reverse_lazy('usageTagsSettings')

@@ -5,6 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
+# django-bootstrap-modal-forms
+from bootstrap_modal_forms.forms import BSModalModelForm
+
 
 class PlantForm(ModelForm):
     class Meta:
@@ -44,7 +47,7 @@ class UserUpdateForm(ModelForm):
         model = User
         fields = ['first_name','last_name','username','email',]
 
-'''class ProfileUpdateForm(ModelForm):
+class UseTagUpdateModelForm(BSModalModelForm):
     class Meta:
-        model = Profile
-        fields = ['institution','dept','role']'''
+        model = Usage
+        fields = '__all__' 
