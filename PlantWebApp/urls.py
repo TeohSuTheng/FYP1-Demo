@@ -28,6 +28,7 @@ urlpatterns = [
     path('use-chart',views.usage_chart,name='use-chart'),
     path('unpublished-list/',views.unpubList,name='unpubList'),
     path('site-users/',views.siteUsersList,name='siteUsersList'),
+    path('site-user/<int:id>',views.siteUserDetail,name='siteUserDetail'),
 
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
     path('usage-tags-update-form/<int:pk>',views.UsageTagUpdateView.as_view(),name='usageTagsUpdate'),

@@ -1,6 +1,7 @@
 #from django.db.models.query import RawQuerySet
 from django.shortcuts import render,redirect, get_object_or_404
 #from django.views.generic import UpdateView
+from django.utils import formats
 
 from . import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -465,6 +466,51 @@ def userProfileDelete(request,id):
 def siteUsersList(request):
     userList = User.objects.filter(is_staff = False)
     return render(request, 'PlantWebApp/site-users.html',{'userList':userList})
+
+@staff_member_required(login_url='user_login')
+def siteUserDetail(request,id):
+
+    # Display user data 
+    user_info = User.objects.get(id=id)
+    user_profile = Profile.objects.get(user_id=id)
+
+    date = formats.date_format(user_info.date_joined, "SHORT_DATETIME_FORMAT")
+
+    # Display list of plant data submitted by user
+
+    ## Published ##
+    pub_list = Q(user_id=id) & Q(publish=True)
+    pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
+    ## Pagination ##
+    pub_p = Paginator(pub_plant_list,4)
+    page = request.GET.get('page')
+    pub_plants = pub_p.get_page(page)
+
+    ## To Be Verified ##
+    unpub_list = Q(user_id=id) & Q(publish=False) & Q(rejected=False) 
+    plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
+    ## Pagination ##
+    unpub_p = Paginator(plant_list,4)
+    page1 = request.GET.get('page1')
+    unpub_plants = unpub_p.get_page(page1)
+    
+    ## Rejected ##
+    reject_q = Q(user_id=id) & Q(rejected=True) 
+    reject_list = Plant.objects.filter(reject_q).order_by('plantScientificName')
+    ## Pagination ##
+    reject_p = Paginator(reject_list,4)
+    page2 = request.GET.get('page2')
+    reject_list = reject_p.get_page(page2)
+
+    context = {
+        'user_info':user_info,
+        'user_profile':user_profile,
+        'reject_list':reject_list,
+        'pub_plants':pub_plants,
+        'unpub_plants':unpub_plants,
+        'date':date
+    }
+    return render(request, 'PlantWebApp/site-user-detail.html',context)
 
 @staff_member_required(login_url='user_login')
 def usageTagsSettings(request):
