@@ -442,6 +442,9 @@ def userProfileUpdate(request,id):
             u_form.save()
             p_form.save()
             messages.success(request,'Updated successfully.')
+            
+            if request.user.is_staff:
+                return siteUsersList(request)
             return userProfileView(request,id)
             #return redirect
 

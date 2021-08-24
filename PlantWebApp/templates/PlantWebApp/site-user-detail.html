@@ -77,10 +77,15 @@
                     <div class="row">
                         <div class="col-sm-5">Job Position:</div>
                         <div class="col-sm">{{user_profile.role}}</div>
-                    </div><br><br>
+                    </div><br>
                 </div>
             </div>
-            <br>
+            <div class="d-grid gap-2">
+                <a href="{% url 'user_profile_update' user_info.id %}" class="btn btn-primary">Edit Profile</a>
+                <button class="btn btn-success" type="button">Reset Password</button>
+                <button class="btn btn-secondary" type="button">Disable User</button>
+                <button class="btn btn-danger" type="button">Delete User</button>
+            </div>
         </div>
         </div>
 
@@ -261,6 +266,6 @@
     </div>
 </div>
 
-
+<br><br>
 
 {% endblock content %}
