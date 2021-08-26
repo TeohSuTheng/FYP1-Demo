@@ -23,20 +23,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('PlantWebApp.urls')),
 
+    # REST Framework URLS
+    path('api/usage/', include('PlantWebApp.api.urls','usage_api')),
+
+    # Password Reset Links 
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='Accounts/password-change-done.html'),
     name='password_change_done'),
-
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='Accounts/password-change.html'),
     name='password_change'),
-
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='Accounts/password-reset-done.html'),
     name='password_reset_done'),
-
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='Accounts/password_reset_form.html'), name='password_reset'),
-
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='Accounts/password_reset_confirm.html'),
     name='password_reset_confirm'),
-
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='Accounts/password-reset-complete.html'),
     name='password_reset_complete'),
 ]

@@ -14,13 +14,7 @@ from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Dist
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
-
 from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.renderers import TemplateHTMLRenderer
-from .serializers import PlantSerializer
 
 from django.contrib.auth.models import User
 from tablib import Dataset
@@ -665,7 +659,7 @@ def displayPlantImage(request,id):
     plant = Plant.objects.get(id=id)
     return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
 
-#@api_view(['GET', 'POST'])
+'''#@api_view(['GET', 'POST'])
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
@@ -675,13 +669,8 @@ def apiOverview(request):
         'Update':'/task-update/<str:pk>/',
         'Delete':'/task-delete/<str:pk>/',
     }
-    return Response(api_urls)
+    return Response(api_urls)'''
 
-@api_view(['GET'])
-def plantListApi(request):
-    plants = Plant.objects.all()
-    serializer = PlantSerializer(plants,many=True)
-    return Response(serializer.data)
 
 
 # Class Based Views
