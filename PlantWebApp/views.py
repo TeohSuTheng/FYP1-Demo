@@ -22,7 +22,7 @@ from tablib import Dataset
 from .resources import DistResource, PlantResource
 
 # Check errors
-from django.template import RequestContext
+from django.template import RequestContext, context
 
 # Import Pagination Libraries
 from django.core.paginator import Paginator
@@ -80,6 +80,23 @@ def displaySearchResults(request):
         return render(request,'PlantWebApp/search-results.html',{'searchquery':searchquery, 'results':results,'suggest':suggest})
     else:
         home(request)
+
+#select2
+@staff_member_required(login_url='user_login')
+def displayUsageResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        result = Usage.objects.filter(usage_tag__search=searchquery)
+
+        # Set up Pagination
+        use_pag = Paginator(result, 10)
+        page = request.GET.get('page')
+        uses = use_pag.get_page(page)
+
+        full_list = Usage.objects.all().values('usage_tag').distinct()
+
+        return render(request,'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
+
 
 @login_required(login_url='user_login')    
 def displayPlantForm(request):
@@ -157,10 +174,6 @@ def displayPlantForm(request):
             return render(request,'PlantWebApp/plant-form.html',context_dict)            
 
     return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist})
-
-def displayGlossary(request):
-    plant_list = Plant.objects.all().order_by('plantScientificName')
-    return render(request, 'PlantWebApp/plant-glossary.html',{'plant_list':plant_list})
 
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
@@ -511,8 +524,15 @@ def siteUserDetail(request,id):
 
 @staff_member_required(login_url='user_login')
 def usageTagsSettings(request):
-    uses = Usage.objects.all().order_by('usage_tag')
-    return render(request, 'PlantWebApp/usage-tags-settings.html',{'uses':uses})
+    use_queryset = Usage.objects.all().order_by('usage_tag')
+    full_list = Usage.objects.all().values('usage_tag').distinct()
+
+    # Set up Pagination
+    use_pag = Paginator(use_queryset, 10)
+    page = request.GET.get('page')
+    uses = use_pag.get_page(page)
+
+    return render(request, 'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
 
 def browse(request):
     # Only pubish plants that are verified by admin
@@ -659,29 +679,18 @@ def displayPlantImage(request,id):
     plant = Plant.objects.get(id=id)
     return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
 
-'''#@api_view(['GET', 'POST'])
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls = {
-        'List':'/plant-list/',
-        'Detail View':'/plant-detail/<str:pk>/',
-        'Create':'/task-create/',
-        'Update':'/task-update/<str:pk>/',
-        'Delete':'/task-delete/<str:pk>/',
-    }
-    return Response(api_urls)'''
-
-
 
 # Class Based Views
+from django.views.generic import ListView
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView,BSModalUpdateView, BSModalDeleteView
+import json
 
-'''class UsageTagUpdateView(BSModalCreateView):
+class UsageTagCreateView(BSModalCreateView):
     template_name = 'PlantWebApp/usage-tags-update.html'
     form_class = forms.UseTagUpdateModelForm
     success_message = 'Success: Plant Usage Tag updated.'
-    success_url = reverse_lazy('usageTagsSettings')'''
+    success_url = reverse_lazy('display_form')
 
 class UsageTagUpdateView(BSModalUpdateView):
     model = Usage
@@ -695,3 +704,13 @@ class UsageTagDeleteView(BSModalDeleteView):
     template_name = 'PlantWebApp/usage-tags-del.html'
     success_message = 'Success: Plant Usage Tag deleted.'
     success_url = reverse_lazy('usageTagsSettings')
+
+# Live Search for usage-tags-settings
+'''class UsageListView(ListView):
+    model = Usage
+    template_name = 'PlantWebApp/usage-tags-settings.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["qs_json"] = json.dumps(list(Usage.objects.values()))
+        return context'''

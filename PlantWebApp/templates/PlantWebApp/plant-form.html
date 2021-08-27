@@ -1,6 +1,11 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
+{% load static %}
+
 
 {% block content%}
+<!--django-bootstrap-modal-forms-->
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
 <div class="container">
 <h1>Add Plant Information</h1>
 
@@ -57,7 +62,10 @@
         <!--Javascript Add eventlistener , confirm , POST form, django can add multiple entries?-->
         <div class="mb-3">
             <p>
-            <small>Cannot find the uses? </small>
+            <small>Cannot find the uses? </small> 
+            <button type="button" class="create-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'UsageTagCreateView'%}">Add</button>
+                    
+
             <a class="btn btn-light" align-items="center" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
             <!--a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"-->
               Add uses
@@ -75,7 +83,7 @@
 
         <div class="mb-3">
             <label for="inputState" class="form-label">Plant Distribution</label>
-                <select id="selectDist" class="form-select" name="distribution" multiple="multiple">
+                <select id="selectDist" class="js-example-basic-single js-states form-control" name="distribution" >
                     {% for dat in dist %}
                         <option value="{{ dat.id }}">{{ dat.countryName }}</option>
                     {% endfor %}
@@ -103,9 +111,14 @@
         
     </form>
 
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content"></div>
+        </div>
+    </div>
 </div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
         
         //ajax 
         const imgBox = document.querySelector('#img-box');
@@ -137,5 +150,16 @@
         var tempstr = "{{usearr|safe}}".replace(/[^0-9,]/g, '').split(",");
         $("#mySelect2").val(tempstr);
         
-    </script>
+</script>
+
+<!--Javascript: Pop-up form-->
+<script type="text/javascript">
+    $(function () { 
+      /*function popupform(){*/
+      $(".create-tag").each(function () {
+          $(this).modalForm({formURL: $(this).data("form-url")});
+      });
+    })
+</script>
+
 {% endblock content %}

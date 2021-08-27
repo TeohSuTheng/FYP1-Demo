@@ -5,7 +5,6 @@
 <!--django-bootstrap-modal-forms-->
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
-
 <!--Site Admin Content header-->
 <div class="content-header" style="padding-left:25px ;">
     <div class="row">
@@ -15,20 +14,55 @@
       <div class="col">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
-          <li class="breadcrumb-item active">Site Users</li>
+          <li class="breadcrumb-item active"><a href="{%url 'usageTagsSettings' %}">Usage Tags</a></li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
 </div><br>
 
-<div class="container">Search+Pagination+Add Tag</div><br>
+<!--Search Form - Plant Usage Tag-->
+<div class="container"> #+Add Tag </br>
+  <div class="row">
+    <div class="col-8"></div>
+    <div class="col">
+      <form class="d-flex" method="GET" action="{%url 'display_UsageResults' %}">
+        {% csrf_token %}
+        <div class="input-group input-group-sm mb-3">
+          <select id="selectUse" class="form-select" name="searchquery" data-placeholder="Search Usage Tag" >
+            <option></option>
+            {% for tag in full_list %}
+                <option value="{{ tag.usage_tag }}">{{ tag.usage_tag }}</option>
+            {% endfor %}
+          </select>
+          <!--input type="text" class="form-control" placeholder="Search Usage Tag" name="searchquery" id="tags"-->
+          <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
+<!--div class="container">
+  <div class="row">
+    <div class="col-8"></div>
+    <div class="col">
+        <div class="input-group input-group-sm mb-3">
+          <input type="text" class="form-control" placeholder="Search Usage Tag" name="searchquery" id="searchquery">
+          <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
+        </div>
+    </div>
+  </div>
+</div-->
+
+
+
+<!--Usage Tags Table-->
 <div class="container">
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
             <div class="col-3">
-                Id
+                No.
               </div>
               <div class="col">
                 Usage Tag
@@ -38,11 +72,29 @@
               </div>
             </div>
         </h6>
+        
+        <!--div class="card-body">
+          <div id="box">
+              {% for use in object_list %}
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col">{{use.usage_tag}}</div>
+                  <div class="col-3">
+                    <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' use.id%}">Update</button>
+                    <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'usageTagsDelete' use.id%}">Delete</button>
+                  </div>
+                </div><br>
+              {% endfor %}
+          </div>
+        </div-->
+        
+
+        {% if uses %}
         <div class="card-body">
-            {% for use in uses%}
+          {% for use in uses %}
             <div class="row align-items-start">
                 <div class="col-3">
-                    <p class="card-text">{{use.id}}</p>
+                    <p class="card-text">{{ forloop.counter0|add:uses.start_index }}</p>
                 </div>
                 <div class="col">
                     <p class="card-text">{{use.usage_tag}}</p>
@@ -54,22 +106,41 @@
                 <br><br><br>
             </div>
             {% endfor %}
-
         </div>
-    </div>
+        {% endif %}
+    </div><br>
+
+    <!--Pagination-->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center ">
+            {% if uses.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ uses.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                    Page {{uses.number}} of {{uses.paginator.num_pages}}
+                </a>
+            </li> 
+
+            {% if uses.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ uses.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 
     <div class="modal fade" tabindex="-1" role="dialog" id="modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content"></div>
       </div>
     </div>
-
+<br><br><br>
 </div>
 
-<!--Javascript-->
+<!--Javascript: Pop-up form-->
 <script type="text/javascript">
-  $(function () {
-
+  $(function () { 
+    /*function popupform(){*/
     $(".update-tag").each(function () {
         $(this).modalForm({formURL: $(this).data("form-url")});
     });
@@ -78,8 +149,53 @@
     $(".delete-tag").each(function () {
         $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
     });
-
-    });
+  })
 </script>
 
+<!--Select2-->
+<script>
+   $(document).ready(function() {
+            $('#selectUse').select2({
+            });
+        });
+</script>
 {% endblock %}
+
+<!--
+/*Javascript: Live Search for Usage Tags
+<script>
+$(function () {
+    const data = '{{qs_json}}'
+    const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
+    console.log(rdata)
+    const input = document.getElementById('searchquery')
+    console.log(input)
+
+    let filteredArr = []
+    input.addEventListener('keyup',(e)=>{
+      box.innerHTML = ""
+      filteredArr = rdata.filter(info=>info['usage_tag'].includes(e.target.value))
+      console.log(e.target.value)
+      console.log(filteredArr)
+      
+      if (filteredArr.length > 0){
+            filteredArr.map(info=>{
+                box.innerHTML += `
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col">${info['usage_tag']}</div>
+                  <div class="col-3">
+                    <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' 9998%}">Update</button>
+                    <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'usageTagsDelete' 9999%}">Delete</button>
+                  </div>
+                </div><br>
+                `.replace(9998,info['id']).replace(9999,info['id'])
+            })
+        } else {
+            box.innerHTML = "<b>No results found...</b>"
+        }
+    }
+    )});
+
+    popupform();
+</script> -->

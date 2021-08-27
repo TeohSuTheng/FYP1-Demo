@@ -5,9 +5,9 @@ from . import views
 urlpatterns = [
     path('',views.home,name='home'),
     path('search-results/',views.displaySearchResults,name='display_SearchResults'),
-    #path('search/',views.searchResultsAPI,name='searchResultsAPI'),
+    path('usage-search-results/',views.displayUsageResults,name='display_UsageResults'),
+
     path('form/',views.displayPlantForm,name='display_form'),
-    path('glossary/',views.displayGlossary,name='display_glossary'),
     path('plant/<int:id>',views.displayPlant,name='display_plant'),
     path('plant/image/<int:id>',views.displayPlantImage,name='display_plantImg'),
     path('form/update/<int:pk>',views.UpdatePostView,name='update_form'),
@@ -31,8 +31,10 @@ urlpatterns = [
     path('site-user/<int:id>',views.siteUserDetail,name='siteUserDetail'),
 
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
+    #path('usage-tags-settings/',views.UsageListView.as_view()   ,name='usageTagsSettings'),
     path('usage-tags-update-form/<int:pk>',views.UsageTagUpdateView.as_view(),name='usageTagsUpdate'),
     path('usage-tags-del/<int:pk>',views.UsageTagDeleteView.as_view(),name='usageTagsDelete'),
+    path('usage-tags-create/',views.UsageTagCreateView.as_view(),name='UsageTagCreateView'),
 
     path('publish/<int:pk>',views.publishAction,name='publish'),
     path('country-settings/',views.country_settings,name='settings'),

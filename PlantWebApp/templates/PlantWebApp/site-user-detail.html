@@ -100,7 +100,7 @@
                         <h6 class="card-header" style="background-color: #dff8e552;">
                             <div class="row align-items-start">
                                 <div class="col-2">
-                                    Id
+                                    No.
                                 </div>
                                 <div class="col">
                                     Scientific Name
@@ -114,7 +114,7 @@
                             {% for plant in pub_plants%}
                             <div class="row align-items-start">
                                 <div class="col-2">
-                                    {{plant.id}}
+                                    {{ forloop.counter0|add:pub_plants.start_index }}
                                 </div>
                                 <div class="col">
                                     <p class="card-text">{{plant.plantScientificName}}</p>
@@ -159,7 +159,7 @@
                 <h6 class="card-header" style="background-color: #d6f7dea1;">
                     <div class="row align-items-start">
                         <div class="col-2">
-                            Id
+                            No.
                         </div>
                         <div class="col">
                             Scientific Name
@@ -173,7 +173,7 @@
                     {% for plant in unpub_plants%}
                     <div class="row align-items-start">
                         <div class="col-2">
-                            {{ plant.id }}
+                            {{ forloop.counter0|add:unpub_plants.start_index }}
                         </div>
                         <div class="col">
                             <p class="card-text">{{plant.plantScientificName}}</p>
@@ -216,10 +216,13 @@
                         <h6 class="card-header" style="background-color: #bff5ce83;">
                         <div class="row align-items-start">
                             <div class="col-2">
-                                Id
+                                No.
                             </div>
                             <div class="col">
                                 Scientific Name
+                            </div>
+                            <div class="col-3">
+                                Action
                             </div>
                         </div>
                     </h6>
@@ -227,7 +230,7 @@
                         {% for plant in reject_list%}
                         <div class="row align-items-start">
                             <div class="col-2">
-                                {{ plant.id }}
+                                {{ forloop.counter0|add:reject_list.start_index }}
                             </div>
                             <div class="col">
                                 <p class="card-text">{{plant.plantScientificName}}</p>
