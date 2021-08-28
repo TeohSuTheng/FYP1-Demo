@@ -687,10 +687,10 @@ from bootstrap_modal_forms.generic import BSModalCreateView,BSModalUpdateView, B
 import json
 
 class UsageTagCreateView(BSModalCreateView):
-    template_name = 'PlantWebApp/usage-tags-update.html'
+    template_name = 'PlantWebApp/usage-tags-create.html'
     form_class = forms.UseTagUpdateModelForm
-    success_message = 'Success: Plant Usage Tag updated.'
-    success_url = reverse_lazy('display_form')
+    success_message = 'Success: Plant Usage Tag Created.'
+    success_url = reverse_lazy('usageTagsSettings')
 
 class UsageTagUpdateView(BSModalUpdateView):
     model = Usage

@@ -45,11 +45,6 @@
                 <label for="floatingTextarea">Flower</label>
             </div><br>
 
-            <!--div class="mb-3">
-                <label class="form-label">Plant Distribution</label>
-                <input type="text" class="form-control" name="plantDist" value="{{plantDist}}">
-            </div-->
-
             <div class="mb-3">
                 <label for="inputState" class="form-label">Ethnobotanical Uses</label>
                     <select id="mySelect2" class="form-select" name="usage" multiple="multiple">
@@ -63,6 +58,8 @@
         <div class="mb-3">
             <p>
             <small>Cannot find the uses? </small> 
+
+            <!--?-->
             <button type="button" class="create-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'UsageTagCreateView'%}">Add</button>
                     
 
@@ -83,7 +80,8 @@
 
         <div class="mb-3">
             <label for="inputState" class="form-label">Plant Distribution</label>
-                <select id="selectDist" class="js-example-basic-single js-states form-control" name="distribution" >
+                <select id="selectDist" class="form-control" name="distribution" multiple="multiple">
+                    <option></option>
                     {% for dat in dist %}
                         <option value="{{ dat.id }}">{{ dat.countryName }}</option>
                     {% endfor %}

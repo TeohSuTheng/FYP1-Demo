@@ -21,9 +21,11 @@
 </div><br>
 
 <!--Search Form - Plant Usage Tag-->
-<div class="container"> #+Add Tag </br>
+<div class="container">
   <div class="row">
-    <div class="col-8"></div>
+    <div class="col-8">
+      <button type="button" class="create-tag bs-modal btn btn-sm btn-success" data-form-url="{% url 'UsageTagCreateView'%}">Create Usage Tag + </button>
+    </div>
     <div class="col">
       <form class="d-flex" method="GET" action="{%url 'display_UsageResults' %}">
         {% csrf_token %}
@@ -148,6 +150,10 @@
     // Delete book buttons - formURL is retrieved from the data of the element
     $(".delete-tag").each(function () {
         $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+
+    $(".create-tag").each(function () {
+          $(this).modalForm({formURL: $(this).data("form-url")});
     });
   })
 </script>
