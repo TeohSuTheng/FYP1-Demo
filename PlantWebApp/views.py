@@ -19,6 +19,9 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from tablib import Dataset
 
+# Folium Map - index page
+import folium
+
 from .resources import DistResource, PlantResource
 
 # Check errors
@@ -31,16 +34,24 @@ from django.core.paginator import Paginator
 
 def home(request):
     """
-    Display home page
+    Display elements in home page
     """
     plant_pub = Plant.objects.filter(publish=True).count()
     use_tag = Usage.objects.count()
     user_no = User.objects.count()
 
+    # Create Folium Map Object
+    m = folium.Map(location=[3.1209,101.6538], zoom_start=14,)
+    folium.Marker(
+        [3.1209,101.6538], tooltip="We are here"
+    ).add_to(m)
+    m = m._repr_html_()
+
     context = {
         'plant_pub':plant_pub,
         'use_tag':use_tag,
-        'user_no' : user_no
+        'user_no' : user_no,
+        'm' : m
     }
     return render(request,'PlantWebApp/index.html',context)
 
@@ -96,7 +107,6 @@ def displayUsageResults(request):
         full_list = Usage.objects.all().values('usage_tag').distinct()
 
         return render(request,'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
-
 
 @login_required(login_url='user_login')    
 def displayPlantForm(request):

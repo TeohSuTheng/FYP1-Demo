@@ -123,7 +123,7 @@
             <p align="center">Advanced Search (Boolean Search)</p><br>
             <div class="row justify-content-center">
                 <div class="col">
-                    <div class="card" style="width: 20rem;">
+                    <div class="card" >
                         <img class="card-img-top" src="{% static '/images/discover-icon2.jpg' %}" alt="..">
                         <div class="card-body">
                           <p class="card-text">{{plant_pub}} plant records published.</p>
@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card" style="width: 20rem;">
+                    <div class="card">
                         <img class="card-img-top" src="{% static '/images/discover-icon3.jpg' %}" alt="..">
                         <div class="card-body">
                           <p class="card-text">{{use_tag}} ethnobotanical usage recorded.</p>
@@ -139,7 +139,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card" style="width: 20rem;">
+                    <div class="card" >
                         <img class="card-img-top" src="{% static '/images/discover-icon4.jpg' %}" alt="..">
                         <div class="card-body">
                           <p class="card-text">{{user_no}} registered users.</p>
@@ -154,8 +154,38 @@
     
     </section>
 
-    <section class="partition-background"><p>Project Background</p></section>
-    <section class="partition-about"><p>About Us</p></section>
+    <section class="partition-background">
+      <div class="container-fluid">
+        <h2>Project Background</h2>
+        <div class="row">
+          <div class="col">
+            <div class="map-container">
+              <h3>Map</h3>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="partition-about">
+      <div class="container-fluid">
+        <h2>Contact Us</h2>
+        <div class="row" style="display: flex; justify-content: center;">
+          <div class="col" style="padding-top: 40px;">
+            <p>Email</p>
+            <p>Phone</p>
+          </div>
+          <div class="col" style="padding-top: 40px;">
+            <div class="map-container">
+              {{m|safe}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer></footer>
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>

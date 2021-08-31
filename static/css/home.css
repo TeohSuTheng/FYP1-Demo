@@ -52,10 +52,12 @@
 .partition-background{
     height:100vh;
     background-color: #2D442F;
+    color: white;
 }
 
 .partition-about{
     height:100vh;
+    padding: 40px;
 }
 
 /*Discover Section*/
@@ -106,4 +108,7 @@
     }
 }
 
-
+footer{
+    height: 30vh;
+    background-color: gainsboro;
+}
