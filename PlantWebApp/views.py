@@ -473,11 +473,12 @@ def userProfileUpdate(request,id):
     }
     return render(request, 'PlantWebApp/user-profile-update.html',context)
 
+@login_required(login_url='user_login')
 def userProfileDelete(request,id):
     if request.method == "POST":
         request.user.delete()
         messages.success(request,'Account deleted successfully.')
-        ## + Del Profile
+        ## + Del Profile (cascade = True)
         return redirect("home")
 
     return render(request, 'PlantWebApp/user-delete.html',{})
@@ -714,6 +715,8 @@ class UsageTagDeleteView(BSModalDeleteView):
     template_name = 'PlantWebApp/usage-tags-del.html'
     success_message = 'Success: Plant Usage Tag deleted.'
     success_url = reverse_lazy('usageTagsSettings')
+
+#class AdminDisableUser():
 
 # Live Search for usage-tags-settings
 '''class UsageListView(ListView):
