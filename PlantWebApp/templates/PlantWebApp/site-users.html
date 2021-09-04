@@ -56,7 +56,11 @@
                 </div>
                 <div class="col">
                     <a href="{% url 'siteUserDetail' siteUser.id%}" class="btn btn-success">Details</a>
-                    <a href="{% url 'user_profile' siteUser.id%}" class="btn btn-danger">Disable</a>
+                    {% if siteUser.is_active %}
+                      <a href="{%url 'siteUserDisable' siteUser.id %}" class="btn btn-danger">Disable</a>
+                    {% else %}
+                      <a href="{%url 'siteUserEnable' siteUser.id %}" class="btn btn-secondary">Enable</a>
+                    {% endif %}
                 </div>
                 <br><br><br>
             </div>

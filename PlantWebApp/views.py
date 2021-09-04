@@ -368,13 +368,20 @@ def UserLogin(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request, username=username, password = password)
+            check = Q(username=username) & Q(is_active = False)
+            disableduser = User.objects.filter(check)
+            print(disableduser)
+            print(user)
 
             if user is not None:
                 login(request,user)
                 return redirect('user_home')
             else:
+                if disableduser:
+                    messages.info(request, 'Account disabled. Please contact site administrator: site@admin.com ')
+                    return render(request, 'PlantWebApp/login-form.html',{})
+                    
                 messages.info(request, 'Username or password is incorrect.')
-
         return render(request, 'PlantWebApp/login-form.html',{})
 
 def logout_request(request):
@@ -534,6 +541,20 @@ def siteUserDetail(request,id):
     return render(request, 'PlantWebApp/site-user-detail.html',context)
 
 @staff_member_required(login_url='user_login')
+def siteUserDisable(request,id):
+    user_data = User.objects.get(id=id)
+    user_data.is_active = False
+    user_data.save()
+    return siteUsersList(request)
+
+@staff_member_required(login_url='user_login')
+def siteUserEnable(request,id):
+    user_data = User.objects.get(id=id)
+    user_data.is_active = True
+    user_data.save()
+    return siteUsersList(request)
+
+@staff_member_required(login_url='user_login')
 def usageTagsSettings(request):
     use_queryset = Usage.objects.all().order_by('usage_tag')
     full_list = Usage.objects.all().values('usage_tag').distinct()
@@ -690,6 +711,9 @@ def displayPlantImage(request,id):
     plant = Plant.objects.get(id=id)
     return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
 
+
+
+#@permission_required('polls.add_choice')
 
 # Class Based Views
 from django.views.generic import ListView

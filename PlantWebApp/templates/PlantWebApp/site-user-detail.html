@@ -83,8 +83,12 @@
             <div class="d-grid gap-2">
                 <a href="{% url 'user_profile_update' user_info.id %}" class="btn btn-primary">Edit Profile</a>
                 <button class="btn btn-warning" type="button">Reset Password</button>
-                <button class="btn btn-danger" type="button">Disable User</button>
-                <!--a href="{%url 'user_delete' user_info.id %}" class="btn btn-danger">Delete User</a-->
+                <!--button class="btn btn-danger" type="button">Disable User</button-->
+                {% if user_info.is_active %}
+                    <a href="{%url 'siteUserDisable' user_info.id %}" class="btn btn-danger">Disable User</a>
+                {% else %}
+                    <a href="{%url 'siteUserEnable' user_info.id %}" class="btn btn-secondary">Enable User</a>
+                {% endif %}
             </div>
         </div>
         </div>
