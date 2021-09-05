@@ -31,6 +31,7 @@ urlpatterns = [
     path('site-user/<int:id>',views.siteUserDetail,name='siteUserDetail'),
     path('site-user/disable/<int:id>',views.siteUserDisable,name='siteUserDisable'),
     path('site-user/enable/<int:id>',views.siteUserEnable,name='siteUserEnable'),
+    path('site-user-reset/<int:id>',views.adminResetPassword,name='AdminResetPassword'),
 
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
     #path('usage-tags-settings/',views.UsageListView.as_view()   ,name='usageTagsSettings'),

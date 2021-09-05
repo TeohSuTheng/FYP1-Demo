@@ -1,6 +1,8 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
 {% block content%}
+
 <!--Site Admin Content header-->
 <div class="content-header" style="padding-left:25px ;">
     <div class="row">
@@ -82,8 +84,7 @@
             </div>
             <div class="d-grid gap-2">
                 <a href="{% url 'user_profile_update' user_info.id %}" class="btn btn-primary">Edit Profile</a>
-                <button class="btn btn-warning" type="button">Reset Password</button>
-                <!--button class="btn btn-danger" type="button">Disable User</button-->
+                <a href="{% url 'AdminResetPassword' user_info.id %}" class="btn btn-warning">Reset Password</a>
                 {% if user_info.is_active %}
                     <a href="{%url 'siteUserDisable' user_info.id %}" class="btn btn-danger">Disable User</a>
                 {% else %}
@@ -271,8 +272,10 @@
             
         </div>
     </div>
+
 </div>
 
 <br><br>
+
 
 {% endblock content %}

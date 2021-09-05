@@ -711,6 +711,13 @@ def displayPlantImage(request,id):
     plant = Plant.objects.get(id=id)
     return render(request,'PlantWebApp/plant-image.html',{'plant':plant})
 
+def adminResetPassword(request,id):
+    user_dat = User.objects.get(id=id)
+    if request.method == "POST":
+        new_password = request.POST['new_pw']
+        user_dat.set_password(new_password)
+        user_dat.save()
+    return render(request,'PlantWebApp/site-user-reset-password.html',{'user_dat':user_dat})
 
 
 #@permission_required('polls.add_choice')
@@ -740,7 +747,6 @@ class UsageTagDeleteView(BSModalDeleteView):
     success_message = 'Success: Plant Usage Tag deleted.'
     success_url = reverse_lazy('usageTagsSettings')
 
-#class AdminDisableUser():
 
 # Live Search for usage-tags-settings
 '''class UsageListView(ListView):
