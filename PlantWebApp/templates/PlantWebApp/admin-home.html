@@ -190,6 +190,10 @@
                   <div class="d-flex justify-content-between">
                     <h5 class="card-title">Plant Records Based on Uses</h5>
                     <!--a href="javascript:void(0);">View Report</a-->
+                    <div class="grp">
+                      <button id="zoomIn" onclick="ZoomIn"><i class="fas fa-search-plus"></i></button>
+                      <button id="zoomOut" onclick="ZoomOut"><i class="fas fa-search-minus"></i></button>
+                    </div>
                   </div>
                 </div>
                 <div class="card-body">
@@ -213,6 +217,27 @@
 
 </div>
 </section>
+
+<!--Usage Chart Size Adjustments-->
+<script>
+
+  function ZoomIn() {
+    //document.querySelector(".use-chart").style.width += 1000;
+    //jquery
+    $('.use-chart').width("+=100");
+  }
+
+  function ZoomOut() {
+    //jquery
+    if ($('.use-chart').width() > 1024 ){
+      $('.use-chart').width("-=100");
+    }
+  }
+  
+  document.getElementById("zoomIn").onclick = function() {ZoomIn()};
+  document.getElementById("zoomOut").onclick = function() {ZoomOut()};
+  
+</script>
 
 <!--svgMap.js-->
 <script>
