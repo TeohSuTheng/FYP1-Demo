@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
+from django.forms import formset_factory
 
 from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection
 from django.contrib import messages
@@ -719,6 +720,23 @@ def adminResetPassword(request,id):
         user_dat.save()
     return render(request,'PlantWebApp/site-user-reset-password.html',{'user_dat':user_dat})
 
+def advancedSearch(request):
+    # form - flexible
+    # user can add input columns + type
+    # input name - search1, search2, search3... (for loop)
+    # Qcomplex - Boolean (AND + Or first) -> (NOT)
+    # AJAX Suggestions (type chosen)
+    AdvancedSearchFormSet = formset_factory(forms.AdvancedSearchForm,extra=3)
+    
+    if 'submit' in request.POST:
+        formset = AdvancedSearchFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                # extract name from each form and save
+                name = form.cleaned_data.get('term')
+                print(name)
+
+    return render(request,'PlantWebApp/advanced-search.html',{'AdvancedSearchFormSet':AdvancedSearchFormSet})
 
 #@permission_required('polls.add_choice')
 

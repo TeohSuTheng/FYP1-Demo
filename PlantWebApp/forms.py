@@ -1,4 +1,5 @@
 from django.db.models import fields
+from django.forms import formset_factory
 from .models import Distribution, Plant, Rejection, Usage, Profile
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
@@ -51,3 +52,35 @@ class UseTagUpdateModelForm(BSModalModelForm):
     class Meta:
         model = Usage
         fields = '__all__' 
+
+FIELD_CHOICES = [
+    ('plantScientificName','Scientific Name'),
+    ('plantLocalName','Local Name'),
+    ('pmStem','Stem Morphology'),
+]
+
+BOOLEAN_CHOICES = [
+    ('And','AND'),
+    ('Or','OR'),
+    ('Not','NOT'),
+]
+
+class AdvancedSearchForm(forms.Form):
+    term = forms.CharField(
+        label="Search",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter Search Query'
+        }))
+    field = forms.ChoiceField(
+        label="Select Field",
+        widget=forms.Select,
+        choices=FIELD_CHOICES,
+    )
+    booleanOperator = forms.ChoiceField(
+        label="Select Boolean Operator",
+        widget=forms.Select,
+        choices=BOOLEAN_CHOICES,
+    )
+
+#AdvancedSearchFormSet = formset_factory(AdvancedSearchForm,extra=1)

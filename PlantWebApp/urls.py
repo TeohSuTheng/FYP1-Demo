@@ -22,6 +22,7 @@ urlpatterns = [
     path('user-delete/<int:id>',views.userProfileDelete,name='user_delete'),
     path("logout", views.logout_request, name="logout"),
     path('browse-name/',views.browse,name='browse'),
+    path('advanced-search/',views.advancedSearch,name='advancedSearch'),
 
     #path('browse-use/',views.browse_use,name='browse_use'),
     #path('browse-dist/',views.browse_dist,name='browse_dist'),

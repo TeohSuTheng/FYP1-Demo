@@ -1,0 +1,107 @@
+{% extends "PlantWebApp/base-no-nav.html" %}
+{% load static %}
+
+{% block content%}
+<!--div class="container">
+    <form method="GET" action="">
+        {% csrf_token %}
+        <div class="dynamic-form">
+            <div class="row">
+                <div class="col-8"><input type="text" class="form-control" placeholder="Search" name="search1"></div>
+                <div class="col">
+                    <select id="inputState" class="form-select">
+                    <option selected>Select a Field</option>
+                    <option>...</option>
+                    </select>
+                </div>
+                <div class="col-1">
+                    <button onclick="addFunction()">+</button>
+                    <button>-</button>
+                </div>
+            </div><br>
+
+
+        </div>
+        <!--Row>
+
+        <div class="input-group mb-3">
+            <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+        </div>
+    </form>
+</div-->
+
+<div class="container">
+    <h1>Advanced Search</h1>
+    
+    <form method="POST" action="">
+    {% csrf_token %}
+
+    {{ AdvancedSearchFormSet.management_form }}
+
+    {% for form in AdvancedSearchFormSet.forms %}
+    <div class='table'>
+        <table class='no_error' style="width: 100%;">
+            {{ form.as_table }}
+            <!--{{form.as_p}}-->
+        </table>
+    </div>
+        <!--{{form.as_p}}
+        <!--
+        {% for field in form  %}
+        <div class="row">
+            <div class="col-2">
+                {{ field.label_tag }}
+            </div>
+            <div class="col">
+                {{ field }}
+            </div>
+        </div><br>
+        {% endfor %}-->
+    {% endfor %}
+    <div class="input-group-append">
+        <button type="submit" name="submit"> Search </button>
+    </div>
+</form>
+    <div class="input-group-append">
+        <button class="btn btn-success add-form-row" id="add_more">+</button>
+    </div>
+</div>
+
+<script>
+    //var total = 0;
+
+    function cloneMore(selector, type) {
+
+        var newElement = $(selector).clone(true);
+        total = $('#id_' + type + '_set-TOTAL_FORMS').val();
+
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            //alert(name + '|'+ id);
+            /*
+            name: form-0-term
+            id: id_form-0-term
+
+            form-0-field|id_form-0-field
+            form-0-booleanOperator|id_form-0-booleanOperator
+            */
+        });
+        newElement.find('label').each(function() {
+            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+            $(this).attr('for', newFor);
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        //total++;
+    }
+
+    $('#add_more').click(function() {
+        cloneMore('div.table:last', 'service');
+    });
+</script>
+
+{% endblock %}
+

@@ -9,7 +9,7 @@ body{
 }
 
 .search-section{
-    height:75vh;
+    height:80vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,7 +34,15 @@ img {
     margin: 0%;
 }
 
-
+.parallax{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
 
 
 </style>
@@ -137,6 +145,12 @@ Number of Pages: {{ plants.paginator.num_pagesplants.paginator.num_pages }}
 <br><br><br>
 
 
-
+<script>
+    window.addEventListener('scroll',function(){
+        const parallax = document.querySelector('.parallax');
+        let scrollPosition = window.pageYOffset;
+        parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
+    })
+</script>
 
 {% endblock content %}
