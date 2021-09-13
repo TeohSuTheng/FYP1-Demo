@@ -335,7 +335,7 @@ def UserRegister(request):
 
         if request.method == "POST":
             form = forms.CreateUserForm(request.POST)
-            profile = forms.UserProfileForm(request.POST)
+            #profile = forms.UserProfileForm(request.POST)
             fname = request.POST['first_name']
             lname = request.POST['last_name']
             uname = request.POST['username']
@@ -403,7 +403,7 @@ def logout_request(request):
         del request.session['user_id']
     except KeyError:
         pass
-    
+
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("home")
@@ -442,6 +442,9 @@ def userHome(request):
 
         print(cc)
 
+        # Get all user objects
+        
+
         context = {
             'total_plant':total_plant,
             'plant_pub':plant_pub,
@@ -465,21 +468,21 @@ def userHome(request):
 
 @login_required(login_url='user_login')
 def userProfileView(request,id):
-    user_profile = Profile.objects.get(user_id=id)
+    #user_profile = Profile.objects.get(user_id=id)
     context = {
         'user_info' : get_object_or_404(User,id=id), #user_data = User.objects.get(id=id)
-        'user_profile' : user_profile,
+        #'user_profile' : user_profile,
     }
     return render(request, 'PlantWebApp/user-profile.html',context)
 
 @login_required(login_url='user_login')
 def userProfileUpdate(request,id):
     user_data = User.objects.get(id=id)
-    user_profile = Profile.objects.get(user_id=id)
+    #user_profile = Profile.objects.get(user_id=id)
 
     if request.method == "POST":
         u_form = forms.UserUpdateForm(request.POST, instance=user_data)
-        p_form = forms.UserProfileForm(request.POST, instance=user_profile)
+        p_form = forms.UserProfileForm(request.POST, instance=user_data.profile)
 
         if u_form.is_valid() and p_form.is_valid(): 
             u_form.save()
@@ -495,7 +498,7 @@ def userProfileUpdate(request,id):
         
     context = {
         'user_data' : user_data, #user_data = User.objects.get(id=id)
-        'user_profile' : user_profile,
+        #'user_profile' : user_profile,
     }
     return render(request, 'PlantWebApp/user-profile-update.html',context)
 
@@ -519,7 +522,7 @@ def siteUserDetail(request,id):
 
     # Display user data 
     user_info = User.objects.get(id=id)
-    user_profile = Profile.objects.get(user_id=id)
+    #user_profile = Profile.objects.get(user_id=id)
 
     date = formats.date_format(user_info.date_joined, "SHORT_DATETIME_FORMAT")
 
@@ -551,7 +554,7 @@ def siteUserDetail(request,id):
 
     context = {
         'user_info':user_info,
-        'user_profile':user_profile,
+        #'user_profile':user_profile,
         'reject_list':reject_list,
         'pub_plants':pub_plants,
         'unpub_plants':unpub_plants,
