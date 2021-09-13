@@ -362,21 +362,34 @@ def UserRegister(request):
         return render(request, 'PlantWebApp/register-form.html',{'form':form})
 
 def UserLogin(request):
+
+    # User had already logged in
     if request.user.is_authenticated:
         return redirect('user_home')
+
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
+
+            # Check login credentials
             user = authenticate(request, username=username, password = password)
+
+            # Check if user is inactive (Account disabled by admin)
             check = Q(username=username) & Q(is_active = False)
             disableduser = User.objects.filter(check)
             print(disableduser)
             print(user)
 
+            # Login successfully
             if user is not None:
+
+                # Add Session
+                request.session['user_id'] = user.id
+
                 login(request,user)
                 return redirect('user_home')
+            
             else:
                 if disableduser:
                     messages.info(request, 'Account disabled. Please contact site administrator: site@admin.com ')
@@ -386,6 +399,11 @@ def UserLogin(request):
         return render(request, 'PlantWebApp/login-form.html',{})
 
 def logout_request(request):
+    try:
+        del request.session['user_id']
+    except KeyError:
+        pass
+    
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("home")
