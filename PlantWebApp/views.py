@@ -16,6 +16,8 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
 from django.http import JsonResponse
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 from tablib import Dataset
@@ -408,6 +410,16 @@ def logout_request(request):
     messages.info(request, "Logged out successfully!")
     return redirect("home")
 
+def get_all_logged_in_users():
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    return User.objects.filter(id__in=uid_list).order_by('first_name')
+
 @login_required(login_url='user_login')
 def userHome(request):
     if request.user.is_staff:
@@ -443,7 +455,7 @@ def userHome(request):
         print(cc)
 
         # Get all user objects
-        
+        logged_users = get_all_logged_in_users()
 
         context = {
             'total_plant':total_plant,
@@ -454,6 +466,7 @@ def userHome(request):
             'country_name':country_name,
             'country_record':country_record,
             'cc':cc,
+            'logged_users':logged_users,
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:
