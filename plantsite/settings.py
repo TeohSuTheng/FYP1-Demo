@@ -80,6 +80,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsite.wsgi.application'
 
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_COOKIE_AGE = 24 * 60 * 60 # 1 day
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
