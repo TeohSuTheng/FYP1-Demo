@@ -1,7 +1,99 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
-{% block content%}       
+{% block content%}
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<!--https://github.com/StephanWagner/svgMap>
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet"-->
+
+
 <!--div class="col py-3"-->
+
+<!--Site User Content Header-->
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-10">
+        <h3 class="m-0">User Dashboard</h3>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+          <!-- Small boxes (Stat box) -->
+          <div class="row">
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box" style="background-color: #d6f7e7;">
+                  <div class="row">
+                    <!--div class="inner"-->
+                    <div class="col-sm-4" style="margin-left: 20px;">
+                        <br>
+                        <div id="total_plant">
+                            <h3>{{pub_plant_list.count}}</h3>
+                        </div>
+                    <p>Records Published</p>
+                    </div>
+                    <!--div class="icon"-->
+                    <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                        <br>
+                        <i class="fas fa-seedling fa-3x"></i>
+                    </div>
+                </div>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box" style="background-color: #b1dfc9;">
+                  <div class="row">
+                    <!--div class="inner"-->
+                    <div class="col-sm-4" style="margin-left: 20px;;">
+                    <br>
+                        <div id="pub">
+                            <h3>{{plant_list.count}}</h3>
+                        </div>
+                    <p>To Be Verified</p>
+                    </div>
+                    <!--div class="icon"-->
+                    <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                        <br>
+                        <i class="fab fa-pagelines fa-3x"></i>
+                    </div>
+                </div>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box" style="background-color: #89c7aa;">
+                    <div class="row">
+                      <!--div class="inner"-->
+                      <div class="col-sm-4" style="margin-left: 20px;;">
+                          <br>
+                        <div id="use">
+                            <h3>{{reject_list.count}}</h3>
+                        </div>
+      
+                      <p>Records Rejected</p>
+                      </div>
+                      <!--div class="icon"-->
+                      <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                          <br>
+                          <i class="fab fa-canadian-maple-leaf fa-3x"></i>
+                      </div>
+                  </div>
+                  </div>
+              </div><!-- ./col -->
+
+          </div><!-- /.row -->
+<br>
+
 <br>
 <h3 align="center">Plants by User Based On Their Uses</h3><br><br>
 <div>
