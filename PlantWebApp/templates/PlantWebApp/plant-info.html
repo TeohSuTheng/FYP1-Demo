@@ -12,9 +12,22 @@
         <h1 align="center">{{plant_info.plantScientificName}}</h1>
         {% if user.is_authenticated %}
           {% if plant_info.rejected %}
-            <p>Rejected</p>
-            <p>Reason of rejection:</p>
-            <p>{{ reject_info.reason }}</p>
+            <div class="container-fluid" >
+              <div class="d-flex flex-column align-items-center min-vh-50">
+                <h5 style="color: brown;">Rejected</h5>
+                <br>
+
+                <div class="d-flex flex-column align-items-center" style="padding:10px; radius:5px; background-color: antiquewhite;">
+                  <p>Reason of rejection: {{ reject_info.reason }}</p>
+                </div>
+
+                <br>
+           
+                {% if user.id == plant_info.user.id  %}
+                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
+                {% endif %}
+              </div>
+            </div>
           {% elif user.id == plant_info.user.id %}
             <p align="center">
               <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
