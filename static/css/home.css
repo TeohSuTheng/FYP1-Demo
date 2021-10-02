@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Ephesis&display=swap');*/
 
 *{
     margin: 0px;
@@ -40,13 +41,23 @@ p a:hover {
 #headline{
     font-size: 6em;
     line-height: 1.5;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto Slab', serif;
     font-weight: 500;
 }
 
 #subheader{
     font-size: 18px;
 }
+
+/*h1.arrow { font-size: 15px; text-transform: uppercase; color: #353535; letter-spacing: 1px; background: url('../img/h1-bg.png') no-repeat center bottom; padding-bottom: 30px; font-weight: bold; }
+
+.wp1, .wp2, .wp3, .wp4, .wp5, .wp6 { visibility: hidden; }
+.bounceInLeft, .bounceInRight, .fadeInUp, .fadeInUpDelay, .fadeInDown, .fadeInUpD, .fadeInLeft, .fadeInRight { visibility: visible; }
+
+.intro { background: #f3f5f8; }
+.intro p { margin: 50px 0 0; }
+.section-padding { padding: 90px 0 100px }*/
+
 
 .parallax{
     position: absolute;
@@ -74,6 +85,7 @@ p a:hover {
     position: relative;
     overflow: hidden;
     color:#2D442F;
+    
 }
 
 .discover-container h2{
@@ -110,6 +122,13 @@ p a:hover {
         left: 120%;
     }
 }
+
+.animate__animated.animate__fadeIn, .animate__animated.animate__fadeInUp{
+    --animate-duration: 2s;
+    visibility: visible;
+  }
+
+.wp1 {visibility: hidden;}
 
 /*Project Background*/
 .partition-background{

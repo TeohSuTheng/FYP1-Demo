@@ -9,8 +9,9 @@
     <title>Digital Plant Herbarium</title>
     <link rel="stylesheet" href="{% static '/css/home.css' %}">
     
+    <!--***-->
     <!--Animate css-->
-    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
      <!-- Bootstrap CSS -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
@@ -95,8 +96,12 @@
         <img class="parallax" src="{% static '/images/Home-Header.jpg' %}" alt="">
         <!--div class="animate__animated animate__fadeInDown animate__delay-1s" id="text-wrapper"-->
         <div id="text-wrapper">
-            <h1 class="fs-1" id="headline">Digital Plant Herbarium</h1>
-            <h6 class="fw-normal" id="subheader">A plant management system to store various medicinal plant information digitally for future research.</h6>
+          <div class="animate__animated animate__fadeInDown">
+              <h1 class="fs-1" id="headline">Digital Plant Herbarium</h1>
+          </div>
+          <div class="animate__animated animate__fadeInUp animate__delay-1s">
+              <h6 class="fw-normal" id="subheader">A plant management system to store various medicinal plant information digitally for future research.</h6>
+          </div>
         </div>
     </section>
 
@@ -109,13 +114,26 @@
         </div>
       {% endfor %}
     {% endif %}
+
+    <!--section class="intro text-center section-padding" id="intro">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2 wp1">
+            <h1 class="arrow">A Creative Portfolio Template</h1>
+            <p>Sed a lorem quis neque interdum <a href="#">consequat ut sed sem</a>. Duis quis tempor nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent id tempor ipsum. Fusce at massa ac nunc porta fringilla sed eget neque. Quisque quis pretium nulla. Fusce eget bibendum neque, vel volutpat augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+          </div>
+        </div>
+      </div>
+    </section-->
     
     <!--Discover Section-->
     <section class="partition-discover">
+      <div class="wp1">
         <div class="discover-container">
             <h2><span>D</span>isc<span>ov</span>er</h2>
         </div>
         <div class="container">
+          
             <form method="GET" action="{%url 'display_SearchResults' %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
@@ -126,38 +144,36 @@
             <!--p align="center">
               <a href="{% url 'advancedSearch' %}">Advanced Search <i class="fas fa-search"></i></a>
             </p--><br><br><br>
-            
+
             <div class="row justify-content-center">
-                <div class="col">
+                <div class="col" id="site-info1">
                     <div class="card" >
                         <img class="card-img-top" src="{% static '/images/discover-icon2.jpg' %}" alt="..">
                         <div class="card-body">
-                          <p class="card-text">{{plant_pub}} plant records published.</p>
+                          <p class="card-text" align="center">{{plant_pub}} plant records published.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card">
+                    <div class="card" id="site-info2">
                         <img class="card-img-top" src="{% static '/images/discover-icon3.jpg' %}" alt="..">
                         <div class="card-body">
-                          <p class="card-text">{{use_tag}} ethnobotanical usage recorded.</p>
+                          <p class="card-text" align="center">{{use_tag}} ethnobotanical usage recorded.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card" >
+                    <div class="card" id="site-info3">
                         <img class="card-img-top" src="{% static '/images/discover-icon4.jpg' %}" alt="..">
                         <div class="card-body">
-                          <p class="card-text">{{user_no}} registered users.</p>
+                          <p class="card-text" align="center">{{user_no}} registered users.</p>
                         </div>
                     </div>
                 </div>
               </div>
 
-        </div>
-
-
-    
+        </div><!--container-->
+      </div><!--wp1-->
     </section>
 
     <section class="partition-background">
@@ -172,6 +188,7 @@
             <div class="square"></div>
           </div>
           <div class="col" style="padding-right: 50px; padding-top: 30px;">
+            
             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt fugiat alias dolor reprehenderit ad rerum vitae et asperiores, molestiae voluptates debitis reiciendis vero nostrum necessitatibus ratione labore accusamus hic? Necessitatibus!</p><br>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod voluptates illum, nesciunt cum deleniti, aspernatur fugit quidem eos quaerat blanditiis pariatur voluptatibus exercitationem molestias quae, cupiditate dolore? Ex, quisquam. Aspernatur!</p>
           </div>
@@ -206,16 +223,27 @@
     </section>
 
     <footer><p><small>Footer content 2021</small></p></footer>
+    
+    <!--jquery 3.6.0-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    
+    <!--Waypoint-->
+    <script src="{% static '/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static '/js/waypoints.js' %}"></script>
+
     <script>
         window.addEventListener('scroll',function(){
             const parallax = document.querySelector('.parallax');
             let scrollPosition = window.pageYOffset;
             parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
         })
+
     </script>
+
+
 </body>
 </html>
 
