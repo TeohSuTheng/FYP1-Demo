@@ -19,6 +19,9 @@
      <!--Font Awesome-->
     <script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>
 
+    <!--leaflet-->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+
 </head>
 <body>
     <!--Navbar-->
@@ -214,8 +217,12 @@
           </div>
           <div class="col-1"></div>
           <div class="col-6" style="padding-top: 40px;">
-            <div class="map-container">
-              {{m|safe}}
+            <!--Folium library-->
+            <!--div class="map-container">
+                {{m|safe}}
+            </div-->
+            <div id="leaflet">
+              
             </div>
           </div>
         </div>
@@ -243,7 +250,22 @@
 
     </script>
 
+    <!--leaflet-->
+    <script type="application/javascript" src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
+    <script>
+      var map = new L.Map('leaflet', {
+          center: [3.1209,101.6538],
+          zoom: 13,
+          layers: [
+              new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  'attribution': 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+              })
+          ]
+      });
+
+      var marker = L.marker([3.1209,101.6538]).addTo(map);
+    </script>
 </body>
 </html>
 

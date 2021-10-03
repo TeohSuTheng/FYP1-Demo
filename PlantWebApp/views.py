@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from tablib import Dataset
 
 # Folium Map - index page
-import folium
+#import folium
 
 from .resources import DistResource, PlantResource
 
@@ -44,17 +44,18 @@ def home(request):
     user_no = User.objects.count()
 
     # Create Folium Map Object
+    '''
     m = folium.Map(location=[3.1209,101.6538], zoom_start=14,)
     folium.Marker(
         [3.1209,101.6538], tooltip="We are here"
     ).add_to(m)
-    m = m._repr_html_()
+    m = m._repr_html_()'''
 
     context = {
         'plant_pub':plant_pub,
         'use_tag':use_tag,
         'user_no' : user_no,
-        'm' : m
+        #'m' : m
     }
     return render(request,'PlantWebApp/index.html',context)
 

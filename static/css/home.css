@@ -140,7 +140,11 @@ p a:hover {
     
 }
 
-    /*Square Border*/
+#leaflet {
+    height: 100%;
+}
+
+/*Square Border*/
 .square{
     position: relative;
     left: 40px;
