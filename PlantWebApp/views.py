@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from tablib import Dataset
 
 # Folium Map - index page
-#import folium
+# import folium
 
 from .resources import DistResource, PlantResource
 

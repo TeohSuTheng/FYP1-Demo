@@ -128,7 +128,7 @@ p a:hover {
     visibility: visible;
   }
 
-.wp1 {visibility: hidden;}
+.wp1, .wp2, .wp3 {visibility: hidden;}
 
 /*Project Background*/
 .partition-background{
