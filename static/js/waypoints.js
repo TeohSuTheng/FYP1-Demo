@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('.wp1').addClass('animate__animated animate__fadeIn')
 	},
     {
-		offset: '75%'
+		offset: '105%'
 	})
 
   $('.wp2').waypoint(function() {

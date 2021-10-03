@@ -131,12 +131,10 @@
     
     <!--Discover Section-->
     <section class="partition-discover">
-      <div class="wp1">
         <div class="discover-container">
             <h2><span>D</span>isc<span>ov</span>er</h2>
         </div>
         <div class="container">
-          
             <form method="GET" action="{%url 'display_SearchResults' %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
@@ -147,8 +145,9 @@
             <!--p align="center">
               <a href="{% url 'advancedSearch' %}">Advanced Search <i class="fas fa-search"></i></a>
             </p--><br><br><br>
-
+            <div class="wp1">
             <div class="row justify-content-center">
+              
                 <div class="col" id="site-info1">
                     <div class="card" >
                         <img class="card-img-top" src="{% static '/images/discover-icon2.jpg' %}" alt="..">
@@ -173,10 +172,10 @@
                         </div>
                     </div>
                 </div>
-              </div>
-
+              </div><!--wp1-->
+            </div>
         </div><!--container-->
-      </div><!--wp1-->
+      
     </section>
 
     <section class="partition-background">
@@ -257,6 +256,7 @@
     <script type="application/javascript" src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
     <script>
+      /*
       var map = new L.Map('leaflet', {
           center: [3.1209,101.6538],
           zoom: 13,
@@ -267,7 +267,7 @@
           ]
       });
 
-      var marker = L.marker([3.1209,101.6538]).addTo(map);
+      var marker = L.marker([3.1209,101.6538]).addTo(map);*/
     </script>
 </body>
 </html>
