@@ -117,17 +117,6 @@
         </div>
       {% endfor %}
     {% endif %}
-
-    <!--section class="intro text-center section-padding" id="intro">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2 wp1">
-            <h1 class="arrow">A Creative Portfolio Template</h1>
-            <p>Sed a lorem quis neque interdum <a href="#">consequat ut sed sem</a>. Duis quis tempor nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent id tempor ipsum. Fusce at massa ac nunc porta fringilla sed eget neque. Quisque quis pretium nulla. Fusce eget bibendum neque, vel volutpat augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-          </div>
-        </div>
-      </div>
-    </section-->
     
     <!--Discover Section-->
     <section class="partition-discover">
@@ -135,19 +124,19 @@
             <h2><span>D</span>isc<span>ov</span>er</h2>
         </div>
         <div class="container">
-            <form method="GET" action="{%url 'display_SearchResults' %}">
+            <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
                 {% csrf_token %}
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
                     <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
                 </div>
+                <div class="invalid-query"></div>
             </form>
             <!--p align="center">
               <a href="{% url 'advancedSearch' %}">Advanced Search <i class="fas fa-search"></i></a>
-            </p--><br><br><br>
+            </p--><br><br>
             <div class="wp1">
             <div class="row justify-content-center">
-              
                 <div class="col" id="site-info1">
                     <div class="card" >
                         <img class="card-img-top" src="{% static '/images/discover-icon2.jpg' %}" alt="..">
@@ -244,12 +233,22 @@
     <script src="{% static '/js/waypoints.js' %}"></script>
 
     <script>
+
+      // Add Parallax effect to Image 
         window.addEventListener('scroll',function(){
             const parallax = document.querySelector('.parallax');
             let scrollPosition = window.pageYOffset;
             parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
         })
-
+      
+      // Search Form Validation
+      function validateForm() {
+        var userQuery = document.forms["searchForm"]["searchquery"].value.trim(); //trim - to remove trailing whitespaces
+        if (userQuery == "") {
+          document.querySelector(".invalid-query").innerHTML = "<p style='color:red;'><i class='fas fa-exclamation-circle'></i> Please enter a valid search query</p>"
+          return false;
+        }
+      }
     </script>
 
     <!--leaflet-->
