@@ -2,8 +2,35 @@
 {% load static %}
 
 {% block content%}
-<div class="container">
-    <h3 align="center">Plant Search</h3>
+<link rel="stylesheet" href="{% static '/css/searchStyle.css' %}">
+
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-8">
+        <h3 class="m-0"></h3>
+      </div><!-- /.col -->
+      <div class="col" style="padding-right: 40px;">            
+          <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+<section class="search-section-result">
+    <img id="result" class="parallax" src="{% static '/images/BrowseHeader1.jpg' %}" alt="">
+    <div class="container">
+        <h2 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h2><br>
+        {% if searchquery %}
+            <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
+        {% endif %}       
+    <!--h3 align="center">Plant Search</h3>
     <br>
     <form method="GET" action="{%url 'display_SearchResults' %}">
         {% csrf_token %}
@@ -11,11 +38,13 @@
             <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
             <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
         </div>
-    </form>
-    <br><br><br>
+    </form-->
+    </div>
+</section>
+<br><br><br>
 
-
-    <h3 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h3>
+<div class="container">
+    <!--h3 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h3>
         {% if searchquery %}
             <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
             <br>
@@ -89,10 +118,25 @@
                     </div>
                 </div>
             {% endif %}
-        
+        <!--
         {% else %}
             <p> Please enter a search query.. </p>
-        {% endif %}
+        {% endif %}-->
 </div>
 
+
+<!--Font Awesome-->
+<script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>
+
+<script>
+
+      // Search Form Validation
+      function validateForm() {
+        var userQuery = document.forms["searchForm"]["searchquery"].value.trim(); //trim - to remove trailing whitespaces
+        if (userQuery == "") {
+          document.querySelector(".invalid-query").innerHTML = "<p style='color:red;'><i class='fas fa-exclamation-circle'></i> Please enter a valid search query</p>"
+          return false;
+        }
+      }
+</script>
 {% endblock content%}

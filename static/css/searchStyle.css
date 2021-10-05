@@ -1,0 +1,63 @@
+
+body{
+    background-color: #FDF8F4;
+}
+
+/*Header Image for browse_plants.html*/
+.search-section{
+    height:80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#header {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}  
+
+/*Header Image for search-results.html*/
+.search-section-result{
+    height:70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#result {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 80%;
+}
+
+/*Shared*/
+#text-wrapper{
+    text-align: center;
+    width: 60%;
+    padding: 0%;
+    margin: 0%;
+}
+
+.parallax{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}

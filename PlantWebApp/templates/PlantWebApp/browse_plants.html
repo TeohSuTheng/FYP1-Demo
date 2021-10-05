@@ -2,63 +2,27 @@
 {% load static %}
 
 {% block content%}
-<style>
-
-body{
-    background-color: #FDF8F4;
-}
-
-.search-section{
-    height:80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-img {
-    position: absolute;
-    top:0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}  
-
-#text-wrapper{
-    text-align: center;
-    width: 60%;
-    padding: 0%;
-    margin: 0%;
-}
-
-.parallax{
-    position: absolute;
-    top:0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-</style>
+<link rel="stylesheet" href="{% static '/css/searchStyle.css' %}">
 
 <section class="search-section">
-    <img class="parallax" src="{% static '/images/BrowseHeader1.jpg' %}" alt="">
+    <img id="header" class="parallax" src="{% static '/images/BrowseHeader1.jpg' %}" alt="">
 
     <div class="container">
         <h3 align="center">Plant Search</h3>
         <br>
-        <form method="GET" action="{%url 'display_SearchResults' %}">
+        <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
             {% csrf_token %}
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
                 <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
             </div>
+            <div class="invalid-query"></div>
         </form>
+        
         <br>
+        <div class="arrow"></div>
+        <div class="arrow"></div>
+        <div class="arrow"></div>
     </div>
 
     
@@ -97,7 +61,8 @@ img {
         {% endfor %}
 
     </div>
-</div>
+</div><!--card-->
+</div><!--container-->
 
 <!--
 {{plants}} <br>
@@ -109,47 +74,64 @@ Number of Pages: {{ plants.paginator.num_pagesplants.paginator.num_pages }}
 
 <hr>
 <!--Pagination-->
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        {% if plants.has_previous %}
-            <!--li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li-->
-            <li class="page-item"><a class="page-link" href="?page={{ plants.previous_page_number }}">Previous</a></li>
-        {% endif %}
+<section class = "pagination">
+    <div class="container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if plants.has_previous %}
+                    <!--li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li-->
+                    <li class="page-item"><a class="page-link" href="?page={{ plants.previous_page_number }}">Previous</a></li>
+                {% endif %}
 
-        <!--li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                Page {{plants.number}} of {{plants.paginator.num_pages}}
-            </a>
-        </li--> <!--Page 1 of 3-->
+                <!--li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        Page {{plants.number}} of {{plants.paginator.num_pages}}
+                    </a>
+                </li--> <!--Page 1 of 3-->
 
-        <!--Page Number Boxes-->
-        {% for pg in page_num %}
-            {% if plants.number == forloop.counter %}
-                <li class="page-item active" aria-current="page">
-                    <span class="page-link">{{ forloop.counter }}</span>
-                </li>
-            {% else %}
-                <!--** LImit page-->
-                <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{forloop.counter}}</a></li>
-            {% endif %}
-        {% endfor %}    
+                <!--Page Number Boxes-->
+                {% for pg in page_num %}
+                    {% if plants.number == forloop.counter %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ forloop.counter }}</span>
+                        </li>
+                    {% else %}
+                        <!--** LImit page-->
+                        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{forloop.counter}}</a></li>
+                    {% endif %}
+                {% endfor %}    
 
-        {% if plants.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ plants.next_page_number }}">Next</a></li>
-            <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
-        {% endif %}
-    </ul>
-</nav>
-</div>
+                {% if plants.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ plants.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>
+
 <br><br><br>
 
+<!--Font Awesome-->
+<script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>
 
 <script>
+    // Add Parallax effect to Image 
     window.addEventListener('scroll',function(){
         const parallax = document.querySelector('.parallax');
         let scrollPosition = window.pageYOffset;
         parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
+
     })
+    
+    // Search Form Validation
+    function validateForm() {
+        var userQuery = document.forms["searchForm"]["searchquery"].value.trim(); //trim - to remove trailing whitespaces
+        if (userQuery == "") {
+          document.querySelector(".invalid-query").innerHTML = "<p><span style='background-color:#ffcccb;'><i class='fas fa-exclamation-circle'></i> Please enter a valid search query</span></p>"
+          return false;
+        }
+      }    
+    
 </script>
 
 {% endblock content %}
