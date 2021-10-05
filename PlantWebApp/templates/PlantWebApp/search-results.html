@@ -29,26 +29,22 @@
         <h2 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h2><br>
         {% if searchquery %}
             <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
-        {% endif %}       
-    <!--h3 align="center">Plant Search</h3>
-    <br>
-    <form method="GET" action="{%url 'display_SearchResults' %}">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
-            <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
-        </div>
-    </form-->
+        {% endif %} 
+        <br><br>
+        <!--Scroll down arrow-->
+        {% if results %}
+            <div class="scroll-icon">
+                <p align="center"><a class="scrollTo" data-scrollTo="#plantList" href="#plantList"><img src="{% static '/images/scroll-icon.png' %}" alt=""></a></p>
+            </div>
+        {% endif %}      
     </div>
 </section>
-<br><br><br>
+<p style="background-color: #3c4250;">--</p>
+<br>
 
-<div class="container">
-    <!--h3 align="center">Search result{{results|pluralize}} for "{{searchquery}}"</h3>
-        {% if searchquery %}
-            <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
-            <br>
-
+<div class="container" id="plantList">
+    <h5 style="visibility: hidden;">Test</h5>
+    <h5 style="visibility: hidden;">Results</h5>
             {% if results %}
             <div class="card">
                 <h6 class="card-header">
@@ -118,18 +114,20 @@
                     </div>
                 </div>
             {% endif %}
-        <!--
-        {% else %}
-            <p> Please enter a search query.. </p>
-        {% endif %}-->
 </div>
-
 
 <!--Font Awesome-->
 <script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>
 
 <script>
+    // Add Parallax effect to Image 
+    window.addEventListener('scroll',function(){
+        const parallax = document.querySelector('.parallax');
+        let scrollPosition = window.pageYOffset;
+        parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
 
+    })
+    
       // Search Form Validation
       function validateForm() {
         var userQuery = document.forms["searchForm"]["searchquery"].value.trim(); //trim - to remove trailing whitespaces

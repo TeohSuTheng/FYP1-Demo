@@ -4,11 +4,32 @@
 {% block content%}
 <link rel="stylesheet" href="{% static '/css/searchStyle.css' %}">
 
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-8">
+        <h3 class="m-0"></h3>
+      </div><!-- /.col -->
+      <div class="col" style="padding-right: 40px;">            
+          <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
 <section class="search-section">
     <img id="header" class="parallax" src="{% static '/images/BrowseHeader1.jpg' %}" alt="">
 
     <div class="container">
-        <h3 align="center">Plant Search</h3>
+        <h3 align="center">Explore</h3>
+        <br><br>
+        <!--h3 align="center">Plant Search</h3>
         <br>
         <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
             {% csrf_token %}
@@ -20,17 +41,20 @@
         </form>
         
         <br>
+        <!--div class="arrow"></div>
         <div class="arrow"></div>
-        <div class="arrow"></div>
-        <div class="arrow"></div>
-    </div>
-
-    
+        <div class="arrow"></div-->
+        <div class="scroll-icon">
+            <p align="center"><a class="scrollTo" data-scrollTo="#plantList" href="#plantList"><img src="{% static '/images/scroll-icon.png' %}" alt=""></a></p>
+        </div> 
+    </div> 
 </section>
+<p style="background-color: #3c4250;">--</p>
 
-<br><br>
+<div id="plantList">
+<h3 style="visibility:hidden;">--</h3><h3 style="visibility:hidden;">--</h3>
 <div class="container">
-<h3 align="center">List of Plants</h3>
+<h3 align="center">List of Plants</h3><br>
 <div class="card">
     <h6 class="card-header">
         <div class="row align-items-start">
@@ -63,7 +87,7 @@
     </div>
 </div><!--card-->
 </div><!--container-->
-
+</div>
 <!--
 {{plants}} <br>
 Has Previous: {{ plants.has_previous }} <br>
