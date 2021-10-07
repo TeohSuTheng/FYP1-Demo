@@ -88,7 +88,7 @@ def displaySearchResults(request):
             print('ok')
             suggest = []
             trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
-            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).order_by('-similarity')
+            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).filter(publish=True).order_by('-similarity')
             print(suggest)
             # speed up: https://stackoverflow.com/questions/56538419/poor-performance-when-trigram-similarity-and-full-text-search-were-combined-with/56547280#56547280
 
