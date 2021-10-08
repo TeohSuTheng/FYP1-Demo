@@ -242,14 +242,30 @@ def UpdatePostView(request,pk):
     countryarr = list(countryData)
     print(countryarr)
 
+    #updated_record = plantdata.updated_at
+    #print(updated_record)
+
     if request.method == "POST":
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
 
+        #Plant.refresh_from_db(Plant,fields="updated_at")
+        # Retrieve current updated_at datetime and check if it matches the one we retrieved before updating
+        #plantdata.refresh_from_db()
+        #newPlantData = Plant.objects.get(id=plantdata.id)
+        #newPlantData = plantdata
+        '''
+        print(updated_record)
+        print(newPlantData.updated_at)
+        if newPlantData.updated_at == updated_record:
+            print("Ok!!!")
+        else:
+            print("Not Ok!!!")'''
+            
         if use_form.is_valid():
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
-            usearr = request.POST.getlist('usage')#Added
+            usearr = request.POST.getlist('usage') # Added
             usearr.append(latest_use) #append the newly saved usage tag ###
 
             context = {
@@ -294,6 +310,7 @@ def UpdatePostView(request,pk):
                 return render(request, 'PlantWebApp/update-form.html',context)
 
             plant_form.save()
+            messages.success(request,('Plant record updated successfully.'))
             '''
             plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
             messages.success(request,('Updated successfully.'))
@@ -528,7 +545,8 @@ def userProfileDelete(request,id):
 
 @staff_member_required(login_url='user_login')
 def siteUsersList(request):
-    userList = User.objects.filter(is_staff = False)
+    #userList = User.objects.filter(is_staff = False)
+    userList = User.objects.all()
     return render(request, 'PlantWebApp/site-users.html',{'userList':userList})
 
 @staff_member_required(login_url='user_login')

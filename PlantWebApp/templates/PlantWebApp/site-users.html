@@ -55,7 +55,7 @@
                     <p class="card-text">{{siteUser.date_joined}}</p>
                 </div>
                 <div class="col">
-                    <a href="{% url 'siteUserDetail' siteUser.id%}" class="btn btn-success">Details</a>
+                    <a href="{% url 'siteUserDetail' siteUser.id%}" class="btn btn-success">Records</a>
                     {% if siteUser.is_active %}
                       <a href="{%url 'siteUserDisable' siteUser.id %}" class="btn btn-danger">Disable</a>
                     {% else %}

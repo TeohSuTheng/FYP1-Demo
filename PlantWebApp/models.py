@@ -15,6 +15,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=255)
     dept = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
+    updated_at = models.DateTimeField(auto_now=True)
 
 '''
 @receiver(post_save, sender=User)
@@ -63,11 +64,11 @@ class Plant(models.Model):
     plantref = models.TextField(null=True, blank=True)
     publish = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
 
     #planttemp = models.TextField(null=True, blank=True)
     #**#ref
     #published_at
-    #updated_at = models.DateTimeField(auto_now=True)
     #usetemp = models.TextField(null=True, blank=True)
 
 class Rejection(models.Model):
