@@ -229,8 +229,10 @@ def displayPlant(request,id):
 
 @login_required(login_url='user_login')
 def UpdatePostView(request,pk):
+    
     use = Usage.objects.all() #get uses_tags from Usage table
-    plantdata = Plant.objects.get(id=pk) #get particular plant object from Plant table
+    plantdata = Plant.objects.get(id=pk)
+    print(plantdata.version) #get particular plant object from Plant table
     dist = Distribution.objects.all() #get distribution_country from Distribution table
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
@@ -242,26 +244,13 @@ def UpdatePostView(request,pk):
     countryarr = list(countryData)
     print(countryarr)
 
-    #updated_record = plantdata.updated_at
-    #print(updated_record)
-
     if request.method == "POST":
         use_form = forms.UsageForm(request.POST)
+        #print(plantdata.version)
+        #newPlantData = Plant.objects.get(id=plantdata.id)
+        #print(newPlantData.version)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
 
-        #Plant.refresh_from_db(Plant,fields="updated_at")
-        # Retrieve current updated_at datetime and check if it matches the one we retrieved before updating
-        #plantdata.refresh_from_db()
-        #newPlantData = Plant.objects.get(id=plantdata.id)
-        #newPlantData = plantdata
-        '''
-        print(updated_record)
-        print(newPlantData.updated_at)
-        if newPlantData.updated_at == updated_record:
-            print("Ok!!!")
-        else:
-            print("Not Ok!!!")'''
-            
         if use_form.is_valid():
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object

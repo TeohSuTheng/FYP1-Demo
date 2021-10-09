@@ -6,7 +6,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
-
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -65,11 +64,9 @@ class Plant(models.Model):
     publish = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
-
-    #planttemp = models.TextField(null=True, blank=True)
+    #version = IntegerVersionField( )
     #**#ref
-    #published_at
-    #usetemp = models.TextField(null=True, blank=True)
+
 
 class Rejection(models.Model):
     plant = models.OneToOneField(
