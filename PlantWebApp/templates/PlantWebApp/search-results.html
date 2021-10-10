@@ -30,21 +30,24 @@
         {% if searchquery %}
             <h5 align="center">{{results.count}} result{{results|pluralize}} found </h5> <!--Pluralize-->
         {% endif %} 
-        <br><br>
+        <br>
+        {% if suggest %}
+            <p align="center">{{suggest.count}} search suggestion{{results|pluralize}} </p>
+        {% endif %} <br>
+
         <!--Scroll down arrow-->
-        {% if results %}
+        {% if results or suggest %}
             <div class="scroll-icon">
                 <p align="center"><a class="scrollTo" data-scrollTo="#plantList" href="#plantList"><img src="{% static '/images/scroll-icon.png' %}" alt=""></a></p>
             </div>
-        {% endif %}      
+        {% endif %}
+   
     </div>
 </section>
 <p style="background-color: #3c4250;">--</p>
-<br>
 
 <div class="container" id="plantList">
     <h5 style="visibility: hidden;">Test</h5>
-    <h5 style="visibility: hidden;">Results</h5>
             {% if results %}
             <div class="card">
                 <h6 class="card-header">
@@ -81,7 +84,7 @@
             <br>
 
             {% if suggest %}
-                <h4>Do you mean?</h4>
+                <h3 align="center">Do you mean?</h3>
                 <div class="card">
                     <h6 class="card-header">
                         <div class="row align-items-start">
@@ -114,7 +117,7 @@
                     </div>
                 </div>
             {% endif %}
-</div>
+</div><br><br><br>
 
 <!--Font Awesome-->
 <script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>

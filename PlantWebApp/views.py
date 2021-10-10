@@ -22,6 +22,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from tablib import Dataset
 
+from django.db import transaction
 # Folium Map - index page
 # import folium
 
@@ -229,26 +230,21 @@ def displayPlant(request,id):
 
 @login_required(login_url='user_login')
 def UpdatePostView(request,pk):
-    
     use = Usage.objects.all() #get uses_tags from Usage table
     plantdata = Plant.objects.get(id=pk)
-    print(plantdata.version) #get particular plant object from Plant table
+    #newplantdata = Plant.objects.select_for_update(skip_locked=True).filter(id=pk)
+    #print(newplantdata[0])
     dist = Distribution.objects.all() #get distribution_country from Distribution table
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
     plantUsageData = Plant_Usage.objects.filter(plantID=pk).values_list('usageID', flat=True)
     usearr= list(plantUsageData)
-    #print(usearr)
 
     countryData = Plant_Distribution.objects.filter(plantID=pk).values_list('distID',flat=True)
     countryarr = list(countryData)
-    print(countryarr)
 
     if request.method == "POST":
         use_form = forms.UsageForm(request.POST)
-        #print(plantdata.version)
-        #newPlantData = Plant.objects.get(id=plantdata.id)
-        #print(newPlantData.version)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
 
         if use_form.is_valid():
@@ -297,13 +293,12 @@ def UpdatePostView(request,pk):
                     'dist':dist,
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
-
+            
+            
+            #with transaction.atomic():
             plant_form.save()
             messages.success(request,('Plant record updated successfully.'))
-            '''
-            plant_list = Plant.objects.filter(user_id=request.user).order_by('plantScientificName')
-            messages.success(request,('Updated successfully.'))
-            return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list})'''
+
             return userHome(request)
     
     context = {
@@ -653,9 +648,44 @@ def usage_chart(request):
 
 @staff_member_required(login_url='user_login')
 def unpubList(request):
-        # Arrange in the order from earliest to latest
-        plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
-        return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+    # Arrange in the order from earliest to latest
+    plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
+    
+    # Set up Pagination
+    p = Paginator(plant_list, 10)
+    page = request.GET.get('page')
+    plants = p.get_page(page)
+
+
+    return render(request, 'PlantWebApp/admin-unpublished.html',{'plants':plants})
+    #return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+@staff_member_required(login_url='user_login')
+def verified(request):
+    # Arrange in the order from earliest to latest
+    plant_list = Plant.objects.filter(publish=True).filter(rejected=False).order_by('plantScientificName') 
+
+    # Set up Pagination
+    p = Paginator(plant_list, 10)
+    page = request.GET.get('page')
+    plants = p.get_page(page)
+
+    # Hack Pagination 
+    page_num = 'a' * p.num_pages
+
+    return render(request, 'PlantWebApp/admin-verified.html',{'plants':plants,'page_num':page_num})
+
+@staff_member_required(login_url='user_login')
+def rejected(request):
+    # Arrange in the order from earliest to latest
+    plant_list = Plant.objects.filter(rejected=True).order_by('plantScientificName') 
+
+    # Set up Pagination
+    p = Paginator(plant_list, 10)
+    page = request.GET.get('page')
+    plants = p.get_page(page)
+
+    return render(request, 'PlantWebApp/admin-rejected.html',{'plants':plants})
 
 @staff_member_required(login_url='user_login')
 def publishAction(request,pk):

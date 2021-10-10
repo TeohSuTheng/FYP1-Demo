@@ -28,6 +28,9 @@ urlpatterns = [
     #path('browse-dist/',views.browse_dist,name='browse_dist'),
     path('use-chart',views.usage_chart,name='use-chart'),
     path('unpublished-list/',views.unpubList,name='unpubList'),
+    path('published-list/',views.verified,name='verified'),
+    path('rejected-list/',views.rejected,name='rejected'),
+
     path('site-users/',views.siteUsersList,name='siteUsersList'),
     path('site-user/<int:id>',views.siteUserDetail,name='siteUserDetail'),
     path('site-user/disable/<int:id>',views.siteUserDisable,name='siteUserDisable'),

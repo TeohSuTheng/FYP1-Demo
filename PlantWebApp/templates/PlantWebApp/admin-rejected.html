@@ -8,7 +8,7 @@
       <div class="col">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
-          <li class="breadcrumb-item active">To Be Verified</a></li>
+          <li class="breadcrumb-item active">Verified</a></li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -16,9 +16,24 @@
 
 <div class="container">
     <h2 align="center">Plant Records</h2>
-    <p align="center" style="color: white;"><span style="background-color:rgb(42, 119, 106);">| To Be Verified |</span></p>
-    
+    <p align="center" style="color: white;"><span style="background-color:rgb(79, 47, 50);">| Rejected |</span></p>
     <br>
+
+    <!--Search Bar-->
+    <div class="row">
+        <div class="col-sm-9"></div><!-- /.col -->
+        <div class="col">
+            <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search" name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
@@ -48,19 +63,19 @@
                     <p class="card-text">{{plant.created_at}}</p>
                 </div>
                 <div class="col-4">
-                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-primary">Details</a>
-                    <a href="{% url 'publish' plant.id%}" class="btn btn-outline-success">Publish</a>
-                    <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a-->
-                    <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-danger">Reject</a>
-                    <!--a href="{% url 'delete_form' plant.id%}" class="btn btn-light">Delete</a-->
+                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                    <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-warning">Update</a>
+                    <!--a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-danger">Reject</a-->
+                    <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
                 </div>
                 <br><br><br>
             </div>
             {% endfor %}
 
         </div>
-    </div><br>
-
+    </div>
+</div>
+<br>
 <!--Pagination-->
 <section class = "pagination">
     <div class="container">
@@ -83,9 +98,6 @@
             </ul>
         </nav>
     </div>
-</section>    <br><br>    
-
-
-</div>
+</section>    <br><br>
 
 {% endblock content %}
