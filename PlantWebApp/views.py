@@ -125,6 +125,7 @@ def displayPlantForm(request):
         # Verify data
         if use_form.is_valid():
             use_form.save()
+            
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
             
             plantScientificName = request.POST['plantScientificName']
@@ -144,6 +145,7 @@ def displayPlantForm(request):
                 'plantref': request.POST['plantref'],
                 'dist':dist,
             }
+
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
@@ -152,6 +154,7 @@ def displayPlantForm(request):
 
             if tag_exist:
                 messages.success(request,('The plant usage entered already exists in our database.'))
+                # Add context dict
                 return render(request,'PlantWebApp/plant-form.html',{'use': use})
 
             plantdat = plant_form.save(commit=False)
