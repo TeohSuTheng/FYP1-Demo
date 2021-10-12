@@ -477,12 +477,32 @@ def userHome(request):
     else:
         pub_list = Q(user_id=request.user) & Q(publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
+        ## Pagination ##
+        pub_p = Paginator(pub_plant_list,6)
+        page = request.GET.get('page')
+        pub_plants = pub_p.get_page(page)
+
         unpub_list = Q(user_id=request.user) & Q(publish=False) & Q(rejected=False) 
         plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
+        ## Pagination ##
+        unpub_p = Paginator(plant_list,6)
+        page1 = request.GET.get('page1')
+        unpub_plants = unpub_p.get_page(page1)
+
         reject_q = Q(user_id=request.user) & Q(rejected=True) 
         reject_list = Plant.objects.filter(reject_q).order_by('plantScientificName')
-        return render(request, 'PlantWebApp/user_home.html',{'plant_list':plant_list, 'pub_plant_list':pub_plant_list, 'reject_list':reject_list})
-    ## if (is_staff==True) redirect to another page
+        ## Pagination ##
+        reject_p = Paginator(reject_list,6)
+        page2 = request.GET.get('page2')
+        reject_list = reject_p.get_page(page2)
+
+        context = {
+            'reject_list':reject_list,
+            'pub_plants':pub_plants,
+            'unpub_plants':unpub_plants,
+        }
+
+        return render(request, 'PlantWebApp/user_home.html',context)
 
 @login_required(login_url='user_login')
 def userProfileView(request,id):
