@@ -439,42 +439,38 @@ def userHome(request):
         plant_pub = Plant.objects.filter(publish=True).count() # Get total number of plant records published
         use_tag = Usage.objects.count() # Get total number of usage tags stored
         user_no = User.objects.count() # Get total number of users registered
-        countryData = Plant_Distribution.objects.all().values('distID').annotate(Count('distID')) # Get total number of plant records based on each country (plant distribution)
+        countryData = Plant_Distribution.objects.all().values('distID').annotate(Count('distID')).order_by('-distID__count') # Get total number of plant records based on each country (plant distribution) and order by plant count in distribution model in desc '-'
 
         ## Prepare data for svg map ##
         country_list = []
         for j in countryData:
-            #print(j.get('distID')) #{'distID': 54, 'distID__count': 2}
             country_list.append(Distribution.objects.filter(id=j.get('distID'))[0].country_alpha2)
-        #print(country_list)
 
         country_name = []
         for k in countryData:
             country_name.append(Distribution.objects.filter(id=k.get('distID'))[0].countryName)
-        #print(country_name)
 
         country_record = []
         for l in countryData:
             country_record.append(l['distID__count'])
         
-        cc = {}
+        country_dict = {}
         for m in range(0,len(countryData)):
-            #print(countryData[m])
-            cc[country_list[m]] = {'plant':country_record[m]}
+            country_dict[country_name[m]] = country_record[m]
 
-        print(cc)
+        ## Pagination ##
 
         # Get all user objects
         logged_users = get_all_logged_in_users()
         ## Pagination ##
-        pub_p = Paginator(logged_users,4)
+        pub_p = Paginator(logged_users,3)
         page = request.GET.get('page')
         logged_users = pub_p.get_page(page)
 
         # Get all logged out users by excluding logged_in users queryset
         logged_out_users = User.objects.exclude(username__in=logged_users)
         ## Pagination ##
-        pub_p = Paginator(logged_out_users,4)
+        pub_p = Paginator(logged_out_users,3)
         page = request.GET.get('page')
         logged_out_users = pub_p.get_page(page)
 
@@ -486,9 +482,10 @@ def userHome(request):
             'country_list':country_list,
             'country_name':country_name,
             'country_record':country_record,
-            'cc':cc,
+            'country_dict':country_dict,
             'logged_users':logged_users,
             'logged_out_users':logged_out_users,
+
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:
