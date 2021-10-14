@@ -416,13 +416,18 @@ def logout_request(request):
     return redirect("home")
 
 def get_all_logged_in_users():
+    # Query all non-expired sessions
+    # use timezone.now() instead of datetime.now() in latest versions of Django
+    # '__gte' means greater than or equal
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
     uid_list = []
 
+    # Build a list of user ids from that query
     for session in sessions:
         data = session.get_decoded()
         uid_list.append(data.get('_auth_user_id', None))
 
+    # Query all logged in users based on id list
     return User.objects.filter(id__in=uid_list).order_by('first_name')
 
 @login_required(login_url='user_login')
@@ -461,6 +466,17 @@ def userHome(request):
 
         # Get all user objects
         logged_users = get_all_logged_in_users()
+        ## Pagination ##
+        pub_p = Paginator(logged_users,4)
+        page = request.GET.get('page')
+        logged_users = pub_p.get_page(page)
+
+        # Get all logged out users by excluding logged_in users queryset
+        logged_out_users = User.objects.exclude(username__in=logged_users)
+        ## Pagination ##
+        pub_p = Paginator(logged_out_users,4)
+        page = request.GET.get('page')
+        logged_out_users = pub_p.get_page(page)
 
         context = {
             'total_plant':total_plant,
@@ -472,6 +488,7 @@ def userHome(request):
             'country_record':country_record,
             'cc':cc,
             'logged_users':logged_users,
+            'logged_out_users':logged_out_users,
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:

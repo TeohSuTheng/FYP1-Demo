@@ -44,19 +44,6 @@
   </div>
 </div>
 
-<!--div class="container">
-  <div class="row">
-    <div class="col-8"></div>
-    <div class="col">
-        <div class="input-group input-group-sm mb-3">
-          <input type="text" class="form-control" placeholder="Search Usage Tag" name="searchquery" id="searchquery">
-          <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-        </div>
-    </div>
-  </div>
-</div-->
-
-
 
 <!--Usage Tags Table-->
 <div class="container">
@@ -73,23 +60,7 @@
                 Actions
               </div>
             </div>
-        </h6>
-        
-        <!--div class="card-body">
-          <div id="box">
-              {% for use in object_list %}
-                <div class="row">
-                  <div class="col-3"></div>
-                  <div class="col">{{use.usage_tag}}</div>
-                  <div class="col-3">
-                    <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' use.id%}">Update</button>
-                    <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'usageTagsDelete' use.id%}">Delete</button>
-                  </div>
-                </div><br>
-              {% endfor %}
-          </div>
-        </div-->
-        
+        </h6>     
 
         {% if uses %}
         <div class="card-body">

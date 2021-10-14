@@ -145,30 +145,22 @@
                 <div class="card">
                   <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
-                      <h5 class="card-title">Logged In Users</h5>
+                      <h5 class="card-title">Site Users</h5>
                       <!--a href="javascript:void(0);">View Report</a-->
                     </div>
                   </div>
                   <div class="card-body">
+
                     <div class="d-flex">
-                      <p>{{logged_users.count}}  User{{logged_users|pluralize}} currently logged in</p> 
-                      
-                      <!--p class="ml-auto d-flex flex-column text-right">
-                        <span class="text-success">
-                          <i class="fas fa-arrow-up"></i> 12.5%
-                        </span>
-                        <span class="text-muted">Since last week</span>
-                      </p-->
+                      <h6>Logged In: {{logged_users.paginator.count}}  User{{logged_users|pluralize}}</h6> 
                     </div>
                     <!-- /.d-flex -->
-    
                     <div class="position-relative mb-4">
                       <table class="table table-dark table-striped">
                         <thead>
                           <tr>
                             <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Username</th>
                             <th scope="col-1"></th>
                           </tr>
@@ -176,15 +168,78 @@
                         <tbody>  
                           {% for u in logged_users %}
                           <tr>
-                            <th scope="row">{{forloop.counter}}</th>
-                            <td>{{u.first_name}}</td>
-                            <td>{{u.last_name}}</td>
+                            <th scope="row">{{ forloop.counter0|add:logged_users.start_index }}</th>
+                            <td>{{u.first_name}} {{u.last_name}}</td>
                             <td>{{u.username}}</td>
                             <td><span class="text-success"><i class="fas fa-circle fa-xs"></i></span></td>
                           </tr>
                           {% endfor %}
                         </tbody>
                       </table>
+                      <!--Pagination-->
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-sm justify-content-center ">
+                        {% if logged_users.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ logged_users.previous_page_number }}">&laquo;</a></li>
+                        {% endif %}
+                
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                    Page {{logged_users.number}} of {{logged_users.paginator.num_pages}}
+                                </a>
+                            </li> <!--Page 1 of 3-->   
+                
+                            {% if logged_users.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ logged_users.next_page_number }}">&raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                      </nav>
+                    </div>
+
+                    <div class="d-flex">
+                      <h6>Logged Out: {{logged_out_users.paginator.count}}  User{{logged_out_users|pluralize}}</h6> 
+                    </div>
+                    <!-- /.d-flex -->
+                    <div class="position-relative mb-4">
+                      <table class="table table-light table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Last Logged In</th>
+                            <th scope="col-1"></th>
+                          </tr>
+                        </thead>
+                        <tbody>  
+                          {% for u in logged_out_users %}
+                          <tr>
+                            <th scope="row">{{ forloop.counter0|add:logged_out_users.start_index }}</th>
+                            <td>{{u.first_name}} {{u.last_name}}</td>
+                            <td>{{u.last_login}}</td>
+                            <td><span class="text-secondary"><i class="fas fa-circle fa-xs"></i></span></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+
+                      <!--Pagination-->
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-sm justify-content-center ">
+                        {% if logged_out_users.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ logged_out_users.previous_page_number }}">&laquo;</a></li>
+                        {% endif %}
+                
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                    Page {{logged_out_users.number}} of {{logged_out_users.paginator.num_pages}}
+                                </a>
+                            </li> <!--Page 1 of 3-->   
+                
+                            {% if logged_out_users.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ logged_out_users.next_page_number }}">&raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                     </div>
 
                   </div>
