@@ -5,7 +5,6 @@
 <div class="content-header" style="padding-left:25px ;">
     <div class="row">
       <div class="col-sm-9">
-        <h3 class="m-0">Users</h3>
       </div><!-- /.col -->
       <div class="col">
         <ol class="breadcrumb float-sm-right">
@@ -16,10 +15,27 @@
     </div><!-- /.row -->
 </div><br>
 
-<div class="container">Search</div><br>
-
 <div class="container">
-  <h5>Active Users</h5>
+  <h2 align="center">Site Users</h2>
+  <br>
+
+    <!--Search Bar-->
+    <div class="row">
+      <div class="col-sm-8"></div><!-- /.col -->
+      <div class="col">
+          <form name="searchForm" method="GET" action="{%url 'display_UsersResults' %}" onsubmit="return validateForm()">
+              {% csrf_token %}
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Search User by Name" name="searchquery">
+                  <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+              </div>
+              <div class="invalid-query"></div>
+          </form>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+
+{% if userList %}
+  <h5>Active User{{userList|pluralize}}</h5>
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
@@ -65,12 +81,11 @@
 
         </div>
     </div>
-</div>
+{% endif %}
 <br><br>
 
 {% if inactive_userList %}
-<div class="container">
-  <h5>Inactive Users</h5>
+  <h5>Inactive User{{inactive_userList|pluralize}}</h5>
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">

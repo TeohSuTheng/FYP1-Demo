@@ -559,6 +559,26 @@ def siteUsersList(request):
     return render(request, 'PlantWebApp/site-users.html',{'userList':userList, 'inactive_userList':inactive_userList})
 
 @staff_member_required(login_url='user_login')
+def displayUserResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        suggest = []
+
+        userList = User.objects.annotate(search = SearchVector('first_name','last_name')).filter(search=SearchQuery(searchquery)).filter(is_active=True).distinct('id')
+        print(userList)
+        inactive_userList = User.objects.annotate(search = SearchVector('first_name','last_name')).filter(search=SearchQuery(searchquery)).filter(is_active=False).distinct('id')
+        
+
+        # Set up Pagination
+        #p = Paginator(results, 10)
+        #page = request.GET.get('page')
+        #plants = p.get_page(page)
+
+        return render(request,'PlantWebApp/site-users.html', {'userList':userList,'inactive_userList':inactive_userList})
+    else:
+        siteUsersList(request)
+
+@staff_member_required(login_url='user_login')
 def siteUserDetail(request,id):
 
     # Display user data 
