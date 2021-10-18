@@ -717,7 +717,6 @@ def displayUnpublishedResults(request):
     else:
         unpubList(request)
 
-
 @staff_member_required(login_url='user_login')
 def verified(request):
     # Arrange in the order from earliest to latest
@@ -734,6 +733,24 @@ def verified(request):
     return render(request, 'PlantWebApp/admin-verified.html',{'plants':plants,'page_num':page_num})
 
 @staff_member_required(login_url='user_login')
+def displayPublishedResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        suggest = []
+
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(publish=True).filter(rejected=False).distinct('id')
+        print(results)
+
+        # Set up Pagination
+        p = Paginator(results, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
+
+        return render(request,'PlantWebApp/admin-verified.html', {'plants':plants})
+    else:
+        verified(request)
+
+@staff_member_required(login_url='user_login')
 def rejected(request):
     # Arrange in the order from earliest to latest
     plant_list = Plant.objects.filter(rejected=True).order_by('plantScientificName') 
@@ -744,6 +761,24 @@ def rejected(request):
     plants = p.get_page(page)
 
     return render(request, 'PlantWebApp/admin-rejected.html',{'plants':plants})
+
+@staff_member_required(login_url='user_login')
+def displayRejectedResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        suggest = []
+
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(rejected=True).distinct('id')
+        print(results)
+
+        # Set up Pagination
+        p = Paginator(results, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
+
+        return render(request,'PlantWebApp/admin-rejected.html', {'plants':plants})
+    else:
+        rejected(request)
 
 @staff_member_required(login_url='user_login')
 def publishAction(request,pk):

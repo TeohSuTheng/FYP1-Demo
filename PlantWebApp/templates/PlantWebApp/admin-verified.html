@@ -21,12 +21,12 @@
 
     <!--Search Bar-->
     <div class="row">
-        <div class="col-sm-9"></div><!-- /.col -->
+        <div class="col-sm-8"></div><!-- /.col -->
         <div class="col">
-            <form name="searchForm" method="GET" action="{%url 'display_VerifiedResults' %}" onsubmit="return validateForm()">
+            <form name="searchForm" method="GET" action="{%url 'display_PublishedResults' %}" onsubmit="return validateForm()">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search" name="searchquery">
+                    <input type="text" class="form-control" placeholder="Search Scientific Name" name="searchquery">
                     <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
                 </div>
                 <div class="invalid-query"></div>
