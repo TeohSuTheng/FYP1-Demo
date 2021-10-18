@@ -171,7 +171,15 @@
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                        <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Plant Records </span> 
+                </a>
+                    <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="{%url 'display_form' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Add record</span></a>
+                            </li>
+                    </ul>
+                <!--ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
                         <a href="/" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline text-white">Home</span>
@@ -247,7 +255,7 @@
                         <!--li><a class="dropdown-item" href="#">New project...</a></li>
                         <li><a class="dropdown-item" href="#">Settings</a></li-->
                         <!--li><a class="dropdown-item" href="{%url 'password_change' %}">Profile</a></li-->
-                        <li><a class="dropdown-item" href="{%url 'user_profile' user.id %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{%url 'user_profile' user.id %}">Profile Settings</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

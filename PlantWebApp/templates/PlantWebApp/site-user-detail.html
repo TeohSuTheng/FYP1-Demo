@@ -89,6 +89,7 @@
                     <a href="{%url 'siteUserDisable' user_info.id %}" class="btn btn-danger">Disable User</a>
                 {% else %}
                     <a href="{%url 'siteUserEnable' user_info.id %}" class="btn btn-secondary">Enable User</a>
+                    <a href="{%url 'user_delete' user_info.id %}" class="btn btn-danger">Delete User</a>
                 {% endif %}
             </div>
         </div>

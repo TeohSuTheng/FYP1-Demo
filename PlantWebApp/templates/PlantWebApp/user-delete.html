@@ -1,4 +1,5 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
 {% block content%}
 <!--div class="col py-3"-->
@@ -11,23 +12,23 @@
           <div class="col">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
-              <li class="breadcrumb-item"><a href="{%url 'user_profile' user.id %}">User Profile</a></li>
+              <li class="breadcrumb-item"><a href="{%url 'user_profile' site_user.id %}">User Profile</a></li>
               <li class="breadcrumb-item active">User Account Deletion</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
   </div><br><br>
 
-    <div class="container-fluid">
+    <div class="container" style="height: 70vh;">
         
-        <h5 align="center">Are you sure you want to delete account <strong>"{{user.username}}"</strong> ?</h5>
-        <p align="center"><span style="color: red;">Warning</span>: If you delete your account, you will permanently lose all data associated with the account.</p>
+        <h5 align="center">Are you sure you want to delete account <strong>"{{ site_user.username }}"</strong> ?</h5>
+        <p align="center"><span style="color: red;">Warning</span>: If you delete this account, you will permanently lose all data associated with the account.</p>
         <br>
 
         <div class="form" style="display: flex; justify-content: center;">
             <form method="POST" action="">
                 {% csrf_token %}
-                <a href="{%url 'user_profile' user.id %}" class="btn btn-light">Cancel</a>
+                <a href="{%url 'user_profile' site_user.id %}" class="btn btn-light">Cancel</a>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
         </div>

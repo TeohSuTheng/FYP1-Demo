@@ -556,19 +556,23 @@ def userProfileUpdate(request,id):
 
 @login_required(login_url='user_login')
 def userProfileDelete(request,id):
+    site_user = User.objects.get(id=id)
+    print(site_user)
+
     if request.method == "POST":
-        request.user.delete()
+        site_user.delete()
         messages.success(request,'Account deleted successfully.')
         ## + Del Profile (cascade = True)
         return redirect("home")
 
-    return render(request, 'PlantWebApp/user-delete.html',{})
+    return render(request, 'PlantWebApp/user-delete.html',{'site_user':site_user})
 
 @staff_member_required(login_url='user_login')
 def siteUsersList(request):
     #userList = User.objects.filter(is_staff = False)
-    userList = User.objects.all()
-    return render(request, 'PlantWebApp/site-users.html',{'userList':userList})
+    userList = User.objects.filter(is_active = True)
+    inactive_userList = User.objects.filter(is_active = False)
+    return render(request, 'PlantWebApp/site-users.html',{'userList':userList, 'inactive_userList':inactive_userList})
 
 @staff_member_required(login_url='user_login')
 def siteUserDetail(request,id):
