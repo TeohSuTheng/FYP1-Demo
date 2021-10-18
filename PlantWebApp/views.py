@@ -97,22 +97,6 @@ def displaySearchResults(request):
     else:
         home(request)
 
-#select2
-@staff_member_required(login_url='user_login')
-def displayUsageResults(request):
-    if request.method == "GET":
-        searchquery = request.GET['searchquery'] #is not None
-        result = Usage.objects.filter(usage_tag__search=searchquery)
-
-        # Set up Pagination
-        use_pag = Paginator(result, 10)
-        page = request.GET.get('page')
-        uses = use_pag.get_page(page)
-
-        full_list = Usage.objects.all().values('usage_tag').distinct()
-
-        return render(request,'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
-
 @login_required(login_url='user_login')    
 def displayPlantForm(request):
     use = Usage.objects.all() #Get usage_tags data from Usage table 
@@ -645,6 +629,22 @@ def usageTagsSettings(request):
 
     return render(request, 'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
 
+#select2
+@staff_member_required(login_url='user_login')
+def displayUsageResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        result = Usage.objects.filter(usage_tag__search=searchquery)
+
+        # Set up Pagination
+        use_pag = Paginator(result, 10)
+        page = request.GET.get('page')
+        uses = use_pag.get_page(page)
+
+        full_list = Usage.objects.all().values('usage_tag').distinct()
+
+        return render(request,'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
+
 def browse(request):
     # Only pubish plants that are verified by admin
     plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
@@ -697,9 +697,26 @@ def unpubList(request):
     page = request.GET.get('page')
     plants = p.get_page(page)
 
-
     return render(request, 'PlantWebApp/admin-unpublished.html',{'plants':plants})
-    #return render(request, 'PlantWebApp/admin-unpublished.html',{'plant_list':plant_list})
+
+@staff_member_required(login_url='user_login')
+def displayUnpublishedResults(request):
+    if request.method == "GET":
+        searchquery = request.GET['searchquery'] #is not None
+        suggest = []
+
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(publish=False).filter(rejected=False).distinct('id')
+        print(results)
+
+        # Set up Pagination
+        p = Paginator(results, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
+
+        return render(request,'PlantWebApp/admin-unpublished.html', {'plants':plants})
+    else:
+        unpubList(request)
+
 
 @staff_member_required(login_url='user_login')
 def verified(request):

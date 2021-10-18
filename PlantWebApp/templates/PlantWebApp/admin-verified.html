@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-sm-9"></div><!-- /.col -->
         <div class="col">
-            <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+            <form name="searchForm" method="GET" action="{%url 'display_VerifiedResults' %}" onsubmit="return validateForm()">
                 {% csrf_token %}
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search" name="searchquery">

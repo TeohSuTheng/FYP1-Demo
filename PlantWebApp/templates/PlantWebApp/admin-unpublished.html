@@ -17,8 +17,23 @@
 <div class="container">
     <h2 align="center">Plant Records</h2>
     <p align="center" style="color: white;"><span style="background-color:rgb(42, 119, 106);">| To Be Verified |</span></p>
-    
     <br>
+
+    <!--Search Bar-->
+    <div class="row">
+        <div class="col-sm-8"></div><!-- /.col -->
+        <div class="col">
+            <form name="searchForm" method="GET" action="{%url 'display_UnpublishedResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Scientific Name" name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
