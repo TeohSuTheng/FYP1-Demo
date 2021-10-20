@@ -11,6 +11,7 @@
     <div class="container">
         <h1 align="center">{{plant_info.plantScientificName}}</h1>
         {% if user.is_authenticated %}
+          <!--Rejected Records-->
           {% if plant_info.rejected %}
             <div class="container-fluid" >
               <div class="d-flex flex-column align-items-center min-vh-50">
@@ -22,26 +23,39 @@
                 </div>
 
                 <br>
-           
-                {% if user.id == plant_info.user.id  %}
+                {% if user.is_staff  %}
+                  <p align="center">
+                    <a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Modify</a>
+                    <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
+                  </p>
+                {% elif user.id == plant_info.user.id  %}
                   <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
                 {% endif %}
               </div>
             </div>
-          {% elif user.id == plant_info.user.id %}
+          <!--Published Records-->
+        {% elif plant_info.publish %}
             <p align="center">
               <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
               <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
             </p>
-          {% elif user.is_staff %} 
+          <!--To Be Verified Records-->
+        {% else %}
+            {% if user.is_staff %} 
                 <p align="center">
-                  <a href="{% url 'publish' plant_info.id%}" class="btn btn-outline-success">Publish</a>
-                  <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
-                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Reject**</a>
-                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+                    <a href="{% url 'publish' plant_info.id%}" class="btn btn-success">Publish</a>
+                    <a href="{% url 'update_form' plant_info.id%}" class="btn btn-primary">Update</a>
+                    <a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Reject</a>
+                    <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
                 </p> 
-          {% endif %}
+            {% elif user.id == plant_info.user.id %}
+              <p align="center">
+                <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
+                <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+              </p>
+            {% endif %}
         {% endif %}
+      {% endif %}
         <br><br>
         <div class="row">
             <div class="col">

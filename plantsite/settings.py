@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'PlantWebApp',
+    #'api.apps.ApiConfig',
     'django_cleanup', #automatically deletes files for FileField, ImageField and subclasses
-    #'import_export', #to use django-import-export from the admin
     'rest_framework',
     'bootstrap_modal_forms',
+    #'import_export', #to use django-import-export from the admin
+    
 ]
 
 MIDDLEWARE = [

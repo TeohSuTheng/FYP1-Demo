@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from PlantWebApp.models import Usage
+from PlantWebApp.models import Plant
 
-class UsageSerializer(serializers.ModelSerializer):
+# Serialize Django object into json
+class PlantSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usage
+        model = Plant
         fields = '__all__'

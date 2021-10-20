@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('PlantWebApp.urls')),
 
     # REST Framework URLS
-    path('api/usage/', include('PlantWebApp.api.urls','usage_api')),
+    path('api/', include('PlantWebApp.api.urls')),
 
     # Password Reset Links 
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='Accounts/password-change-done.html'),

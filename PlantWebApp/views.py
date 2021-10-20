@@ -15,7 +15,7 @@ from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Dist
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
@@ -195,8 +195,6 @@ def displayPlant(request,id):
     country_name = []
     for k in countryData:
         country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
-
-    print(country_name)
 
     plantdata = Plant.objects.get(id=id)
     if plantdata.rejected:
@@ -832,23 +830,6 @@ def country_settings(request):
 
 @staff_member_required(login_url='user_login')
 def rejectPostView(request,id):
-    # ***Rejection Form*** # #Update plant form -> reject#
-    if request.method == "POST":
-        reject_form = forms.RejectForm(request.POST)
-
-        # Verify data
-        if reject_form.is_valid():
-            temp = reject_form.save(commit=False)
-            temp.plant_id = id
-            temp.save()
-
-            plantdata = Plant.objects.get(id=id)
-            plantdata.rejected = True
-            plantdata.save(update_fields=['rejected'])
-
-            # Back to unpublished list page #
-            return unpubList(request)
-
     # ***Display plant data*** #
     # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
@@ -863,15 +844,52 @@ def rejectPostView(request,id):
     country_name = []
     for k in countryData:
         country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
-
-    context = {
-        'plant_info':get_object_or_404(Plant,pk=id),
+    
+    plantdata = Plant.objects.get(id=id) 
+    if plantdata.rejected:
+        reject = Rejection.objects.get(plant_id=id)
+        context = {
+        #'plant_info':get_object_or_404(Plant,pk=id),
+        'plant_info':plantdata,
+        'reject_info':reject,
         'plantUsageData':plantUsageData,
         'use_list':use_list,
         'country_list':country_list,
         'country_name':country_name,
+        }
+    else:
+        context = {
+        #'plant_info':get_object_or_404(Plant,pk=id),
+        'plant_info':plantdata,
+        'plantUsageData':plantUsageData,
+        'use_list':use_list,
+        'country_list':country_list,
+        'country_name':country_name,
+        }
 
-    }
+    if request.method == "POST":
+        if plantdata.rejected == False:
+            reject_form = forms.RejectForm(request.POST)
+
+            # Verify data
+            if reject_form.is_valid():
+                temp = reject_form.save(commit=False)
+                temp.plant_id = id
+                temp.save()
+
+                plantdata = Plant.objects.get(id=id)
+                plantdata.rejected = True
+                plantdata.save(update_fields=['rejected'])
+
+                # Back to unpublished list page #
+                return unpubList(request)
+
+        else:
+            reject_form = forms.RejectForm(request.POST, instance = reject)
+            reject_form.save()
+            messages.success(request,('Rejection reason updated successfully.'))
+            return rejected(request)
+
     return render(request,'PlantWebApp/rejection-form.html',context)
 
 def data_upload(request):
@@ -960,3 +978,4 @@ class UsageTagDeleteView(BSModalDeleteView):
         context = super().get_context_data(**kwargs)
         context["qs_json"] = json.dumps(list(Usage.objects.values()))
         return context'''
+
