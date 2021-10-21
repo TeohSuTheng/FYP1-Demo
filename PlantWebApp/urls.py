@@ -51,4 +51,5 @@ urlpatterns = [
     path('country-settings/',views.country_settings,name='settings'),
     path('plant-data-upload/',views.data_upload,name='data-upload'),
 
+    path('browse-name-api/',views.browse_api,name='browse-api'),
 ]

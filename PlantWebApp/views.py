@@ -979,3 +979,7 @@ class UsageTagDeleteView(BSModalDeleteView):
         context["qs_json"] = json.dumps(list(Usage.objects.values()))
         return context'''
 
+
+#*** API ***#
+def browse_api(request):
+    return render(request,'PlantWebApp/browse_plants_api.html')

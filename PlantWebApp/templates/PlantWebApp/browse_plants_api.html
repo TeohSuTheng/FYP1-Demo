@@ -1,0 +1,141 @@
+{% extends "PlantWebApp/base-no-nav.html" %}
+{% load static %}
+
+{% block content%}
+<link rel="stylesheet" href="{% static '/css/searchStyle.css' %}">
+
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-8">
+        <h3 class="m-0"></h3>
+      </div><!-- /.col -->
+      <div class="col" style="padding-right: 40px;">            
+          <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+<section class="search-section">
+    <img id="header" class="parallax" src="{% static '/images/BrowseHeader1.jpg' %}" alt="">
+
+    <div class="container">
+        <h3 align="center">Explore</h3>
+        <br><br>
+        <!--h3 align="center">Plant Search</h3>
+        <br>
+        <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
+                <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
+            </div>
+            <div class="invalid-query"></div>
+        </form>
+        
+        <br>
+        <!--div class="arrow"></div>
+        <div class="arrow"></div>
+        <div class="arrow"></div-->
+        <div class="scroll-icon">
+            <p align="center"><a class="scrollTo" data-scrollTo="#plantList" href="#plantList"><img src="{% static '/images/scroll-icon.png' %}" alt=""></a></p>
+        </div> 
+    </div> 
+</section>
+<p style="background-color: #3c4250;">--</p>
+
+<div id="plantList">
+<h3 style="visibility:hidden;">--</h3><h3 style="visibility:hidden;">--</h3>
+<div class="container">
+<h3 align="center">List of Plants</h3><br>
+<div class="card">
+    <h6 class="card-header">
+        <div class="row align-items-start">
+        <div class="col">
+            Scientific Name
+          </div>
+          <div class="col-8">
+              Common Name
+          </div>
+          <div class="col">
+          </div>
+        </div>
+    </h6>
+    <div class="card-body">
+    </div>
+</div><!--card-->
+</div><!--container-->
+</div>
+
+<hr>
+<!--Pagination-->
+
+<br><br><br>
+
+<!--Font Awesome-->
+<script src="https://kit.fontawesome.com/90884d5937.js" crossorigin="anonymous"></script>
+
+<script>
+    // Add Parallax effect to Image 
+    window.addEventListener('scroll',function(){
+        const parallax = document.querySelector('.parallax');
+        let scrollPosition = window.pageYOffset;
+        parallax.style.transform = 'translateY(' + scrollPosition * .5 + 'px)';
+
+    })
+    
+    // Search Form Validation
+    function validateForm() {
+        var userQuery = document.forms["searchForm"]["searchquery"].value.trim(); //trim - to remove trailing whitespaces
+        if (userQuery == "") {
+          document.querySelector(".invalid-query").innerHTML = "<p><span style='background-color:#ffcccb;'><i class='fas fa-exclamation-circle'></i> Please enter a valid search query</span></p>"
+          return false;
+        }
+      }  
+
+    // Render data from API
+    function buildList(){
+        var wrapper = document.querySelector(".card-body")
+        
+        var url = "http://127.0.0.1:8000/api/browse-name-api/"
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+
+            var plant_list = data
+            for(i in plant_list){
+                //template literals
+                var item = `
+                    <div class="row align-items-start" id="data-row-${i}">
+                        <div class="col">
+                            <p class="card-text">${plant_list[i].plantScientificName}</p>
+                        </div>
+                        <div class="col-8">
+                            <p class="card-text">${plant_list[i].plantLocalName}</p>
+                        </div>
+                        <div class="col">
+                            <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                        </div>
+
+                        <br><br><br>
+                    </div>
+                `
+
+                wrapper.innerHTML += item
+                
+            }
+        })
+    }  
+    buildList()
+</script>
+
+{% endblock content %}

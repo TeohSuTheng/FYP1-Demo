@@ -5,4 +5,4 @@ from PlantWebApp.models import Plant
 class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
-        fields = '__all__'
+        fields = ['id','plantScientificName','plantLocalName'] #'__all__'

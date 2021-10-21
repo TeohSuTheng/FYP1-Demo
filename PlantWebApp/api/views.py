@@ -23,10 +23,3 @@ def pubPlantList(request):
         serializer = PlantSerializer(plant_list,many=True)
         return Response(serializer.data)
 
-'''
-@api_view(['GET'])
-def UseListApi(request):
-    if request.method == 'GET':
-        uses = Usage.objects.all()
-        serializer = UsageSerializer(uses,many=True)
-        return Response(serializer.data)'''
