@@ -52,4 +52,5 @@ urlpatterns = [
     path('plant-data-upload/',views.data_upload,name='data-upload'),
 
     path('browse-name-api/',views.browse_api,name='browse-api'),
+    path('country-data-detail/<str:country>',views.countryDataDetails,name="countryDataDetails" ),
 ]

@@ -34,3 +34,13 @@ div.vertical-scroll {
     background: rgb(8, 44, 5);
     border-radius: 10px;
   }
+
+/*Country Anchor Tag*/
+#country-anchor {
+  text-decoration: none;
+}
+
+#country-anchor:hover {
+  color: rgb(1, 44, 1);
+}
+

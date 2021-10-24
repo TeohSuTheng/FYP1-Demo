@@ -151,7 +151,7 @@
                             {% for key,val in country_dict.items %} 
                             <tr>
                               <th scope="row">{{ forloop.counter}}</th>
-                              <td>{{ key }}</td>
+                              <td><a id="country-anchor" href="http://127.0.0.1:8000/country-data-detail/{{key}}">{{ key }}</a> </td>
                               <td>{{ val }}</td>
                             </tr>
                             {% endfor %}
@@ -334,39 +334,6 @@
 
 <!--svgMap.js-->
 <script>
-/* 
-  function map()
-  {
-    var $svgMap = $("#svgMap");
-    $.ajax({
-    url: $svgMap.data("url"), //?
-    success: function (data) {
-      //Convert to array
-      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
-      var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
-      var country_dict = {};
-      
-      for (let i = 0; i < country_list.length ; i++)
-      {
-        var tmp = country_list[i]
-        country_dict[tmp] = {'plant':country_record_arr[i]};
-      }
-
-      new svgMap({
-      targetElementID: 'svgMap',
-      data: {
-        data: {
-          plant: {
-            name: 'Plant Record(s)',
-            format: '{0}'
-          },
-        },
-        applyData: 'plant',
-        values: country_dict
-      }
-    });
-  }
-    })}*/
 
     //Convert to array
     var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
@@ -377,6 +344,7 @@
     {
       var tmp = country_list[i]
       country_dict[tmp] = {'plant':country_record_arr[i]};
+      //country_dict[tmp] = {'plant':''};
     }
 
     var map = new svgMap({
@@ -393,6 +361,7 @@
     }
   });
 
+  /*
   function updateMap()
   {
     var $svgMap = $("#svgMap");
@@ -417,7 +386,7 @@
     }
 
     })
-  }
+  }*/
 
 </script>
 

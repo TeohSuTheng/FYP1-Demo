@@ -941,6 +941,11 @@ def advancedSearch(request):
 
     return render(request,'PlantWebApp/advanced-search.html',{'AdvancedSearchFormSet':AdvancedSearchFormSet})
 
+
+def countryDataDetails(request,country):
+    return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
+
+
 #@permission_required('polls.add_choice')
 
 # Class Based Views

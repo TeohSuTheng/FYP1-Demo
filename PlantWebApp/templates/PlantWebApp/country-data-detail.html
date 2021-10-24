@@ -1,0 +1,174 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
+
+{% block content%}
+<!--Site Admin Content header-->
+<div class="content-header" style="padding-left:55px ;">
+    <div class="row">
+      <div class="col-sm-8">
+        <h2 >Country: {{country}}</h2>
+      </div><!-- /.col -->
+      <div class="col">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item active">{{country}}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+    <br>
+</div><br>
+
+<div class="container" >
+    
+
+    <div id="plantList">
+
+        <div class="container">
+        <h3 align="center">Published</h3><br>
+        <div class="card">
+            <h6 class="card-header">
+                <div class="row align-items-start">
+                <div class="col">
+                    Scientific Name
+                  </div>
+                  <div class="col-8">
+                      Common Name
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+            </h6>
+            <div id="card-body-published" class="card-body">
+            </div>
+        </div><!--card-->
+        <br><br>
+
+        <h3 align="center">Unpublished</h3><br>
+        <div class="card">
+            <h6 class="card-header">
+                <div class="row align-items-start">
+                <div class="col">
+                    Scientific Name
+                  </div>
+                  <div class="col-8">
+                      Common Name
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+            </h6>
+            <div class="card-body" id="card-body-unpublished">
+            </div>
+        </div><!--card-->
+        <br><br>
+
+        <h3 align="center">Rejected</h3><br>
+        <div class="card">
+            <h6 class="card-header">
+                <div class="row align-items-start">
+                <div class="col">
+                    Scientific Name
+                  </div>
+                  <div class="col-8">
+                      Common Name
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+            </h6>
+            <div id="card-body-rejected" class="card-body" >
+            </div>
+        </div><!--card-->
+        </div><!--container-->
+    </div>
+</div>
+
+<script>
+    // Render data from API
+    function buildList(){
+        var wrapper = document.querySelector("#card-body-published")
+        var unpubWrapper = document.querySelector("#card-body-unpublished")
+        var rejectWrapper = document.querySelector("#card-body-rejected")
+        
+        var url = "http://127.0.0.1:8000/api/browse-country-api/{{country}}"
+        console.log(url)
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+
+            var plant_list = data
+            for(i in plant_list){
+                var published =  `${plant_list[i].publish}`
+                var rejected =  `${plant_list[i].rejected}`
+                
+                if (published == "true"){
+                    var item = `
+                        <div class="row align-items-start" id="data-row-${i}">
+                            <div class="col">
+                                <p class="card-text">${plant_list[i].plantScientificName}</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="card-text">${plant_list[i].plantLocalName}</p>
+                            </div>
+                            <div class="col">
+                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                            </div>
+
+                            <br><br><br>
+                        </div>
+                    `
+
+                    wrapper.innerHTML += item
+                }
+
+                else if (rejected == "false")
+                {
+                    var item = `
+                        <div class="row align-items-start" id="data-row-${i}">
+                            <div class="col">
+                                <p class="card-text">${plant_list[i].plantScientificName}</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="card-text">${plant_list[i].plantLocalName}</p>
+                            </div>
+                            <div class="col">
+                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                            </div>
+
+                            <br><br><br>
+                        </div>
+                    `
+
+                    unpubWrapper.innerHTML += item
+                }
+
+                else {
+                    var item = `
+                        <div class="row align-items-start" id="data-row-${i}">
+                            <div class="col">
+                                <p class="card-text">${plant_list[i].plantScientificName}</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="card-text">${plant_list[i].plantLocalName}</p>
+                            </div>
+                            <div class="col">
+                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                            </div>
+
+                            <br><br><br>
+                        </div>
+                    `
+
+                    rejectWrapper.innerHTML += item
+                }
+
+                
+            }
+        })
+    }  
+    buildList()
+</script>
+
+{% endblock %}
