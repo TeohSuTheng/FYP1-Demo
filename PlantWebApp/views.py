@@ -941,9 +941,33 @@ def advancedSearch(request):
 
     return render(request,'PlantWebApp/advanced-search.html',{'AdvancedSearchFormSet':AdvancedSearchFormSet})
 
-
 def countryDataDetails(request,country):
     return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
+
+def userPageView(request,id):
+    # Display user data 
+    user_info = User.objects.get(id=id)
+    #user_profile = Profile.objects.get(user_id=id)
+
+    date = formats.date_format(user_info.date_joined, "SHORT_DATETIME_FORMAT")
+
+    # Display list of plant data submitted by user
+
+    ## Published ##
+    pub_list = Q(user_id=id) & Q(publish=True)
+    pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
+    ## Pagination ##
+    pub_p = Paginator(pub_plant_list,10)
+    page = request.GET.get('page')
+    pub_plants = pub_p.get_page(page)
+
+    context = {
+        'user_info':user_info,
+        'pub_plants':pub_plants,
+        'date':date
+    }
+
+    return render(request,'PlantWebApp/user-page.html', context)
 
 
 #@permission_required('polls.add_choice')

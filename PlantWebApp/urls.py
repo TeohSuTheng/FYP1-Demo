@@ -53,4 +53,5 @@ urlpatterns = [
 
     path('browse-name-api/',views.browse_api,name='browse-api'),
     path('country-data-detail/<str:country>',views.countryDataDetails,name="countryDataDetails" ),
+    path('user-page/<int:id>',views.userPageView,name='user_page'),
 ]

@@ -107,9 +107,10 @@
             <br>
             <h4>Reference</h4>
             <p>{{plant_info.plantref|linebreaks}}</p><br><br>
-            <p class="h6">Created on: {{plant_info.created_at.date}} by {{plant_info.user.first_name}} {{plant_info.user.last_name}}</p>
+            <p class="h6">Created on: {{plant_info.created_at.date}} by <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>
         </div>
     </div>
+    <br><br><br>
 
     <script>
       //Convert to array
