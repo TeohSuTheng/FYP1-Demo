@@ -4,8 +4,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from PlantWebApp.models import Plant
-from .serializers import PlantSerializer
+from PlantWebApp.models import Plant, Profile
+from django.contrib.auth.models import User
+from .serializers import PlantSerializer,UserProfileSerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery
 
 @api_view(['GET'])
@@ -30,4 +31,13 @@ def countryData(request,country):
         results = Plant.objects.annotate(search = SearchVector('distribution__countryName')).filter(search=SearchQuery(country)).distinct('id')
         serializer = PlantSerializer(results,many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def UserPersonalData(request,id):
+    if request.method == 'GET':
+        user_info = User.objects.get(id=id)
+        serializer = UserProfileSerializer(user_info)
+        return Response(serializer.data)
+
+
 

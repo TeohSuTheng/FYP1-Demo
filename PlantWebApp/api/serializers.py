@@ -1,11 +1,24 @@
 from rest_framework import serializers
-from PlantWebApp.models import Plant
+from PlantWebApp.models import Plant, Profile
+from django.contrib.auth.models import User
 
 # Serialize Django object into json
 class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
         fields = ['id','plantScientificName','plantLocalName','publish','rejected'] #'__all__'
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['role','dept','institution'] #'__all__'
+
+# Nested Relationships
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['id','username','first_name','last_name','email','profile'] #'__all__'
 
 
 '''class PlantDetailSerializer(serializers.Serializer):

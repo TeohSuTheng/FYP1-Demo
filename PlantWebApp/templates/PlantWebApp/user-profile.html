@@ -1,4 +1,5 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
 {% block content%}
 <!-- Google Font: Source Sans Pro -->
@@ -32,6 +33,9 @@
             </h4>
         </div>
         <br>
+
+        <div class="wrapper">
+            <!--
             <div class="row">
                 <div class="col-sm-3">First Name:</div>
                 <div class="col-sm">{{user_info.first_name}}</div>
@@ -45,7 +49,7 @@
                 <div class="col-sm">{{user_info.username}}</div>
             </div><br>
 
-         <!--Contact Information-->
+         <!--Contact Information
          <div class="row" style="background-color: #91c785;">
             <h4 style="color: white; display: flex; justify-content: center;">
                 Contact Information
@@ -56,7 +60,7 @@
             <div class="col-sm">{{user_info.email}}</div>
         </div><br>
 
-        <!--Job Description-->
+        <!--Job Description
         <div class="row" style="background-color: #76a06d;">
             <h4 style="color: white; display: flex; justify-content: center;">
                 Job Description
@@ -73,18 +77,81 @@
         <div class="row">
             <div class="col-sm-3">Job Position:</div>
             <div class="col-sm">{{user_info.profile.role}}</div>
-        </div><br><br>
+        </div-->
+    </div>
+        
+        <br><br>
 
         <!--Buttons-->
         <p align="center">
-            <a href="{% url 'user_profile_update' user.id %}" class="btn btn-outline-primary">Update Account</a>
+            <a href="{% url 'user_profile_update' id %}" class="btn btn-outline-primary">Update Account</a>
             <!--a href="#" class="btn btn-outline-success">Change Password</a-->
-            <a href="{%url 'user_delete' user.id %}" class="btn btn-outline-danger">Delete Account</a>
+            <a href="{%url 'user_delete' id %}" class="btn btn-outline-danger">Delete Account</a>
         </p>
 
       </div>
 
+<script>
+    // Render data from API
+    function buildList(){
+        var wrapper = document.querySelector(".wrapper")
+        
+        var url = "http://127.0.0.1:8000/api/user-data-api/{{id}}"
 
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+            var item = `
+                <div class="row">
+                    <div class="col-sm-3">First Name:</div>
+                    <div class="col-sm">${data.first_name}</div>
+                </div><br>
+                <div class="row">
+                    <div class="col-sm-3">Last Name:</div>
+                    <div class="col-sm">${data.last_name}</div>
+                </div><br>
+                <div class="row">
+                    <div class="col-sm-3">Username:</div>
+                    <div class="col-sm">${data.username}</div>
+                </div><br>
+
+            <!--Contact Information-->
+            <div class="row" style="background-color: #91c785;">
+                <h4 style="color: white; display: flex; justify-content: center;">
+                    Contact Information
+                </h4>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Email Address:</div>
+                <div class="col-sm">${data.email}</div>
+            </div><br>
+
+            <!--Job Description-->
+            <div class="row" style="background-color: #76a06d;">
+                <h4 style="color: white; display: flex; justify-content: center;">
+                    Job Description
+                </h4>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Institution:</div>
+                <div class="col-sm">${data.profile.institution}</div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Department:</div>
+                <div class="col-sm">${data.profile.dept}</div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-3">Job Position:</div>
+                <div class="col-sm">${data.profile.role}</div>
+            </div>`
+
+            wrapper.innerHTML += item
+                
+        })
+    }  
+    buildList()
+</script>
 
 <!--/div-->   
 {% endblock %}

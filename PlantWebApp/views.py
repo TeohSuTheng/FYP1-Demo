@@ -500,14 +500,6 @@ def userHome(request):
 
         return render(request, 'PlantWebApp/user_home.html',context)
 
-@login_required(login_url='user_login')
-def userProfileView(request,id):
-    #user_profile = Profile.objects.get(user_id=id)
-    context = {
-        'user_info' : get_object_or_404(User,id=id), #user_data = User.objects.get(id=id)
-        #'user_profile' : user_profile,
-    }
-    return render(request, 'PlantWebApp/user-profile.html',context)
 
 @login_required(login_url='user_login')
 def userProfileUpdate(request,id):
@@ -941,16 +933,12 @@ def advancedSearch(request):
 
     return render(request,'PlantWebApp/advanced-search.html',{'AdvancedSearchFormSet':AdvancedSearchFormSet})
 
-def countryDataDetails(request,country):
-    return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
-
 def userPageView(request,id):
     # Display user data 
     user_info = User.objects.get(id=id)
     #user_profile = Profile.objects.get(user_id=id)
 
-    date = formats.date_format(user_info.date_joined, "SHORT_DATETIME_FORMAT")
-
+    
     # Display list of plant data submitted by user
 
     ## Published ##
@@ -964,10 +952,27 @@ def userPageView(request,id):
     context = {
         'user_info':user_info,
         'pub_plants':pub_plants,
-        'date':date
     }
 
     return render(request,'PlantWebApp/user-page.html', context)
+
+#** API VIEWS**
+def countryDataDetails(request,country):
+    return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
+
+'''
+@login_required(login_url='user_login')
+def userProfileView(request,id):
+    #user_profile = Profile.objects.get(user_id=id)
+    context = {
+        'user_info' : get_object_or_404(User,id=id), #user_data = User.objects.get(id=id)
+        #'user_profile' : user_profile,
+    }
+    return render(request, 'PlantWebApp/user-profile.html',context)'''
+
+@login_required(login_url='user_login')
+def userProfileView(request,id):
+    return render(request, 'PlantWebApp/user-profile.html',{'id':id})
 
 
 #@permission_required('polls.add_choice')
