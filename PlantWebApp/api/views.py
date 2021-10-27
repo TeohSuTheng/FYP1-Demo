@@ -4,10 +4,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from PlantWebApp.models import Plant, Profile
+from PlantWebApp.models import Plant
 from django.contrib.auth.models import User
-from .serializers import PlantSerializer,UserProfileSerializer
+from .serializers import PlantSerializer,UserProfileSerializer,PlantDetailSerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery
+from rest_framework.pagination import PageNumberPagination
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -21,9 +22,14 @@ def apiOverview(request):
 @api_view(['GET'])
 def pubPlantList(request):
     if request.method == 'GET':
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+
         plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
-        serializer = PlantSerializer(plant_list,many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(plant_list, request) 
+        serializer = PlantSerializer(result_page,many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET'])
 def countryData(request,country):
@@ -37,6 +43,13 @@ def UserPersonalData(request,id):
     if request.method == 'GET':
         user_info = User.objects.get(id=id)
         serializer = UserProfileSerializer(user_info)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def PlantDetail(request,id):
+    if request.method == 'GET':
+        plantdata = Plant.objects.get(id=id)
+        serializer = PlantDetailSerializer(plantdata)
         return Response(serializer.data)
 
 

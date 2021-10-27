@@ -29,18 +29,6 @@
     <div class="container">
         <h3 align="center">Explore</h3>
         <br><br>
-        <!--h3 align="center">Plant Search</h3>
-        <br>
-        <form name="searchForm" method="GET" action="{%url 'display_SearchResults' %}" onsubmit="return validateForm()">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search plant by keyword.. " name="searchquery">
-                <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
-            </div>
-            <div class="invalid-query"></div>
-        </form>
-        
-        <br>
         <!--div class="arrow"></div>
         <div class="arrow"></div>
         <div class="arrow"></div-->
@@ -68,14 +56,25 @@
           </div>
         </div>
     </h6>
-    <div class="card-body">
-    </div>
+    <div class="card-body"></div>
 </div><!--card-->
 </div><!--container-->
 </div>
 
 <hr>
 <!--Pagination-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <div class="pagination-wrapper">
+            <li class="page-item">
+                <a class="page-link" id="prev">Previous</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" id="next">Next</a>
+            </li>
+        </div>
+    </ul>
+  </nav>
 
 <br><br><br>
 
@@ -103,6 +102,7 @@
     // Render data from API
     function buildList(){
         var wrapper = document.querySelector(".card-body")
+        var pagination = document.querySelector(".pagination-wrapper")
         
         var url = "http://127.0.0.1:8000/api/browse-name-api/"
 
@@ -111,7 +111,8 @@
         .then(function(data){
             console.log(data)
 
-            var plant_list = data
+            var plant_list = data.results
+
             for(i in plant_list){
                 //template literals
                 var item = `
@@ -133,9 +134,142 @@
                 wrapper.innerHTML += item
                 
             }
+
+            //prevURL = data.previous
+            //nextURL = data.next
+            console.log(data.next)
+
+            
         })
-    }  
+    } 
+    
     buildList()
+   
+/*
+ window.onload
+    function loadNextPage(){
+        var wrapper = document.querySelector(".card-body")
+        wrapper.innerHTML = `` //Clean
+        var pagination = document.querySelector(".pagination-wrapper")
+
+        if (nextURL==null){
+            
+        }
+        else{
+
+        fetch(nextURL)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+
+            var plant_list = data.results
+            for(i in plant_list){
+                //template literals
+                var item = `
+                    <div class="row align-items-start" id="data-row-${i}">
+                        <div class="col">
+                            <p class="card-text">${plant_list[i].plantScientificName}</p>
+                        </div>
+                        <div class="col-8">
+                            <p class="card-text">${plant_list[i].plantLocalName}</p>
+                        </div>
+                        <div class="col">
+                            <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                        </div>
+
+                        <br><br><br>
+                    </div>
+                `
+
+                wrapper.innerHTML += item      
+    }
+
+                prevURL = data.previous
+                nextURL = data.next
+        
+})
+}}
+
+var nextURL
+var prevURL
+const n = document.getElementById("next")
+n.addEventListener('click',loadNextPage)
+
+/*
+
+function loadPrevPage()
+{
+    var wrapper = document.querySelector(".card-body")
+        wrapper.innerHTML = `` //Clean
+        var pagination = document.querySelector(".pagination-wrapper")
+ //Clean 
+        fetch(prevURL)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+
+            var plant_list = data.results
+            for(i in plant_list){
+                //template literals
+                var item = `
+                    <div class="row align-items-start" id="data-row-${i}">
+                        <div class="col">
+                            <p class="card-text">${plant_list[i].plantScientificName}</p>
+                        </div>
+                        <div class="col-8">
+                            <p class="card-text">${plant_list[i].plantLocalName}</p>
+                        </div>
+                        <div class="col">
+                            <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                        </div>
+
+                        <br><br><br>
+                    </div>
+                `
+
+                wrapper.innerHTML += item      
+    }
+
+                prevURL = data.previous
+                nextURL = data.next
+
+                if (prevURL == null)
+                {
+                    var item = `
+                    <li class="page-item disabled">
+                        <a class="page-link" id="prev">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" id="next">Next</a>
+                    </li>
+                    `
+                    pagination.innerHTML = item
+                }
+                else
+                {
+                    var item = `
+                        <li class="page-item">
+                            <a class="page-link" id="prev">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" id="next">Next</a>
+                        </li>
+                    `
+                    pagination.innerHTML = item
+                }
+})
+
+}
+
+    var prevURL
+    var nextURL
+    
+
+    const n = document.getElementById("next")
+    n.addEventListener('click',loadNextPage)
+
+    const p = document.getElementById("prev")
+    p.addEventListener('click',loadPrevPage)*/
 </script>
 
 {% endblock content %}
