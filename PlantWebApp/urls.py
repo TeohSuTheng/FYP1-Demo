@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('form/',views.displayPlantForm,name='display_form'),
     path('plant/<int:id>',views.displayPlant,name='display_plant'),
+    path('plant-api/<int:id>',views.displayPlantApi,name='displayPlantApi'),
+    
     path('plant/image/<int:id>',views.displayPlantImage,name='display_plantImg'),
     path('form/update/<int:pk>',views.UpdatePostView,name='update_form'),
     path('form/delete/<int:pk>',views.deletePost,name='delete_form'),

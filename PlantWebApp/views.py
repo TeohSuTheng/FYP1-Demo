@@ -213,6 +213,9 @@ def displayPlant(request,id):
     }
     return render(request, 'PlantWebApp/plant-info.html',context)
 
+def displayPlantApi(request,id):
+    return render(request, 'PlantWebApp/plant-info-api.html',{'id':id})
+
 @login_required(login_url='user_login')
 def UpdatePostView(request,pk):
     use = Usage.objects.all() #get uses_tags from Usage table

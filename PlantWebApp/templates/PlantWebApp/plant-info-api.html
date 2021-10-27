@@ -1,142 +1,134 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
 
 {% block content%}
-
-<!--https://github.com/StephanWagner/svgMap-->
-<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet">
 
 <br>
     <div class="container">
-        <h1 align="center">{{plant_info.plantScientificName}}</h1>
-        {% if user.is_authenticated %}
-          <!--Rejected Records-->
-          {% if plant_info.rejected %}
-            <div class="container-fluid" >
-              <div class="d-flex flex-column align-items-center min-vh-50">
-                <h5 style="color: brown;">Rejected</h5>
-                <br>
-
-                <div class="d-flex flex-column align-items-center" style="padding:10px; radius:5px; background-color: antiquewhite;">
-                  <p>Reason of rejection: {{ reject_info.reason }}</p>
-                </div>
-
-                <br>
-                {% if user.is_staff  %}
-                  <p align="center">
-                    <a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Modify</a>
-                    <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
-                  </p>
-                {% elif user.id == plant_info.user.id  %}
-                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
-                {% endif %}
-              </div>
-            </div>
-          <!--Published Records-->
-        {% elif plant_info.publish %}
-            <p align="center">
-              <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
-              <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
-            </p>
-          <!--To Be Verified Records-->
-        {% else %}
-            {% if user.is_staff %} 
-                <p align="center">
-                    <a href="{% url 'publish' plant_info.id%}" class="btn btn-success">Publish</a>
-                    <a href="{% url 'update_form' plant_info.id%}" class="btn btn-primary">Update</a>
-                    <a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Reject</a>
-                    <!--a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a-->
-                </p> 
-            {% elif user.id == plant_info.user.id %}
-              <p align="center">
-                <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
-                <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
-              </p>
-            {% endif %}
-        {% endif %}
-      {% endif %}
-        <br><br>
-        <div class="row">
-            <div class="col">
-              <a href="{% url 'display_plantImg' plant_info.id%}" target="_blank"> 
-                <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: 350px;">
-              </a>
-        </div>
-        <div class="col-8">
-            <p align="right"><small>Voucher No: {{plant_info.voucher_no}}</small></p>
-            <br>
-            <h4>Plant Local Name</h4>
-            <p>{{plant_info.plantLocalName}}</p><br>
-            <h4>Plant Morphology</h4><br>
-            <table class="table table-striped">
-                <tbody>
-                  <tr>
-                    <th scope="row">Stem</th>
-                    <td>{{plant_info.pmStem}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Leaf</th>
-                    <td>{{plant_info.pmLeaf}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Flower</th>
-                    <td>{{plant_info.pmFlower}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Fruit</th>
-                    <td>{{plant_info.pmFruit}}</td>
-                  </tr>
-                </tbody>
-            </table><br>    
-            <h4>Ethnobotanical Uses</h4>
-            <ul>
-            {% for i in use_list%}
-                <li>{{i}}</li>
-            {% endfor %}
-            </ul>
-            <br>
-            <h4>Plant Distribution</h4>
-            <p>
-            {% for j in country_name %}
-               {{j}}, 
-            {% endfor %}
-            </p>
-            <div id="svgMap"></div>
-            
-            <br>
-            <h4>Reference</h4>
-            <p>{{plant_info.plantref|linebreaks}}</p><br><br>
-            <p class="h6">Created on: {{plant_info.created_at.date}} by <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>
+      <div class="wrapper-title"></div><br><br>
+      <div class="row">
+        <div class="col">
+          <a id="plantImg" href="{% url 'display_plantImg' id%}" target="_blank"></a>
+          </div>
+          <div class="col-8">
+              <div class="wrapper-content"></div>
+              <h4>Ethnobotanical Uses</h4>
+                <ul><div class="wrapper-usage"></div></ul>
+              <br>
+              <h4>Plant Distribution</h4>
+                <p><div class="wrapper-dist"></div></p>
+                <div id="svgMap"></div>
+              <br>
+              <h4>Reference</h4>
+                <div class="wrapper-end"></div>
         </div>
     </div>
+  </div><!--container-->
     <br><br><br>
 
-    <script>
-      //Convert to array
-      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
-      var country_dict = {};
-      
-      for (let i = 0; i < country_list.length ; i++)
-      {
-        var tmp = country_list[i]
-        country_dict[tmp] = {'plant':''};
-      }
+  
+  
+      <script>
+        // Render data from API
+      function buildList(){
+          var wrapperTitle = document.querySelector(".wrapper-title")
+          
+          var url = "http://127.0.0.1:8000/api/plant-detail-api/{{id}}"
+  
+          fetch(url)
+          .then((resp) => resp.json())
+          .then(function(data){
+              console.log(data)
+              
+              var item = `<h1 align="center">${data.plantScientificName}</h1>`
+              wrapperTitle.innerHTML += item
 
-      new svgMap({
-      targetElementID: 'svgMap',
-      data: {
-        data: {
-          plant: {
-            name: '',
-          },
-        },
-        applyData: 'plant',
-        values: country_dict
-      }
-    });
+              wrapperTitle = document.querySelector("#plantImg")
+              var item = `<img src="${data.plantImg}" alt="" class="img-thumbnail" style="width:250px;height: 350px;">`
+              wrapperTitle.innerHTML += item
 
-    </script>
+              wrapperTitle = document.querySelector(".wrapper-content")
+              var item = `
+              <p align="right"><small>Voucher No: ${data.voucher_no}</small></p>
+              <br>
+              <h4>Plant Local Name</h4>
+              <p>${data.plantLocalName}</p><br>
+              <h4>Plant Morphology</h4><br>
+              <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <th scope="row">Stem</th>
+                      <td>${data.pmStem}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Leaf</th>
+                      <td>${data.pmLeaf}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Flower</th>
+                      <td>${data.pmFlower}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fruit</th>
+                      <td>${data.pmFruit}</td>
+                    </tr>
+                  </tbody>
+              </table><br> 
+              `
+              wrapperTitle.innerHTML += item
+
+              wrapperTitle = document.querySelector(".wrapper-usage")
+              for (var i in data.usage)
+              {
+                var item = `<li>${data.usage[i].usage_tag}</li>`
+
+                wrapperTitle.innerHTML += item
+              }
+
+              wrapperTitle = document.querySelector(".wrapper-dist")
+              for (var i in data.distribution)
+              {
+                var item = `${data.distribution[i].countryName}, `
+
+                wrapperTitle.innerHTML += item
+              }
+
+              //SVG Map
+              var country_dict = {}
+              for (var i in data.distribution)
+              {
+                country_dict[data.distribution[i].country_alpha2] = {'plant':''};
+              }
+
+              new svgMap({
+                targetElementID: 'svgMap',
+                data: {
+                  data: {
+                    plant: {
+                      name: '',
+                    },
+                  },
+                  applyData: 'plant',
+                  values: country_dict
+                }
+              });
+            
+              wrapperTitle = document.querySelector(".wrapper-end")
+              var item = `
+                <p>${data.plantref}</p><br><br>
+                <p class="h6">Created by <a href="http://127.0.0.1:8000/user-page/${data.user.id}">${data.user.first_name} ${data.user.last_name}</a></p>
+              `
+              wrapperTitle.innerHTML += item
+ 
+                
+
+          })
+      }  
+      buildList()
+      </script>
+
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
 
 
 {% endblock content %}
