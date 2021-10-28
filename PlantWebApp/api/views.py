@@ -57,7 +57,6 @@ def PlantDetail(request,id):
 def PlantDistSummary(request):
     if request.method == 'GET':
         distData = Distribution.objects.annotate(num_plant=Count('plant'),).order_by('-num_plant') # Get total number of plant records based on each country (plant distribution) and order by plant count in distribution model in desc '-'
-        print(distData)
         serializer = PlantDistSummarySerializer(distData, many=True)
         return Response(serializer.data)
 

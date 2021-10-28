@@ -335,7 +335,48 @@
 <!--svgMap.js-->
 <script>
 
-    //Convert to array
+    var map
+    var country_dict = {}
+
+    // Get SVG data from plant-dist-api API
+    function buildList(){
+
+        var url = "http://127.0.0.1:8000/api/plant-dist-api/"
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+            console.log(data.length)
+
+            
+            for (let i = 0; i < data.length; i++)
+            {
+                country_dict[data[i].country_alpha2] = {'plant':data[i].num_plant};
+                
+            }
+
+            map = new svgMap({
+                targetElementID: 'svgMap',
+                data: {
+                  data: {
+                    plant: {
+                      name: 'Plant Record(s)',
+                      format: '{0}'
+                    },
+                  },
+                  applyData: 'plant',
+                  values: country_dict
+                }
+              });
+
+          })
+        }
+
+    buildList()
+
+
+    /*Convert to array
     var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
     var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
     var country_dict = {};
@@ -359,39 +400,12 @@
       applyData: 'plant',
       values: country_dict
     }
-  });
+  });*/
 
-  /*
-  function updateMap()
-  {
-    var $svgMap = $("#svgMap");
-    $.ajax({
-    url: $svgMap.data("url"),
-    success: function (data) {
-      //console.log(data);
-      
-      //Convert to array
-      var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
-      var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
-      var country_dict = {};
-      
-      for (let i = 0; i < country_list.length ; i++)
-      {
-        var tmp = country_list[i];
-        country_dict[tmp] = {'plant':country_record_arr[i]};
-      }
-      //map.options.data.values = data;
-      //console.log(map.options.data.values)
-      //update
-    }
 
-    })
-  }*/
 
-</script>
+/*Chart.js*/
 
-<!--Chart.js-->
-<script>
   function updateChart()
   {
     //console.log(chart1);
@@ -476,10 +490,9 @@
     };
     GetChartData();
     
-</script>
 
-<!--AJAX Refresh-->
-<script>
+/*AJAX Refresh*/
+
     function refresh() {
         updateChart();
 
@@ -507,8 +520,25 @@
             }
         }
         );
+
+        var url = "http://127.0.0.1:8000/api/plant-dist-api/"
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+
+            for (let i = 0; i < data.length; i++)
+            {
+                country_dict[data[i].country_alpha2] = {'plant':data[i].num_plant};  
+            }
+
+            console.log("updated")
+            map.options.data.values = country_dict
+
+
+          })
     }
-    var seconds = 15; // seconds, edit here
+    var seconds = 5; // seconds, edit here
     setInterval(refresh,seconds * 1000);
 </script>
 
