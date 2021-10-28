@@ -10,6 +10,7 @@ urlpatterns = [
     path('browse-country-api/<str:country>',views.countryData, name='countryData'),
     path('user-data-api/<int:id>',views.UserPersonalData, name='userPersonalData'),
     path('plant-detail-api/<int:id>',views.PlantDetail, name='plantDetail'),
+    path('plant-dist-api/',views.PlantDistSummary, name='PlantDistSummary'),
     
     #path('usage-tags-settings/',views.UseListApi,name='usageTagsSettings'),
 ]

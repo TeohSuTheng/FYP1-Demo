@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from PlantWebApp.models import Distribution, Plant, Profile, Usage
+from PlantWebApp.models import Distribution, Plant, Profile, Usage, Plant_Distribution
 from django.contrib.auth.models import User
 
 # Serialize Django object into json
@@ -44,5 +44,11 @@ class PlantDetailSerializer(serializers.ModelSerializer):
         model = Plant
         fields = "__all__"
 
-
+# Count reverse m-2-m relationships in django rest
+# https://tute.io/how-to-count-reverse-manytomany-relationships-with-django-rest-framework
+class PlantDistSummarySerializer(serializers.ModelSerializer):
+    num_plant = serializers.IntegerField(read_only=True)
+    class Meta:
+        model = Distribution
+        fields = ['id','country_alpha2','countryName','num_plant',]
 

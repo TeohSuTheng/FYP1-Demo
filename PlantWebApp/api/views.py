@@ -4,11 +4,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from PlantWebApp.models import Plant
+from PlantWebApp.models import Distribution, Plant, Plant_Distribution
 from django.contrib.auth.models import User
-from .serializers import PlantSerializer,UserProfileSerializer,PlantDetailSerializer
+from .serializers import PlantSerializer,UserProfileSerializer,PlantDetailSerializer, PlantDistSummarySerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Count
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -50,6 +51,14 @@ def PlantDetail(request,id):
     if request.method == 'GET':
         plantdata = Plant.objects.get(id=id)
         serializer = PlantDetailSerializer(plantdata)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def PlantDistSummary(request):
+    if request.method == 'GET':
+        distData = Distribution.objects.annotate(num_plant=Count('plant'),).order_by('-num_plant') # Get total number of plant records based on each country (plant distribution) and order by plant count in distribution model in desc '-'
+        print(distData)
+        serializer = PlantDistSummarySerializer(distData, many=True)
         return Response(serializer.data)
 
 
