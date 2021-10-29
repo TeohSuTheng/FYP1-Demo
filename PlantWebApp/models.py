@@ -1,34 +1,36 @@
 from django.db import models
-from datetime import datetime, date
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 
 class Profile(models.Model):
+    ADMIN = 1
+    COMMITTEE = 2
+    RESEARCHER =3
+    STUDENT = 4
+      
+    ROLE_CHOICES = (
+          (ADMIN, 'Admin'),
+          (COMMITTEE, 'Committee'),
+          (RESEARCHER, 'Researcher'),
+          (STUDENT, 'Student'),
+    )
+    system_role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES)
+    sv_id = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    role = models.CharField(max_length=255)
     dept = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-
-'''
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-'''
-
+    updated_at = models.DateTimeField(auto_now=True) 
+    is_verified = models.BooleanField(default=False)
+    
 class Usage(models.Model):
     usage_tag = models.CharField(max_length=255,unique=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Distribution(models.Model):
     country_alpha2 = models.CharField(max_length=2)
@@ -61,12 +63,11 @@ class Plant(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
-    publish = models.BooleanField(default=False)
+    admin_publish = models.BooleanField(default=False)
+    commitee_approved = models.BooleanField(default=False)
+    sv_approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
-    #version = IntegerVersionField( )
-    #**#ref
-
 
 class Rejection(models.Model):
     plant = models.OneToOneField(
@@ -84,3 +85,15 @@ class Plant_Usage(models.Model):
 class Plant_Distribution(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     distID = models.ForeignKey(Distribution,on_delete=models.CASCADE)
+
+class RecordPermission(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    plant = models.OneToOneField(
+        Plant,
+        on_delete=models.CASCADE,
+    )
+    can_view = models.BooleanField(default=False)
+    can_edit = models.BooleanField(default=False)

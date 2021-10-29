@@ -40,7 +40,7 @@ def home(request):
     """
     Display elements in home page
     """
-    plant_pub = Plant.objects.filter(publish=True).count()
+    plant_pub = Plant.objects.filter(admin_publish=True).count()
     use_tag = Usage.objects.count()
     user_no = User.objects.count()
 
@@ -82,14 +82,14 @@ def displaySearchResults(request):
         passed through the stemming algorithms, and then it looks for matches for all of the
         resulting terms.
         '''
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','voucher_no','usage__usage_tag','distribution__countryName')).filter(search=SearchQuery(searchquery)).filter(publish=True).distinct('id')
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','voucher_no','usage__usage_tag','distribution__countryName')).filter(search=SearchQuery(searchquery)).filter(admin_publish=True).distinct('id')
         print(results)
 
         if not results: #result queryset is empty
             print('ok')
             suggest = []
             trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
-            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).filter(publish=True).order_by('-similarity')
+            suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).filter(admin_publish=True).order_by('-similarity')
             print(suggest)
             # speed up: https://stackoverflow.com/questions/56538419/poor-performance-when-trigram-similarity-and-full-text-search-were-combined-with/56547280#56547280
 
@@ -421,7 +421,7 @@ def userHome(request):
         #site admin - change to is_superuser if want
 
         total_plant = Plant.objects.count() # Get total number of plant records stored
-        plant_pub = Plant.objects.filter(publish=True).count() # Get total number of plant records published
+        plant_pub = Plant.objects.filter(admin_publish=True).count() # Get total number of plant records published
         use_tag = Usage.objects.count() # Get total number of usage tags stored
         user_no = User.objects.count() # Get total number of users registered
         countryData = Plant_Distribution.objects.all().values('distID').annotate(Count('distID')).order_by('-distID__count') # Get total number of plant records based on each country (plant distribution) and order by plant count in distribution model in desc '-'
@@ -465,8 +465,8 @@ def userHome(request):
             'use_tag':use_tag,
             'user_no' : user_no,
             'country_list':country_list,
-            'country_name':country_name,
-            'country_record':country_record,
+            #'country_name':country_name,
+            #'country_record':country_record,
             'country_dict':country_dict,
             'logged_users':logged_users,
             'logged_out_users':logged_out_users,
@@ -474,14 +474,14 @@ def userHome(request):
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     else:
-        pub_list = Q(user_id=request.user) & Q(publish=True)
+        pub_list = Q(user_id=request.user) & Q(admin_publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
         ## Pagination ##
         pub_p = Paginator(pub_plant_list,6)
         page = request.GET.get('page')
         pub_plants = pub_p.get_page(page)
 
-        unpub_list = Q(user_id=request.user) & Q(publish=False) & Q(rejected=False) 
+        unpub_list = Q(user_id=request.user) & Q(admin_publish=False) & Q(rejected=False) 
         plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
         ## Pagination ##
         unpub_p = Paginator(plant_list,6)
@@ -583,7 +583,7 @@ def siteUserDetail(request,id):
     # Display list of plant data submitted by user
 
     ## Published ##
-    pub_list = Q(user_id=id) & Q(publish=True)
+    pub_list = Q(user_id=id) & Q(admin_publish=True)
     pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
     ## Pagination ##
     pub_p = Paginator(pub_plant_list,4)
@@ -591,7 +591,7 @@ def siteUserDetail(request,id):
     pub_plants = pub_p.get_page(page)
 
     ## To Be Verified ##
-    unpub_list = Q(user_id=id) & Q(publish=False) & Q(rejected=False) 
+    unpub_list = Q(user_id=id) & Q(admin_publish=False) & Q(rejected=False) 
     plant_list = Plant.objects.filter(unpub_list).order_by('plantScientificName')
     ## Pagination ##
     unpub_p = Paginator(plant_list,4)
@@ -660,7 +660,7 @@ def displayUsageResults(request):
 
 def browse(request):
     # Only pubish plants that are verified by admin
-    plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
+    plant_list = Plant.objects.filter(admin_publish=True).order_by('plantScientificName')
 
     # Set up Pagination
     p = Paginator(plant_list, 10)
@@ -703,7 +703,7 @@ def usage_chart(request):
 @staff_member_required(login_url='user_login')
 def unpubList(request):
     # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(publish=False).filter(rejected=False).order_by('created_at') 
+    plant_list = Plant.objects.filter(admin_publish=False).filter(rejected=False).order_by('created_at') 
     
     # Set up Pagination
     p = Paginator(plant_list, 10)
@@ -718,7 +718,7 @@ def displayUnpublishedResults(request):
         searchquery = request.GET['searchquery'] #is not None
         suggest = []
 
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(publish=False).filter(rejected=False).distinct('id')
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(admin_publish=False).filter(rejected=False).distinct('id')
         print(results)
 
         # Set up Pagination
@@ -733,7 +733,7 @@ def displayUnpublishedResults(request):
 @staff_member_required(login_url='user_login')
 def verified(request):
     # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(publish=True).filter(rejected=False).order_by('plantScientificName') 
+    plant_list = Plant.objects.filter(admin_publish=True).filter(rejected=False).order_by('plantScientificName') 
 
     # Set up Pagination
     p = Paginator(plant_list, 10)
@@ -751,7 +751,7 @@ def displayPublishedResults(request):
         searchquery = request.GET['searchquery'] #is not None
         suggest = []
 
-        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(publish=True).filter(rejected=False).distinct('id')
+        results = Plant.objects.annotate(search = SearchVector('plantScientificName',)).filter(search=SearchQuery(searchquery)).filter(admin_publish=True).filter(rejected=False).distinct('id')
         print(results)
 
         # Set up Pagination
@@ -796,8 +796,8 @@ def displayRejectedResults(request):
 @staff_member_required(login_url='user_login')
 def publishAction(request,pk):
     plantdata = Plant.objects.get(id=pk)
-    plantdata.publish = True
-    plantdata.save(update_fields=['publish'])
+    plantdata.admin_publish = True
+    plantdata.save(update_fields=['admin_publish'])
 
     # ** Add message - plant published
     return unpubList(request)
@@ -945,7 +945,7 @@ def userPageView(request,id):
     # Display list of plant data submitted by user
 
     ## Published ##
-    pub_list = Q(user_id=id) & Q(publish=True)
+    pub_list = Q(user_id=id) & Q(admin_publish=True)
     pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
     ## Pagination ##
     pub_p = Paginator(pub_plant_list,10)

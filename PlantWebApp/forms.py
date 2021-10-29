@@ -31,12 +31,12 @@ class UsageForm(ModelForm):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['first_name','last_name','username','email','password1','password2']
+        fields = ['first_name','last_name','username','email','password1','password2',]
 
 class UserProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['institution','dept','role'] #'__all__' 
+        fields = ['institution','dept','system_role','sv_id'] #'__all__' 
 
 class DistributionForm(ModelForm):
     class Meta:

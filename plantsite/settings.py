@@ -93,7 +93,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60 # 1 day
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'PlantDB',
+        'NAME': 'PlantDB1',
         'USER': 'postgres',
         'PASSWORD': 'Pass1226',
         'HOST': 'localhost',

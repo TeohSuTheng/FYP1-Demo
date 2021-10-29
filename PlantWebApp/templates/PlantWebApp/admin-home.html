@@ -21,11 +21,6 @@
             <div class="col-sm-10">
               <h3 class="m-0">Site Admin Dashboard</h3>
             </div><!-- /.col -->
-            <!--div class="col">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item active">Dashboard</li>
-              </ol>
-            </div><!-- /.col -->
           </div><!-- /.row -->
     </div><br>
 
@@ -510,13 +505,6 @@
 
                 // Refresh User Activity Section
                 $('#user-activity').replaceWith($('#user-activity',dat));
-
-                //console.log($('#svgMap'));
-                //var country_dict = country_dict;
-                //console.log(country_dict);
-                //console.log(cc);
-                //map.options.data.values = cc;
-                //console.log(map.options.data.values)
             }
         }
         );
@@ -538,7 +526,7 @@
 
           })
     }
-    var seconds = 5; // seconds, edit here
+    var seconds = 15; // seconds, edit here
     setInterval(refresh,seconds * 1000);
 </script>
 
