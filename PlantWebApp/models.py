@@ -3,20 +3,14 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+class Role(models.Model):
+    role_name = models.CharField(max_length=30)
 
 class Profile(models.Model):
-    ADMIN = 1
-    COMMITTEE = 2
-    RESEARCHER =3
-    STUDENT = 4
-      
-    ROLE_CHOICES = (
-          (ADMIN, 'Admin'),
-          (COMMITTEE, 'Committee'),
-          (RESEARCHER, 'Researcher'),
-          (STUDENT, 'Student'),
+    role = models.OneToOneField(
+        Role,
+        on_delete=models.CASCADE,
     )
-    system_role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES)
     sv_id = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,

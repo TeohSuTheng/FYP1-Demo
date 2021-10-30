@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from PlantWebApp.models import Distribution, Plant, Profile, Usage, Plant_Distribution
+from PlantWebApp.models import Distribution, Plant, Profile, Usage
 from django.contrib.auth.models import User
 
 # Serialize Django object into json
@@ -12,7 +12,7 @@ class PlantSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['role','dept','institution'] #'__all__'
+        fields = ['role_id','dept','institution'] #'__all__'
 
 # Nested Relationships
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -51,4 +51,9 @@ class PlantDistSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Distribution
         fields = ['id','country_alpha2','countryName','num_plant',]
+
+class SupervisorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','first_name','last_name'] #'__all__'
 

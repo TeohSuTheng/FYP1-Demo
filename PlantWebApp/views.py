@@ -319,7 +319,7 @@ def deletePost(request,pk):
     }
     return render(request, 'PlantWebApp/delete-form.html',context)
 
-def UserRegister(request):
+def UserRegister(request): 
     if request.user.is_authenticated:
         return redirect('user_home')
     else:
@@ -327,14 +327,13 @@ def UserRegister(request):
 
         if request.method == "POST":
             form = forms.CreateUserForm(request.POST)
-            #profile = forms.UserProfileForm(request.POST)
             fname = request.POST['first_name']
             lname = request.POST['last_name']
             uname = request.POST['username']
             email = request.POST['email']
             profile_form = forms.UserProfileForm(request.POST)
             
-            if form.is_valid() and profile_form.is_valid:
+            if form.is_valid() and profile_form.is_valid():
                 if any(i.isdigit() for i in fname) or any(i.isdigit() for i in lname):
                     messages.info(request, "Incorrect format for name")
                     return render(request, 'PlantWebApp/register-form.html',{'form':form,'username':uname,'email':email})
@@ -348,17 +347,17 @@ def UserRegister(request):
                 user = form.cleaned_data.get('username') #only get user name
                 messages.success(request,('Account was created for '+user))
                 return redirect('user_login')
-
+            else:
+                messages.error(request,('There is an error in the form. Please recheck.'))
             return render(request, 'PlantWebApp/register-form.html',{'form':form,'first_name':fname,'last_name':lname, 'username':uname,'email':email})
 
-        return render(request, 'PlantWebApp/register-form.html',{'form':form})
+        return render(request, 'PlantWebApp/register-form.html',{'form':form,})
 
 def UserLogin(request):
 
     # User had already logged in
     if request.user.is_authenticated:
         return redirect('user_home')
-
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -370,18 +369,21 @@ def UserLogin(request):
             # Check if user is inactive (Account disabled by admin)
             check = Q(username=username) & Q(is_active = False)
             disableduser = User.objects.filter(check)
-            print(disableduser)
-            print(user)
+
+            verifiychecks = Q(username=username) & Q(profile__is_verified= False)
+            unverifieduser = User.objects.filter(verifiychecks)
+
+            # Is the account verified?
+            if unverifieduser:
+                messages.info(request, 'Account waiting to be verified.')
+                return render(request, 'PlantWebApp/login-form.html',{})
 
             # Login successfully
-            if user is not None:
-
+            elif user is not None:
                 # Add Session
                 request.session['user_id'] = user.id
-
                 login(request,user)
-                return redirect('user_home')
-            
+                return redirect('user_home')     
             else:
                 if disableduser:
                     messages.info(request, 'Account disabled. Please contact site administrator: site@admin.com ')
