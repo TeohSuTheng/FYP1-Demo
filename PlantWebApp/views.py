@@ -549,8 +549,8 @@ def userProfileDelete(request,id):
 @staff_member_required(login_url='user_login')
 def siteUsersList(request):
     #userList = User.objects.filter(is_staff = False)
-    userList = User.objects.filter(is_active = True)
-    inactive_userList = User.objects.filter(is_active = False)
+    userList = User.objects.filter(is_active = True).filter(profile__is_verified=True)
+    inactive_userList = User.objects.filter(is_active = False).filter(profile__is_verified=True)
     return render(request, 'PlantWebApp/site-users.html',{'userList':userList, 'inactive_userList':inactive_userList})
 
 @staff_member_required(login_url='user_login')
@@ -562,16 +562,52 @@ def displayUserResults(request):
         userList = User.objects.annotate(search = SearchVector('first_name','last_name')).filter(search=SearchQuery(searchquery)).filter(is_active=True).distinct('id')
         print(userList)
         inactive_userList = User.objects.annotate(search = SearchVector('first_name','last_name')).filter(search=SearchQuery(searchquery)).filter(is_active=False).distinct('id')
-        
-
-        # Set up Pagination
-        #p = Paginator(results, 10)
-        #page = request.GET.get('page')
-        #plants = p.get_page(page)
 
         return render(request,'PlantWebApp/site-users.html', {'userList':userList,'inactive_userList':inactive_userList})
     else:
         siteUsersList(request)
+
+@staff_member_required(login_url='user_login')
+def siteUserVerification(request):
+    adminquery = Q(profile__role_id=0) & Q(profile__is_verified=False)
+    adminUsers = User.objects.filter(adminquery).order_by("first_name")
+    ## Pagination ##
+    pub_p = Paginator(adminUsers,10)
+    page = request.GET.get('page')
+    admin_list = pub_p.get_page(page)
+
+    committeequery = Q(profile__role_id=1) & Q(profile__is_verified=False)
+    committeeUsers = User.objects.filter(committeequery).order_by("first_name")
+    ## Pagination ##
+    pub_p = Paginator(committeeUsers,10)
+    page = request.GET.get('page')
+    committee_list = pub_p.get_page(page)
+    
+    researchQuery = Q(profile__role_id=2) & Q(profile__is_verified=False)
+    researchUsers = User.objects.filter(researchQuery).order_by("first_name")
+    ## Pagination ##
+    pub_p = Paginator(researchUsers,10)
+    page = request.GET.get('page')
+    researcher_list = pub_p.get_page(page)
+
+    context = {
+        'admin_list':admin_list,
+        'committee_list':committee_list,
+        'researcher_list':researcher_list
+    }
+
+    return render(request, 'PlantWebApp/site-user-verification.html',context)
+
+@login_required(login_url='user_login')
+def ProcessingVerification(request,id):
+    processingUser = Profile.objects.get(user_id=id)
+
+    if processingUser:
+        processingUser.is_verified = True
+        processingUser.save()
+        return redirect('user_home')
+    else:
+        siteUserVerification(request)
 
 @staff_member_required(login_url='user_login')
 def siteUserDetail(request,id):

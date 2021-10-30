@@ -39,11 +39,13 @@
         <br><br>
 
         <!--Buttons-->
-        <p align="center">
-            <a href="{% url 'user_profile_update' id %}" class="btn btn-outline-primary">Update Account</a>
-            <!--a href="#" class="btn btn-outline-success">Change Password</a-->
-            <a href="{%url 'user_delete' id %}" class="btn btn-outline-danger">Delete Account</a>
-        </p>
+        <div class="btn-wrapper">
+            <p align="center">
+                <a href="{% url 'user_profile_update' id %}" class="btn btn-outline-primary">Update Account</a>
+                <!--a href="#" class="btn btn-outline-success">Change Password</a-->
+                <a href="{%url 'user_delete' id %}" class="btn btn-outline-danger">Delete Account</a>
+            </p>
+        </div>
 
       </div>
 
@@ -51,6 +53,7 @@
     // Render data from API
     function buildList(){
         var wrapper = document.querySelector(".wrapper")
+        var wrapperBtn = document.querySelector(".btn-wrapper")
         
         var url = "http://127.0.0.1:8000/api/user-data-api/{{id}}"
 
@@ -98,12 +101,21 @@
                 <div class="col-sm">${data.profile.dept}</div>
             </div><br>
             <div class="row">
-                <div class="col-sm-3">Job Position:</div>
-                <div class="col-sm">${data.profile.role}</div>
+                <div class="col-sm-3">Role:</div>
+                <div class="col-sm">${data.profile.role.role_name}</div>
             </div>`
 
             wrapper.innerHTML += item
                 
+            if (data.profile.is_verified == false){
+                item = `
+                <p align="center">
+                    <a href="http://127.0.0.1:8000/site-user-processing/${data.id}" class="btn btn-outline-primary">Verify Account</a>
+                    <a href="http://127.0.0.1:8000/user-delete/${data.id}" class="btn btn-outline-danger">Delete Account</a>
+                </p>
+                `
+                wrapperBtn.innerHTML = item
+            }
         })
     }  
     buildList()

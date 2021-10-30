@@ -11,6 +11,7 @@ urlpatterns = [
     path('rejected-search-results/',views.displayRejectedResults,name='display_RejectedResults'),
     path('site-users-results/',views.displayUserResults,name='display_UsersResults'),
 
+
     path('form/',views.displayPlantForm,name='display_form'),
     path('plant/<int:id>',views.displayPlant,name='display_plant'),
     path('plant-api/<int:id>',views.displayPlantApi,name='displayPlantApi'),
@@ -42,6 +43,9 @@ urlpatterns = [
     path('site-user/disable/<int:id>',views.siteUserDisable,name='siteUserDisable'),
     path('site-user/enable/<int:id>',views.siteUserEnable,name='siteUserEnable'),
     path('site-user-reset/<int:id>',views.adminResetPassword,name='AdminResetPassword'),
+    path('site-user-verification/',views.siteUserVerification,name='siteUserVerification'),
+    path('site-user-processing/<int:id>',views.ProcessingVerification,name='ProcessingVerification'),
+    
 
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
     #path('usage-tags-settings/',views.UsageListView.as_view()   ,name='usageTagsSettings'),

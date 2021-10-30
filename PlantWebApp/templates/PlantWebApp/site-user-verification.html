@@ -1,0 +1,223 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+
+{% block content%}
+<!--Site Admin Content header-->
+<div class="content-header" style="padding-left:25px ;">
+  <div class="row">
+    <div class="col-sm-9">
+    </div><!-- /.col -->
+    <div class="col">
+      <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Site Users</li>
+      </ol>
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><br>
+
+<div class="container">
+<h2 align="center">Site Users</h2>
+<h5 align="center">To Be Verified</h5>
+<br>
+<h5>Admin Requests</h5>
+<p>{{admin_list.paginator.count}} request{{admin_list|pluralize}}</p>
+
+{% if admin_list %}
+ <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-1">
+                No.
+              </div>
+              <div class="col">
+                Name
+              </div>
+              <div class="col">
+                Email
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for siteUser in admin_list%}
+            <div class="row align-items-start">
+                <div class="col-1">
+                    <p class="card-text">{{ forloop.counter0|add:admin_list.start_index }}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.email}}</p>
+                </div>
+                <div class="col">
+                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
+                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
+                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>       
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-sm justify-content-center ">
+          {% if admin_list.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ admin_list.previous_page_number }}">&laquo;</a></li>
+          {% endif %}
+
+          <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                  Page {{admin_list.number}} of {{admin_list.paginator.num_pages}}
+              </a>
+          </li> <!--Page 1 of 3-->   
+
+          {% if admin_list.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ admin_list.next_page_number }}">&raquo;</a></li>
+              <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
+          {% endif %}
+      </ul>
+  </nav><br>
+{% endif %}
+<br><br>
+
+<h5>Committee Requests</h5>
+<p>{{committee_list.paginator.count}} request{{committee_list|pluralize}}</p>
+
+{% if committee_list %}
+ <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-1">
+                No.
+              </div>
+              <div class="col">
+                Name
+              </div>
+              <div class="col">
+                Email
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for siteUser in committee_list%}
+            <div class="row align-items-start">
+                <div class="col-1">
+                    <p class="card-text">{{ forloop.counter0|add:committee_list.start_index }}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.email}}</p>
+                </div>
+                <div class="col">
+                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
+                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
+                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>  
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    <!--Pagination-->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-sm justify-content-center ">
+          {% if committee_list.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ committee_list.previous_page_number }}">&laquo;</a></li>
+          {% endif %}
+
+          <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                  Page {{committee_list.number}} of {{committee_list.paginator.num_pages}}
+              </a>
+          </li> <!--Page 1 of 3-->   
+
+          {% if committee_list.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ committee_list.next_page_number }}">&raquo;</a></li>
+              <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
+          {% endif %}
+      </ul>
+  </nav><br>
+{% endif %}
+<br><br>
+
+
+<h5>Researcher Requests</h5>
+<p>{{researcher_list.paginator.count}} request{{researcher_list|pluralize}}</p>
+{% if researcher_list %}
+ <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-1">
+                No.
+              </div>
+              <div class="col">
+                Name
+              </div>
+              <div class="col">
+                Email
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for siteUser in researcher_list%}
+            <div class="row align-items-start">
+                <div class="col-1">
+                    <p class="card-text">{{ forloop.counter0|add:researcher_list.start_index }}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
+                </div>
+                <div class="col">
+                    <p class="card-text">{{siteUser.email}}</p>
+                </div>
+                <div class="col">
+                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
+                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
+                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div><br>
+
+  <!--Pagination-->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination pagination-sm justify-content-center ">
+        {% if researcher_list.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ researcher_list.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                Page {{researcher_list.number}} of {{researcher_list.paginator.num_pages}}
+            </a>
+        </li> <!--Page 1 of 3-->   
+
+        {% if researcher_list.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ researcher_list.next_page_number }}">&raquo;</a></li>
+            <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+</div>
+
+
+<br><br>
+{% endblock %}
