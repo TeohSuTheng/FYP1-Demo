@@ -85,9 +85,8 @@ def displaySearchResults(request):
         results = Plant.objects.annotate(search = SearchVector('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFruit','pmFlower','voucher_no','usage__usage_tag','distribution__countryName')).filter(search=SearchQuery(searchquery)).filter(admin_publish=True).distinct('id')
         print(results)
 
+        # CREATE EXTENSION pg_trgm; at postgresql
         if not results: #result queryset is empty
-            print('ok')
-            suggest = []
             trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
             suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).filter(admin_publish=True).order_by('-similarity')
             print(suggest)
