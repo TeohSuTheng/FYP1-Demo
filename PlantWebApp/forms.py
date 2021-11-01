@@ -15,8 +15,13 @@ class PlantForm(ModelForm):
         model = Plant
         #fields = '__all__'  
         fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
-        'pmFruit','plantImg','usage','voucher_no','distribution','plantref',)
+        'pmFruit','plantImg','usage','voucher_no','distribution','plantref','research_data')
     # Widgets
+
+class ResearchForm(ModelForm):
+    class Meta:
+        model = Plant
+        fields = ['research_data']
 
 class RejectForm(ModelForm):
     class Meta:

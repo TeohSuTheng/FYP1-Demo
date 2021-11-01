@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_cleanup', #automatically deletes files for FileField, ImageField and subclasses
     'rest_framework',
     'bootstrap_modal_forms',
+    'ckeditor',
     #'import_export', #to use django-import-export from the admin
     
 ]

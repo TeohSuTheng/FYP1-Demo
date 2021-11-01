@@ -100,6 +100,7 @@ def displaySearchResults(request):
 def displayPlantForm(request):
     use = Usage.objects.all() #Get usage_tags data from Usage table 
     dist = Distribution.objects.all()
+    research_form = forms.ResearchForm(data=request.POST, files=request.FILES)
 
     if request.method == "POST":
         plant_form = forms.PlantForm(data=request.POST, files=request.FILES)
@@ -127,6 +128,7 @@ def displayPlantForm(request):
                 'usearr':usearr,
                 'plantref': request.POST['plantref'],
                 'dist':dist,
+                'research_form':research_form,
             }
 
             messages.success(request,('Usage tag added.'))
@@ -138,16 +140,17 @@ def displayPlantForm(request):
             if tag_exist:
                 messages.success(request,('The plant usage entered already exists in our database.'))
                 # Add context dict
-                return render(request,'PlantWebApp/plant-form.html',{'use': use})
+                return render(request,'PlantWebApp/plant-form.html',{'use': use,'research_form':research_form})
 
             plantdat = plant_form.save(commit=False)
+            plantdat.research_data = research_form.data['research_data']
             plantdat.user = request.user
             plantdat.save()
             plant_form.save()
             
             messages.success(request,('Your form has been submitted successfully.'))
             #get plant_id pass to another view method?
-            return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist})
+            return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist, 'research_form':research_form})
         else:
             plantScientificName = request.POST['plantScientificName']
             usearr = request.POST.getlist('usage')
@@ -164,6 +167,7 @@ def displayPlantForm(request):
                 'usearr':usearr,
                 'plantref': request.POST['plantref'],
                 'dist':dist,
+                'research_form':research_form,
             }
             
             #if scientific name is not unique - means already exist
@@ -174,7 +178,7 @@ def displayPlantForm(request):
                 messages.success(request,('There is an error in your form. Please try again.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)            
 
-    return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist})
+    return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist,'research_form':research_form})
 
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
@@ -230,9 +234,12 @@ def UpdatePostView(request,pk):
     countryData = Plant_Distribution.objects.filter(plantID=pk).values_list('distID',flat=True)
     countryarr = list(countryData)
 
+    research_form = forms.ResearchForm(instance=plantdata)
+
     if request.method == "POST":
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
+        #research_form = forms.ResearchForm(request.POST,files=request.FILES,instance=plantdata)
 
         if use_form.is_valid():
             use_form.save()
@@ -254,6 +261,7 @@ def UpdatePostView(request,pk):
             'use': use,
             'countryarr':countryarr,
             'dist':dist,
+            'research_form':research_form,
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -278,11 +286,9 @@ def UpdatePostView(request,pk):
                     'use': use,
                     'countryarr':countryarr,
                     'dist':dist,
+                    'research_form':research_form,
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
-            
-            
-            #with transaction.atomic():
             plant_form.save()
             messages.success(request,('Plant record updated successfully.'))
 
@@ -302,6 +308,7 @@ def UpdatePostView(request,pk):
         'use': use,
         'countryarr':countryarr,
         'dist':dist,
+        'research_form':research_form
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 

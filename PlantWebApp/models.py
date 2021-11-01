@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from ckeditor.fields import RichTextField
+
 
 class Role(models.Model):
     role_name = models.CharField(max_length=30)
@@ -62,6 +63,7 @@ class Plant(models.Model):
     sv_approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    research_data = RichTextField(null=True, blank=True)
 
 class Rejection(models.Model):
     plant = models.OneToOneField(
@@ -80,6 +82,7 @@ class Plant_Distribution(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     distID = models.ForeignKey(Distribution,on_delete=models.CASCADE)
 
+'''
 class RecordPermission(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -91,3 +94,4 @@ class RecordPermission(models.Model):
     )
     can_view = models.BooleanField(default=False)
     can_edit = models.BooleanField(default=False)
+'''

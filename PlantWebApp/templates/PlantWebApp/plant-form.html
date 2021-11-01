@@ -96,16 +96,26 @@
 
             <div id="img-box"></div>
 
+            <div class="mb-3">
+                {{research_form.media}}
+                {{research_form.as_p}}
+            </div>
+
             <br>
             <div class="d-grid gap-2">
             <button type="submit" class="btn btn-success">Submit</button>
             </div>
             <br>
         </div>
+
         
     </form>
 
 </div>
+
+<script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 
 <script src="{% static '/js/plantform.js' %}"></script>
 
