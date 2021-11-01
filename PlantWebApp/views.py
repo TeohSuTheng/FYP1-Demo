@@ -542,7 +542,6 @@ def userProfileUpdate(request,id):
 @login_required(login_url='user_login')
 def userProfileDelete(request,id):
     site_user = User.objects.get(id=id)
-    print(site_user)
 
     if request.method == "POST":
         site_user.delete()

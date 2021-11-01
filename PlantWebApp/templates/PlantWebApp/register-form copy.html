@@ -165,7 +165,16 @@
 								<option value="0">Admin</option>
 								<option value="1">Committee</option>
 								<option value="2">Researcher</option>
-								<!--option value="3">Student</option-->
+								<option value="3">Student</option>
+							</select>
+						</div>
+
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<select class="custom-select" name="sv_id" id="sv_selection" disabled>
+								<option selected="selected" disabled>Select Supervisor</option>
 							</select>
 						</div>
 
@@ -194,6 +203,36 @@
 			form_fields[field].className += ' form-control'
 		}
 
+		var url = "http://127.0.0.1:8000/api/sv-api/"
+  
+		fetch(url)
+		.then((resp) => resp.json())
+		.then(function(data){
+			console.log(data)
+			var wrapper = document.querySelector("#sv_selection")
+
+			for (var i in data){
+				item = `<option value="${data[i].id}"> ${data[i].first_name} ${data[i].last_name}</option>`
+				wrapper.innerHTML += item
+			}
+
+		})
+		
+		function changeFunc(i) {
+			console.log(i);
+			if (i == '3'){
+				document.getElementById("sv_selection").disabled = false;
+			}
+			else{
+				document.getElementById("sv_selection").disabled = true;
+			}
+			
+		}
+
+
+
+
+		
 	</script>
 </body>
 </html>

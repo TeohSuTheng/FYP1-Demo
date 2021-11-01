@@ -12,7 +12,7 @@ class Profile(models.Model):
         Role,
         on_delete=models.CASCADE,
     )
-    sv_id = models.IntegerField(blank=True, null=True)
+    #sv_id = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -60,7 +60,7 @@ class Plant(models.Model):
     plantref = models.TextField(null=True, blank=True)
     admin_publish = models.BooleanField(default=False)
     commitee_approved = models.BooleanField(default=False)
-    sv_approved = models.BooleanField(default=False)
+    #sv_approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     research_data = RichTextField(null=True, blank=True)

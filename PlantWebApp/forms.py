@@ -41,7 +41,7 @@ class CreateUserForm(UserCreationForm):
 class UserProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['institution','dept','sv_id','role'] #'__all__' 
+        fields = ['institution','dept','role'] #'__all__'  ['institution','dept','sv_id','role'] 
 
 class DistributionForm(ModelForm):
     class Meta:
