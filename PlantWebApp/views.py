@@ -338,6 +338,9 @@ def UserRegister(request):
             uname = request.POST['username']
             email = request.POST['email']
             profile_form = forms.UserProfileForm(request.POST)
+
+            if profile_form.is_valid():
+                print("ok ah")
             
             if form.is_valid() and profile_form.is_valid():
                 if any(i.isdigit() for i in fname) or any(i.isdigit() for i in lname):
@@ -354,6 +357,7 @@ def UserRegister(request):
                 messages.success(request,('Account was created for '+user))
                 return redirect('user_login')
             else:
+                print(profile_form.errors)
                 messages.error(request,('There is an error in the form. Please recheck.'))
             return render(request, 'PlantWebApp/register-form.html',{'form':form,'first_name':fname,'last_name':lname, 'username':uname,'email':email})
 
@@ -425,8 +429,8 @@ def get_all_logged_in_users():
 
 @login_required(login_url='user_login')
 def userHome(request):
-    if request.user.is_staff:
-        #site admin - change to is_superuser if want
+    #if request.user.is_staff:
+    if request.user.profile.role == 0: #Role Id 0 - Admin
 
         total_plant = Plant.objects.count() # Get total number of plant records stored
         plant_pub = Plant.objects.filter(admin_publish=True).count() # Get total number of plant records published
@@ -481,7 +485,9 @@ def userHome(request):
 
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
-    else:
+    elif request.user.profile.role == 1: # Role id 1 - Committee
+        return render(request, 'PlantWebApp/user_home.html',{})
+    else: # Role id 2 - Researcher
         pub_list = Q(user_id=request.user) & Q(admin_publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
         ## Pagination ##
@@ -554,7 +560,7 @@ def userProfileDelete(request,id):
 @staff_member_required(login_url='user_login')
 def siteUsersList(request):
     #userList = User.objects.filter(is_staff = False)
-    userList = User.objects.filter(is_active = True).filter(profile__is_verified=True)
+    userList = User.objects.filter(is_active = True).filter(profile__is_verified=True)#.filter(is_staff = False)
     inactive_userList = User.objects.filter(is_active = False).filter(profile__is_verified=True)
     return render(request, 'PlantWebApp/site-users.html',{'userList':userList, 'inactive_userList':inactive_userList})
 
@@ -574,21 +580,21 @@ def displayUserResults(request):
 
 @staff_member_required(login_url='user_login')
 def siteUserVerification(request):
-    adminquery = Q(profile__role_id=0) & Q(profile__is_verified=False)
+    adminquery = Q(profile__role=0) & Q(profile__is_verified=False)
     adminUsers = User.objects.filter(adminquery).order_by("first_name")
     ## Pagination ##
     pub_p = Paginator(adminUsers,10)
     page = request.GET.get('page')
     admin_list = pub_p.get_page(page)
 
-    committeequery = Q(profile__role_id=1) & Q(profile__is_verified=False)
+    committeequery = Q(profile__role=1) & Q(profile__is_verified=False)
     committeeUsers = User.objects.filter(committeequery).order_by("first_name")
     ## Pagination ##
     pub_p = Paginator(committeeUsers,10)
     page = request.GET.get('page')
     committee_list = pub_p.get_page(page)
     
-    researchQuery = Q(profile__role_id=2) & Q(profile__is_verified=False)
+    researchQuery = Q(profile__role=2) & Q(profile__is_verified=False)
     researchUsers = User.objects.filter(researchQuery).order_by("first_name")
     ## Pagination ##
     pub_p = Paginator(researchUsers,10)
@@ -609,7 +615,13 @@ def ProcessingVerification(request,id):
 
     if processingUser:
         processingUser.is_verified = True
-        processingUser.save()
+        processingUser.save(update_fields=['is_verified'])
+
+        if processingUser.role == 0:
+            thisUser = User.objects.get(id=id)
+            thisUser.is_staff = True
+            thisUser.save(update_fields=['is_staff'])
+
         return redirect('user_home')
     else:
         siteUserVerification(request)

@@ -3,15 +3,23 @@ from django.conf import settings
 from django.db import models
 from ckeditor.fields import RichTextField
 
-
+'''
 class Role(models.Model):
     role_name = models.CharField(max_length=30)
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )'''
 
 class Profile(models.Model):
-    role = models.OneToOneField(
-        Role,
-        on_delete=models.CASCADE,
+
+    ROLENAME = (
+        (0, "Admin"),
+        (1, "Committee"),
+        (2, "Researcher")
     )
+
+    role = models.SmallIntegerField(choices=ROLENAME)
     #sv_id = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
