@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection
+from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection, Images
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
@@ -105,6 +105,7 @@ def displayPlantForm(request):
     if request.method == "POST":
         plant_form = forms.PlantForm(data=request.POST, files=request.FILES)
         use_form = forms.UsageForm(request.POST)
+        img_list = request.FILES.getlist('images_list')
 
         # Verify data
         if use_form.is_valid():
@@ -147,6 +148,9 @@ def displayPlantForm(request):
             plantdat.user = request.user
             plantdat.save()
             plant_form.save()
+
+            for img in img_list:
+                Images.objects.create(plant=plantdat,image=img)
             
             messages.success(request,('Your form has been submitted successfully.'))
             #get plant_id pass to another view method?
@@ -203,6 +207,8 @@ def displayPlant(request,id):
     if plantdata.rejected:
         reject = Rejection.objects.get(plant_id=id)
 
+    plantimages = Images.objects.filter(plant_id=id)
+
     context = {
         #'plant_info':get_object_or_404(Plant,pk=id),
         #'reject_info':get_object_or_404(Rejection,plant_id=id),
@@ -212,6 +218,7 @@ def displayPlant(request,id):
         'use_list':use_list,
         'country_list':country_list,
         'country_name':country_name,
+        'plantimages':plantimages
 
     }
     return render(request, 'PlantWebApp/plant-info.html',context)
@@ -236,7 +243,10 @@ def UpdatePostView(request,pk):
 
     research_form = forms.ResearchForm(instance=plantdata)
 
+    plantimages = Images.objects.filter(plant_id=pk)
+
     if request.method == "POST":
+        img_list = request.FILES.getlist('images_list')
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
         #research_form = forms.ResearchForm(request.POST,files=request.FILES,instance=plantdata)
@@ -290,6 +300,8 @@ def UpdatePostView(request,pk):
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
             plant_form.save()
+            for img in img_list:
+                Images.objects.create(plant=plantdata,image=img)
             messages.success(request,('Plant record updated successfully.'))
 
             return userHome(request)
@@ -308,7 +320,8 @@ def UpdatePostView(request,pk):
         'use': use,
         'countryarr':countryarr,
         'dist':dist,
-        'research_form':research_form
+        'research_form':research_form,
+        'plantimages':plantimages,
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -324,6 +337,12 @@ def deletePost(request,pk):
         'plantScientificName':plantdata.plantScientificName,
     }
     return render(request, 'PlantWebApp/delete-form.html',context)
+
+@login_required(login_url='user_login')
+def deleteImg(request,id):
+    img = Images.objects.get(id=id) #get object from Plant table
+    img.delete()
+    return UpdatePostView(request,img.plant_id)
 
 def UserRegister(request): 
     if request.user.is_authenticated:

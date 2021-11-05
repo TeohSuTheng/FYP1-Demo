@@ -57,12 +57,24 @@
         {% endif %}
       {% endif %}
         <br><br>
+
         <div class="row">
-            <div class="col">
+          <!--Image Carousel-->
+            <div class="col-3">
               <a href="{% url 'display_plantImg' plant_info.id%}" target="_blank"> 
                 <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: 350px;">
               </a>
+              <div class="row">
+                {% for img in plantimages %}
+                <div class="col-md-4 p-3">
+                  <a href="{{img.image.url}}" target="_blank">
+                    <img src="{{img.image.url}}" class="img-fluid" alt="" style="height: 100px; object-fit: contain;">
+                  </a>
+                </div>
+                {% endfor %}
+            </div>
         </div>
+        <div class="col"></div>
         <div class="col-8">
             <p align="right"><small>Voucher No: {{plant_info.voucher_no}}</small></p>
             <br>

@@ -4,9 +4,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from PlantWebApp.models import Distribution, Plant, Profile
+from PlantWebApp.models import Distribution, Plant, Profile, Images
 from django.contrib.auth.models import User
-from .serializers import SupervisorSerializer, PlantSerializer,UserProfileSerializer,PlantDetailSerializer, PlantDistSummarySerializer
+from .serializers import PlantSerializer,UserProfileSerializer,PlantDetailSerializer, PlantDistSummarySerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Count
@@ -60,9 +60,16 @@ def PlantDistSummary(request):
         serializer = PlantDistSummarySerializer(distData, many=True)
         return Response(serializer.data)
 
+'''
 @api_view(['GET'])
 def SupervisorList(request):
     if request.method == 'GET':
         user_info = User.objects.filter(profile__role_id=2)
         serializer = SupervisorSerializer(user_info, many=True)
         return Response(serializer.data)
+'''
+
+@api_view(["DELETE"])
+def image_delete_rest_endpoint(request, id):
+    Images.objects.get(id=id).delete()
+    return Response()

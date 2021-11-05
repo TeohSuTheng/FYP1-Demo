@@ -17,6 +17,8 @@ urlpatterns = [
     path('plant-api/<int:id>',views.displayPlantApi,name='displayPlantApi'),
     
     path('plant/image/<int:id>',views.displayPlantImage,name='display_plantImg'),
+    path('plant/delete-image/<int:id>',views.deleteImg,name='deleteImg'),
+
     path('form/update/<int:pk>',views.UpdatePostView,name='update_form'),
     path('form/delete/<int:pk>',views.deletePost,name='delete_form'),
     path('form/reject/<int:id>',views.rejectPostView,name='reject_form'),

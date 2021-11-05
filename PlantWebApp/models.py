@@ -3,14 +3,6 @@ from django.conf import settings
 from django.db import models
 from ckeditor.fields import RichTextField
 
-'''
-class Role(models.Model):
-    role_name = models.CharField(max_length=30)
-    profile = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-    )'''
-
 class Profile(models.Model):
 
     ROLENAME = (
@@ -72,6 +64,14 @@ class Plant(models.Model):
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     research_data = RichTextField(null=True, blank=True)
+
+class Images(models.Model):
+    plant = models.ForeignKey(
+        Plant,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    image = models.ImageField(blank=True,upload_to='plantImg/',default='default.jpeg') 
 
 class Rejection(models.Model):
     plant = models.OneToOneField(

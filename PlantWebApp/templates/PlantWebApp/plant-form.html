@@ -90,11 +90,18 @@
             </div>
 
             <div class="mb-3">
-                <label for="formFile" class="form-label">Plant Image Upload</label>
+                <label for="formFile" class="form-label">Plant Image Upload (1 file)</label>
                 <input class="form-control" type="file" id="formFile" name="plantImg">
             </div>
 
             <div id="img-box"></div>
+
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Plant Parts Image Upload (Multiple files) </label>
+                <input class="form-control" type="file" name="images_list" multiple>
+            </div>
+
+            
 
             <div class="mb-3">
                 {{research_form.media}}
