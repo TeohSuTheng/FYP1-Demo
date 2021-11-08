@@ -1,0 +1,362 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
+
+{% block content%}
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<!--Chart Scroll-->
+<link rel="stylesheet" href="{% static '/css/adminHomeStyle.css' %}">
+
+<!--https://github.com/StephanWagner/svgMap>
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet"-->
+
+
+<!--div class="col py-3"-->
+
+<!--Site User Content Header-->
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-10">
+        <h3 class="m-0">Committee Dashboard</h3>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><br>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+          <!-- Small boxes (Stat box) -->
+          <div class="row">
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box" style="background-color: #d6f7e7;">
+                  <div class="row">
+                    <!--div class="inner"-->
+                    <div class="col-sm-4" style="margin-left: 20px;">
+                        <br>
+                        <div id="total_plant">
+                            <h3>{{approved_list_count}}</h3>
+                        </div>
+                    <p>Records Accepted</p>
+                    </div>
+                    <!--div class="icon"-->
+                    <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                        <br>
+                        <i class="fas fa-seedling fa-3x"></i>
+                    </div>
+                </div>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box" style="background-color: #b1dfc9;">
+                  <div class="row">
+                    <!--div class="inner"-->
+                    <div class="col-sm-4" style="margin-left: 20px;;">
+                    <br>
+                        <div id="pub">
+                            <h3>{{unapproved_list_count}}</h3>
+                        </div>
+                    <p>Records To Be Verified</p>
+                    </div>
+                    <!--div class="icon"-->
+                    <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                        <br>
+                        <i class="fab fa-pagelines fa-3x"></i>
+                    </div>
+                </div>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box" style="background-color: #89c7aa;">
+                    <div class="row">
+                      <!--div class="inner"-->
+                      <div class="col-sm-4" style="margin-left: 20px;;">
+                          <br>
+                        <div id="use">
+                            <h3>{{rejected_list_count}}</h3>
+                        </div>
+      
+                      <p>Records Rejected</p>
+                      </div>
+                      <!--div class="icon"-->
+                      <div class="col" style="display:flex; justify-content: center; align-items: center;">
+                          <br>
+                          <i class="fab fa-canadian-maple-leaf fa-3x"></i>
+                      </div>
+                  </div>
+                  </div>
+              </div><!-- ./col -->
+
+          </div><!-- /.row -->
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title">Plant Records Based on Uses</h5>
+            <!--a href="javascript:void(0);">View Report</a-->
+            <div class="grp">
+              <button id="zoomIn" onclick="ZoomIn"><i class="fas fa-search-plus"></i></button>
+              <button id="zoomOut" onclick="ZoomOut"><i class="fas fa-search-minus"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="scroll">
+              <div class="use-chart" style="width: 900px;">
+                <canvas id="use-chart" data-url="{% url 'use-chart' %}"></canvas>
+              </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.card -->
+      </div>
+    </div>
+
+
+<br><br><br>
+
+<!--h3 align="center"><u>My Plant List</u></h3>
+<br>
+<div class="published">
+    <h5>Accepted Records</h5>
+    <br>
+    <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col">
+                Scientific Name
+            </div>
+            <div class="col-6">
+                Common Name
+            </div>
+            <div class="col-4">
+            </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for plant in pub_plants%}
+            <div class="row align-items-start">
+                <div class="col">
+                    <p class="card-text">{{plant.plantScientificName}}</p>
+                </div>
+                <div class="col-6">
+                    <p class="card-text">{{plant.plantLocalName}}</p>
+                </div>
+                <div class="col-4">
+                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                    <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
+                    <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div><br>
+    <!--Pagination>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center ">
+        {% if pub_plants.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ pub_plants.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                    Page {{pub_plants.number}} of {{pub_plants.paginator.num_pages}}
+                </a>
+            </li> <!--Page 1 of 3>   
+
+            {% if pub_plants.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ pub_plants.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+<br>
+
+<div class="unpublished">
+    <h5>To be Verified</h5><br>
+    <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col">
+                Scientific Name
+            </div>
+            <div class="col-6">
+                Common Name
+            </div>
+            <div class="col-4">
+            </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for plant in unpub_plants %}
+            <div class="row align-items-start">
+                <div class="col">
+                    <p class="card-text">{{plant.plantScientificName}}</p>
+                </div>
+                <div class="col-6">
+                    <p class="card-text">{{plant.plantLocalName}}</p>
+                </div>
+                <div class="col-4">
+                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                    <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
+                    <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div><br>
+    <!--Pagination>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center ">
+        {% if unpub_plants.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ unpub_plants.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                    Page {{unpub_plants.number}} of {{unpub_plants.paginator.num_pages}}
+                </a>
+            </li> <!--Page 1 of 3>   
+
+            {% if unpub_plants.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ unpub_plants.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<div class="rejected">
+<h5>Rejected Records</h5>
+<br>
+<div class="card">
+    <h6 class="card-header">
+        <div class="row align-items-start">
+        <div class="col">
+            Scientific Name
+          </div>
+          <div class="col-6">
+              Common Name
+          </div>
+          <div class="col-4">
+          </div>
+        </div>
+    </h6>
+    <div class="card-body">
+        {% for plant in reject_list%}
+        <div class="row align-items-start">
+            <div class="col">
+                <p class="card-text">{{plant.plantScientificName}}</p>
+            </div>
+            <div class="col-6">
+                <p class="card-text">{{plant.plantLocalName}}</p>
+            </div>
+            <div class="col-4">
+                <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
+                <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+            </div>
+            <br><br><br>
+        </div>
+        {% endfor %}
+
+    </div>
+</div><br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center ">
+        {% if reject_list.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ reject_list.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                    Page {{reject_list_plants.number}} of {{reject_list.paginator.num_pages}}
+                </a>
+            </li> <!--Page 1 of 3>   
+
+            {% if reject_list.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ reject_list.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+</div>
+</section>
+<!--/div-->
+
+<!--jquery 3.6.0>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<!--Usage Chart Size Adjustments-->
+<script>
+
+    function ZoomIn() {
+      //document.querySelector(".use-chart").style.width += 1000;
+      //jquery
+      $('.use-chart').width("+=100");
+    }
+  
+    function ZoomOut() {
+      //jquery
+      if ($('.use-chart').width() > 900 ){
+        $('.use-chart').width("-=100");
+      }
+    }
+    
+    document.getElementById("zoomIn").onclick = function() {ZoomIn()};
+    document.getElementById("zoomOut").onclick = function() {ZoomOut()};
+    
+  </script>
+
+<script>
+        $(function () {
+
+        var $useChart = $("#use-chart");
+        $.ajax({
+        url: $useChart.data("url"),
+        success: function (data) {
+
+            var ctx = $useChart[0].getContext("2d");
+
+            new Chart(ctx, {
+            type: 'bar', 
+            data: {
+                labels: data.labels,
+                datasets: [{
+                label: 'Plant record',
+                backgroundColor: 'green',
+                data: data.data
+                }]          
+            },
+            options: {
+                responsive: true,
+                legend: {
+                position: 'top',
+                },
+                title: {
+                display: true,
+                text: 'Bar Chart of Plants Based On Their Uses'
+                }
+            }
+            });
+
+        }
+        });
+
+        });
+
+</script>
+{% endblock %}

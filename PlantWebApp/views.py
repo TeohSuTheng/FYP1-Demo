@@ -505,7 +505,18 @@ def userHome(request):
         }
         return render(request, 'PlantWebApp/admin-home.html',context)
     elif request.user.profile.role == 1: # Role id 1 - Committee
-        return render(request, 'PlantWebApp/user_home.html',{})
+        #approved_list = Plant.objects.filter(commitee_approved=True).order_by('plantScientificName')
+        approved_list_count = Plant.objects.filter(commitee_approved=True).count
+        unapproved_list_count = Plant.objects.filter(commitee_approved=False).count
+        rejected_list_count = Plant.objects.filter(rejected=True).count
+
+        context = {
+            'approved_list_count':approved_list_count,
+            'unapproved_list_count':unapproved_list_count,
+            'rejected_list_count':rejected_list_count
+        }
+
+        return render(request, 'PlantWebApp/committee_home.html',context)
     else: # Role id 2 - Researcher
         pub_list = Q(user_id=request.user) & Q(admin_publish=True)
         pub_plant_list = Plant.objects.filter(pub_list).order_by('plantScientificName')
@@ -751,8 +762,9 @@ def usage_chart(request):
     labels = []
     data = []
 
-    if request.user.is_staff:
+    if request.user.profile.role == 0 or request.user.profile.role == 1: #admin
         plant_count = Plant.objects.all().values('usage').annotate(Count('usage')).order_by('usage') # get list of plant objects based on the user
+
     else:
         plant_count = Plant.objects.filter(user_id=request.user).values('usage').annotate(Count('usage')).order_by('usage') # get list of plant objects based on the user
     #1. Get a set of plants created by user
