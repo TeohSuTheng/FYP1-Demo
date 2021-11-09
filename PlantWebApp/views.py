@@ -849,17 +849,20 @@ def displayPublishedResults(request):
     else:
         verified(request)
 
-@staff_member_required(login_url='user_login')
+@login_required(login_url='user_login')
 def rejected(request):
-    # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(rejected=True).order_by('plantScientificName') 
+    if request.user.profile.role == 1 or request.user.profile.role == 0:
+        # Arrange in the order from earliest to latest
+        plant_list = Plant.objects.filter(rejected=True).order_by('plantScientificName') 
 
-    # Set up Pagination
-    p = Paginator(plant_list, 10)
-    page = request.GET.get('page')
-    plants = p.get_page(page)
+        # Set up Pagination
+        p = Paginator(plant_list, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
 
-    return render(request, 'PlantWebApp/admin-rejected.html',{'plants':plants})
+        return render(request, 'PlantWebApp/admin-rejected.html',{'plants':plants})
+    else:
+        return redirect('user_home')
 
 @staff_member_required(login_url='user_login')
 def displayRejectedResults(request):
@@ -909,69 +912,72 @@ def country_settings(request):
             value.save()
     return render(request,'PlantWebApp/country-settings.html',{})
 
-@staff_member_required(login_url='user_login')
+@login_required(login_url='user_login')
 def rejectPostView(request,id):
-    # ***Display plant data*** #
-    # Get queryset of usageID filter by plantID from Plant_Usage table
-    plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
-    countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
-    use_list = []
-    for i in plantUsageData:
-        # [0] - to retrieve values inside the queryset
-        use_list.append(Usage.objects.filter(id=i)[0].usage_tag)
-    country_list = []
-    for j in countryData:
-        country_list.append(Distribution.objects.filter(id=j)[0].country_alpha2)
-    country_name = []
-    for k in countryData:
-        country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
-    
-    plantdata = Plant.objects.get(id=id) 
-    if plantdata.rejected:
-        reject = Rejection.objects.get(plant_id=id)
-        context = {
-        #'plant_info':get_object_or_404(Plant,pk=id),
-        'plant_info':plantdata,
-        'reject_info':reject,
-        'plantUsageData':plantUsageData,
-        'use_list':use_list,
-        'country_list':country_list,
-        'country_name':country_name,
-        }
-    else:
-        context = {
-        #'plant_info':get_object_or_404(Plant,pk=id),
-        'plant_info':plantdata,
-        'plantUsageData':plantUsageData,
-        'use_list':use_list,
-        'country_list':country_list,
-        'country_name':country_name,
-        }
-
-    if request.method == "POST":
-        if plantdata.rejected == False:
-            reject_form = forms.RejectForm(request.POST)
-
-            # Verify data
-            if reject_form.is_valid():
-                temp = reject_form.save(commit=False)
-                temp.plant_id = id
-                temp.save()
-
-                plantdata = Plant.objects.get(id=id)
-                plantdata.rejected = True
-                plantdata.save(update_fields=['rejected'])
-
-                # Back to unpublished list page #
-                return unpubList(request)
-
+    if request.user.profile.role == 1 or request.user.profile.role == 0:
+        # ***Display plant data*** #
+        # Get queryset of usageID filter by plantID from Plant_Usage table
+        plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
+        countryData = Plant_Distribution.objects.filter(plantID=id).values_list('distID',flat=True)
+        use_list = []
+        for i in plantUsageData:
+            # [0] - to retrieve values inside the queryset
+            use_list.append(Usage.objects.filter(id=i)[0].usage_tag)
+        country_list = []
+        for j in countryData:
+            country_list.append(Distribution.objects.filter(id=j)[0].country_alpha2)
+        country_name = []
+        for k in countryData:
+            country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
+        
+        plantdata = Plant.objects.get(id=id) 
+        if plantdata.rejected:
+            reject = Rejection.objects.get(plant_id=id)
+            context = {
+            #'plant_info':get_object_or_404(Plant,pk=id),
+            'plant_info':plantdata,
+            'reject_info':reject,
+            'plantUsageData':plantUsageData,
+            'use_list':use_list,
+            'country_list':country_list,
+            'country_name':country_name,
+            }
         else:
-            reject_form = forms.RejectForm(request.POST, instance = reject)
-            reject_form.save()
-            messages.success(request,('Rejection reason updated successfully.'))
-            return rejected(request)
+            context = {
+            #'plant_info':get_object_or_404(Plant,pk=id),
+            'plant_info':plantdata,
+            'plantUsageData':plantUsageData,
+            'use_list':use_list,
+            'country_list':country_list,
+            'country_name':country_name,
+            }
 
-    return render(request,'PlantWebApp/rejection-form.html',context)
+        if request.method == "POST":
+            if plantdata.rejected == False:
+                reject_form = forms.RejectForm(request.POST)
+
+                # Verify data
+                if reject_form.is_valid():
+                    temp = reject_form.save(commit=False)
+                    temp.plant_id = id
+                    temp.save()
+
+                    plantdata = Plant.objects.get(id=id)
+                    plantdata.rejected = True
+                    plantdata.save(update_fields=['rejected'])
+
+                    # Back to unpublished list page #
+                    return unpubList(request)
+
+            else:
+                reject_form = forms.RejectForm(request.POST, instance = reject)
+                reject_form.save()
+                messages.success(request,('Rejection reason updated successfully.'))
+                return rejected(request)
+
+        return render(request,'PlantWebApp/rejection-form.html',context)
+    else:
+        return redirect('user_home')
 
 def data_upload(request):
     if request.method == "POST":

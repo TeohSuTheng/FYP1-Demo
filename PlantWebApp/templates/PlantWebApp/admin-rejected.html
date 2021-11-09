@@ -63,10 +63,15 @@
                     <p class="card-text">{{plant.created_at}}</p>
                 </div>
                 <div class="col-4">
-                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
-                    <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-warning">Update</a-->
-                    <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify</a>
-                    <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                        <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-warning">Update</a-->
+                        <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify</a>
+                        <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                    {% else %}
+                        <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                        <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify comments</a>
+                    {% endif %}
                 </div>
                 <br><br><br>
             </div>

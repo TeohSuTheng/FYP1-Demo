@@ -36,13 +36,41 @@
 <div id="dashboard">
 
 <!--Dashboard nav.html - template inheritance-->
-{% if user.is_staff %}
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
+    <div class="container-fluid">
+        <!--a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button-->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{%url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{%url 'browse' %}">Browse</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{%url 'user_home' %}">Dashboard</a>
+            </li>
+            
+            </ul>
+        </div>
+        <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
+        <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
+      </div>
+</nav>
+
+{% if user.is_staff %}
+<!--nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
     <div class="container-fluid">
       <!--a class="navbar-brand" href="#">Navbar</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button-->
+      </button>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -63,7 +91,7 @@
       <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
       <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
     </div>
-  </nav>
+  </nav-->
   
  <div class="container-fluid">
     <div class="row flex-nowrap">
@@ -114,13 +142,46 @@
                 </ul>
             </div>
         </div>
+{% elif user.profile.role == 1 %}
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 " style="background-color: #2D442F; ">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
+                <!-- fixed sidebar -->
+                <!--div class="navbar position-fixed"-->
+                <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Menu</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li>
+                        
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Plant Records +</span> </a>
+                            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="{%url 'com_unverified' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - To Be Verified</span></a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="{%url 'com_verified' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Verified</span></a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="{%url 'rejected' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Rejected</span></a>
+                                </li>
+                            </ul>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
 {% else %}
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
+<!--nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
     <div class="container-fluid">
         <!--a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-        </button-->
+        </button>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -141,7 +202,7 @@
         <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
         <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
       </div>
-</nav>
+</nav-->
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 " style="background-color: #2D442F">
