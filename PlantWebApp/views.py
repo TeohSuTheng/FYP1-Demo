@@ -506,8 +506,8 @@ def userHome(request):
         return render(request, 'PlantWebApp/admin-home.html',context)
     elif request.user.profile.role == 1: # Role id 1 - Committee
         #approved_list = Plant.objects.filter(commitee_approved=True).order_by('plantScientificName')
-        approved_list_count = Plant.objects.filter(commitee_approved=True).count
-        unapproved_list_count = Plant.objects.filter(commitee_approved=False).count
+        approved_list_count = Plant.objects.filter(committee_approved=True).count
+        unapproved_list_count = Plant.objects.filter(committee_approved=False).count
         rejected_list_count = Plant.objects.filter(rejected=True).count
 
         context = {
@@ -1063,6 +1063,47 @@ def userProfileView(request,id):
 def userProfileView(request,id):
     return render(request, 'PlantWebApp/user-profile.html',{'id':id})
 
+@login_required(login_url='user_login')
+def committeeVerified(request):
+    if request.user.profile.role == 1: # Role id 1 - Committee
+        # Arrange in the order from earliest to latest
+        plant_list = Plant.objects.filter(committee_approved=True).filter(rejected=False).order_by('plantScientificName') 
+
+        # Set up Pagination
+        p = Paginator(plant_list, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
+
+        # Hack Pagination 
+        #page_num = 'a' * p.num_pages
+        return render(request, 'PlantWebApp/com-verified.html',{'plants':plants})
+    else:
+        return redirect('user_home')
+
+@login_required(login_url='user_login')
+def committeeUnverified(request):
+    if request.user.profile.role == 1: # Role id 1 - Committee
+        # Arrange in the order from earliest to latest
+        plant_list = Plant.objects.filter(committee_approved=False).filter(rejected=False).order_by('plantScientificName') 
+
+        # Set up Pagination
+        p = Paginator(plant_list, 10)
+        page = request.GET.get('page')
+        plants = p.get_page(page)
+
+        # Hack Pagination 
+        #page_num = 'a' * p.num_pages
+        return render(request, 'PlantWebApp/com-unverified.html',{'plants':plants})
+    else:
+        return redirect('user_home')
+
+def processingComVerification(request,id):
+    plantdata = Plant.objects.get(id=id)
+    plantdata.committee_approved = True
+    plantdata.save(update_fields=['committee_approved'])
+
+    # ** Add message - plant published
+    return committeeVerified(request)
 
 #@permission_required('polls.add_choice')
 

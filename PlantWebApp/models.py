@@ -59,7 +59,7 @@ class Plant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     plantref = models.TextField(null=True, blank=True)
     admin_publish = models.BooleanField(default=False)
-    commitee_approved = models.BooleanField(default=False)
+    committee_approved = models.BooleanField(default=False)
     #sv_approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
