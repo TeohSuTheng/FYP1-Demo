@@ -789,7 +789,7 @@ def usage_chart(request):
 @staff_member_required(login_url='user_login')
 def unpubList(request):
     # Arrange in the order from earliest to latest
-    plant_list = Plant.objects.filter(admin_publish=False).filter(rejected=False).order_by('created_at') 
+    plant_list = Plant.objects.filter(committee_approved=True).filter(admin_publish=False).filter(rejected=False).order_by('created_at') 
     
     # Set up Pagination
     p = Paginator(plant_list, 10)
