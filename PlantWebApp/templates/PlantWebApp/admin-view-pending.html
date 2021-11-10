@@ -1,0 +1,102 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+
+{% block content %}
+<!--Site Admin Content header-->
+<div class="content-header" style="padding-left:25px ;">
+    <div class="row">
+      <div class="col-sm-9"></div><!-- /.col -->
+      <div class="col">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item active">To Be Verified</a></li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+
+<div class="container">
+    <h2 align="center">Plant Records</h2>
+    <p align="center" style="color: white;"><span style="background-color:rgb(86, 153, 142);">| Pending Committee Approval |</span></p>
+    <br>
+
+    <!--Search Bar>
+    <div class="row">
+        <div class="col-sm-8"></div><!-- /.col >
+        <div class="col">
+            <form name="searchForm" method="GET" action="{%url 'display_UnpublishedResults' %}" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Scientific Name" name="searchquery">
+                    <button class="btn btn-outline-success" type="submit" id="button-addon2">Search</button>
+                </div>
+                <div class="invalid-query"></div>
+            </form>
+        </div><!-- /.col >
+      </div><!-- /.row -->
+
+    <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+            <div class="col-3">
+                Scientific Name
+            </div>
+            <div class="col-2">
+                Author
+            </div>
+            <div class="col-4">
+                Created At
+            </div>
+            <div class="col-3">
+            </div>
+            </div>
+        </h6>
+        <div class="card-body">
+            {% for plant in plants%}
+            <div class="row align-items-start">
+                <div class="col-3">
+                    <p class="card-text">{{plant.plantScientificName}}</p>
+                </div>
+                <div class="col-2">
+                    <p class="card-text">{{plant.user.first_name}} {{plant.user.last_name}}</p>
+                </div>
+                <div class="col-3">
+                    <p class="card-text">{{plant.created_at}}</p>
+                </div>
+                <div class="col-4">
+                    <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-primary">Details</a>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div><br>
+
+<!--Pagination-->
+<section class = "pagination">
+    <div class="container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm justify-content-center ">
+                {% if plants.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ plants.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        Page {{plants.number}} of {{plants.paginator.num_pages}}
+                    </a>
+                </li> <!--Page 1 of 3-->   
+
+                {% if plants.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ plants.next_page_number }}">&raquo;</a></li>
+                    <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>    <br><br> <br><br><br>   
+
+
+</div>
+
+{% endblock content %}

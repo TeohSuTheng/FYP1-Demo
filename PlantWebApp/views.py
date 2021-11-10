@@ -1088,18 +1088,21 @@ def committeeVerified(request):
 
 @login_required(login_url='user_login')
 def committeeUnverified(request):
+    
+    # Arrange in the order from earliest to latest
+    plant_list = Plant.objects.filter(committee_approved=False).filter(rejected=False).order_by('plantScientificName') 
+
+    # Set up Pagination
+    p = Paginator(plant_list, 10)
+    page = request.GET.get('page')
+    plants = p.get_page(page)
+
     if request.user.profile.role == 1: # Role id 1 - Committee
-        # Arrange in the order from earliest to latest
-        plant_list = Plant.objects.filter(committee_approved=False).filter(rejected=False).order_by('plantScientificName') 
-
-        # Set up Pagination
-        p = Paginator(plant_list, 10)
-        page = request.GET.get('page')
-        plants = p.get_page(page)
-
         # Hack Pagination 
         #page_num = 'a' * p.num_pages
         return render(request, 'PlantWebApp/com-unverified.html',{'plants':plants})
+    elif request.user.profile.role == 0: # Role id 1 - Admin
+        return render(request, 'PlantWebApp/admin-view-pending.html',{'plants':plants})
     else:
         return redirect('user_home')
 
