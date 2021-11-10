@@ -61,6 +61,7 @@ urlpatterns = [
 
     path('browse-name-api/',views.browse_api,name='browse-api'),
     path('country-data-detail/<str:country>',views.countryDataDetails,name="countryDataDetails" ),
+    path('usage-data-detail/<str:use>',views.usageDataDetails,name="usageDataDetails" ),
     path('user-page/<int:id>',views.userPageView,name='user_page'),
 
     path('com-verified-list/',views.committeeVerified,name='com_verified'),

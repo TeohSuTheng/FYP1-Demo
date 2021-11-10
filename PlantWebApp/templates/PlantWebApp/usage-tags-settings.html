@@ -70,7 +70,7 @@
                     <p class="card-text">{{ forloop.counter0|add:uses.start_index }}</p>
                 </div>
                 <div class="col">
-                    <p class="card-text">{{use.usage_tag}}</p>
+                    <p class="card-text"><a id="country-anchor" href="http://127.0.0.1:8000/usage-data-detail/{{use.usage_tag}}">{{use.usage_tag}}</a></p>
                 </div>
                 <div class="col-3">
                     <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' use.id%}">Update</button>

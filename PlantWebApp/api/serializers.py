@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
-        fields = ['id','plantScientificName','plantLocalName','publish','rejected'] #'__all__'
+        fields = ['id','plantScientificName','plantLocalName','admin_publish','rejected'] #'__all__'
 
 '''class RoleSerializer(serializers.ModelSerializer):
     class Meta:

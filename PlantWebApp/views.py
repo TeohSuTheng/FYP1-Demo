@@ -1055,6 +1055,9 @@ def userPageView(request,id):
 def countryDataDetails(request,country):
     return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
 
+def usageDataDetails(request,use):
+    return render(request,'PlantWebApp/usage-data-detail.html',{'use':use})
+
 '''
 @login_required(login_url='user_login')
 def userProfileView(request,id):
