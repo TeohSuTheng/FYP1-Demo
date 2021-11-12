@@ -717,7 +717,7 @@ def siteUserEnable(request,id):
 
 @staff_member_required(login_url='user_login')
 def usageTagsSettings(request):
-    use_queryset = Usage.objects.all().order_by('usage_tag')
+    use_queryset = Usage.objects.all().order_by('created_at')
     full_list = Usage.objects.all().values('usage_tag').distinct()
 
     # Set up Pagination
@@ -726,6 +726,14 @@ def usageTagsSettings(request):
     uses = use_pag.get_page(page)
 
     return render(request, 'PlantWebApp/usage-tags-settings.html',{'uses':uses,'full_list':full_list})
+
+@staff_member_required(login_url='user_login')
+def verify_tags(request,id):
+    use = Usage.objects.get(id=id)
+
+    use.is_verified = True
+    use.save(update_fields=['is_verified'])
+    return usageTagsSettings(request)
 
 #select2
 @staff_member_required(login_url='user_login')

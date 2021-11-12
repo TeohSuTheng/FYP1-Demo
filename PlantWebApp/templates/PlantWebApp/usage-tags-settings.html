@@ -56,6 +56,9 @@
               <div class="col">
                 Usage Tag
               </div>
+              <div class="col-2">
+                  Verification
+              </div>
               <div class="col-3">
                 Actions
               </div>
@@ -71,6 +74,14 @@
                 </div>
                 <div class="col">
                     <p class="card-text"><a id="country-anchor" href="http://127.0.0.1:8000/usage-data-detail/{{use.usage_tag}}">{{use.usage_tag}}</a></p>
+                </div>
+                <div class="col-2">
+                  {% if use.is_verified %}
+                    <button type="button" class="btn btn-sm btn-success" disabled>Verified</button>
+                  {% else %}
+                    <a href="{% url 'verifyingTag' use.id%}" class="btn btn-sm btn-light">Verify</a>
+                  {% endif %}
+                  
                 </div>
                 <div class="col-3">
                     <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' use.id%}">Update</button>

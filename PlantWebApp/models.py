@@ -26,6 +26,7 @@ class Usage(models.Model):
     usage_tag = models.CharField(max_length=255,unique=True)
     updated_at = models.DateTimeField(auto_now=True) 
     created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
 
 class Distribution(models.Model):
     country_alpha2 = models.CharField(max_length=2)

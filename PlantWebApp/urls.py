@@ -50,7 +50,7 @@ urlpatterns = [
     
 
     path('usage-tags-settings/',views.usageTagsSettings,name='usageTagsSettings'),
-    #path('usage-tags-settings/',views.UsageListView.as_view()   ,name='usageTagsSettings'),
+    path('usage-tags-verify-process/<int:id>',views.verify_tags,name='verifyingTag'),
     path('usage-tags-update-form/<int:pk>',views.UsageTagUpdateView.as_view(),name='usageTagsUpdate'),
     path('usage-tags-del/<int:pk>',views.UsageTagDeleteView.as_view(),name='usageTagsDelete'),
     path('usage-tags-create/',views.UsageTagCreateView.as_view(),name='UsageTagCreateView'),
