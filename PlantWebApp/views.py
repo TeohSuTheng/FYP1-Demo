@@ -230,8 +230,7 @@ def displayPlantApi(request,id):
 def UpdatePostView(request,pk):
     use = Usage.objects.all() #get uses_tags from Usage table
     plantdata = Plant.objects.get(id=pk)
-    #newplantdata = Plant.objects.select_for_update(skip_locked=True).filter(id=pk)
-    #print(newplantdata[0])
+
     dist = Distribution.objects.all() #get distribution_country from Distribution table
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
@@ -302,6 +301,12 @@ def UpdatePostView(request,pk):
             plant_form.save()
             for img in img_list:
                 Images.objects.create(plant=plantdata,image=img)
+
+            if plantdata.rejected:
+                print('ok')
+                plantdata.rejected = False
+                plantdata.save(update_fields=['rejected'])
+
             messages.success(request,('Plant record updated successfully.'))
 
             return userHome(request)
