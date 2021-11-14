@@ -115,6 +115,13 @@
             {% endfor %}
             </p>
             <div id="svgMap"></div><br><br>
+
+            <h4>Plant Local Distribution</h4>
+            <p>
+            {% for j in states %}
+               {{j}}, 
+            {% endfor %}
+            </p>
             
             <h4>Reference</h4>
             <p>{{plant_info.plantref|linebreaks}}</p><br><br>

@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from .models import Distribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection, Images
+from .models import Plant_LocalDistribution, Distribution, LocalDistribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection, Images
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
@@ -100,6 +100,7 @@ def displaySearchResults(request):
 def displayPlantForm(request):
     use = Usage.objects.all() #Get usage_tags data from Usage table 
     dist = Distribution.objects.all()
+    state = LocalDistribution.objects.all()
     research_form = forms.ResearchForm(data=request.POST, files=request.FILES)
 
     if request.method == "POST":
@@ -129,6 +130,7 @@ def displayPlantForm(request):
                 'usearr':usearr,
                 'plantref': request.POST['plantref'],
                 'dist':dist,
+                'state':state,
                 'research_form':research_form,
             }
 
@@ -172,6 +174,7 @@ def displayPlantForm(request):
                 'plantref': request.POST['plantref'],
                 'dist':dist,
                 'research_form':research_form,
+                'state':state,
             }
             
             #if scientific name is not unique - means already exist
@@ -182,7 +185,7 @@ def displayPlantForm(request):
                 messages.success(request,('There is an error in your form. Please try again.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)            
 
-    return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist,'research_form':research_form})
+    return render(request,'PlantWebApp/plant-form.html',{'state':state,'use': use,'dist':dist,'research_form':research_form})
 
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
@@ -209,6 +212,8 @@ def displayPlant(request,id):
 
     plantimages = Images.objects.filter(plant_id=id)
 
+    states = LocalDistribution.objects.filter(plant=id).values_list('stateName',flat=True)
+
     context = {
         #'plant_info':get_object_or_404(Plant,pk=id),
         #'reject_info':get_object_or_404(Rejection,plant_id=id),
@@ -218,9 +223,10 @@ def displayPlant(request,id):
         'use_list':use_list,
         'country_list':country_list,
         'country_name':country_name,
-        'plantimages':plantimages
-
+        'plantimages':plantimages,
+        'states':states,
     }
+
     return render(request, 'PlantWebApp/plant-info.html',context)
 
 def displayPlantApi(request,id):
@@ -232,6 +238,7 @@ def UpdatePostView(request,pk):
     plantdata = Plant.objects.get(id=pk)
 
     dist = Distribution.objects.all() #get distribution_country from Distribution table
+    state = LocalDistribution.objects.all()
     
     # Get usageID from plant_usage table and obtain queryset for the respective plant by ID # Convert to list #for select2
     plantUsageData = Plant_Usage.objects.filter(plantID=pk).values_list('usageID', flat=True)
@@ -240,9 +247,14 @@ def UpdatePostView(request,pk):
     countryData = Plant_Distribution.objects.filter(plantID=pk).values_list('distID',flat=True)
     countryarr = list(countryData)
 
+    stateData = Plant_LocalDistribution.objects.filter(plantID=pk).values_list('localID',flat=True)
+    statearr = list(stateData)
+    
     research_form = forms.ResearchForm(instance=plantdata)
 
     plantimages = Images.objects.filter(plant_id=pk)
+
+
 
     if request.method == "POST":
         img_list = request.FILES.getlist('images_list')
@@ -271,6 +283,8 @@ def UpdatePostView(request,pk):
             'countryarr':countryarr,
             'dist':dist,
             'research_form':research_form,
+            'state':state,
+            'statearr':statearr
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -296,6 +310,8 @@ def UpdatePostView(request,pk):
                     'countryarr':countryarr,
                     'dist':dist,
                     'research_form':research_form,
+                    'state':state,
+                    'statearr':statearr
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
             plant_form.save()
@@ -327,6 +343,8 @@ def UpdatePostView(request,pk):
         'dist':dist,
         'research_form':research_form,
         'plantimages':plantimages,
+        'state':state,
+        'statearr':statearr
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -903,6 +921,15 @@ def publishAction(request,pk):
 
     # ** Add message - plant published
     return unpubList(request)
+
+## can delete + country-state-settings
+@staff_member_required(login_url='user_login')
+def addState(request):
+    country_form = forms.LocalDistForm()
+    if request.method == 'POST':
+      form = forms.LocalDistForm(request.POST)
+      form.save()
+    return render(request,'PlantWebApp/country-state-settings.html',{'country_form':country_form})
 
 @staff_member_required(login_url='user_login')
 def country_settings(request):

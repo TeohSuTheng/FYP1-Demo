@@ -17,5 +17,10 @@
         <input type="file" name="myfile">
         <button type="submit">Upload</button>
     </form>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="myfile">
+        <button type="submit">Upload</button>
+    </form>
 </body>
 </html>

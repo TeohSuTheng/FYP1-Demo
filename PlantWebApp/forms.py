@@ -1,6 +1,6 @@
 from django.db.models import fields
 from django.forms import formset_factory
-from .models import Distribution, Images, Plant, Rejection, Usage, Profile
+from .models import Distribution, Images, LocalDistribution, Plant, Rejection, Usage, Profile
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -15,7 +15,7 @@ class PlantForm(ModelForm):
         model = Plant
         #fields = '__all__'  
         fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
-        'pmFruit','plantImg','usage','voucher_no','distribution','plantref','research_data')
+        'pmFruit','plantImg','usage','voucher_no','distribution','localDistribution','plantref','research_data')
     # Widgets
 
 class ImageForm(ModelForm):
@@ -51,6 +51,11 @@ class UserProfileForm(ModelForm):
 class DistributionForm(ModelForm):
     class Meta:
         model = Distribution
+        fields = '__all__'
+
+class LocalDistForm(ModelForm):
+    class Meta:
+        model = LocalDistribution
         fields = '__all__'
 
 class UserUpdateForm(ModelForm):

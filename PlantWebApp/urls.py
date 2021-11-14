@@ -59,6 +59,8 @@ urlpatterns = [
     path('country-settings/',views.country_settings,name='settings'),
     path('plant-data-upload/',views.data_upload,name='data-upload'),
 
+    path('add-state/',views.addState,name='addState'),
+
     path('browse-name-api/',views.browse_api,name='browse-api'),
     path('country-data-detail/<str:country>',views.countryDataDetails,name="countryDataDetails" ),
     path('usage-data-detail/<str:use>',views.usageDataDetails,name="usageDataDetails" ),

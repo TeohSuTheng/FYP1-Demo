@@ -83,6 +83,16 @@
                 </select>
         </div>
 
+        <div class="mb-3">
+            <label for="inputState" class="form-label">Plant Local Distribution</label>
+                <select id="selectLocal" class="form-control" name="localDistribution" multiple="multiple">
+                    <option></option>
+                    {% for dat in state %}
+                        <option value="{{ dat.id }}">{{ dat.stateName }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
 
             <div class="mb-3">
                 <label for="inputState" class="form-label">References <!--small>(in APA format)</small--></label>
@@ -150,6 +160,11 @@
 
             $('#selectDist').select2({
                     'placeholder':'Select Distribution...',
+                    //tags: true,
+            });
+
+            $('#selectLocal').select2({
+                    'placeholder':'Select Local Distribution...',
                     //tags: true,
             });
         });

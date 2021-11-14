@@ -32,6 +32,9 @@ class Distribution(models.Model):
     country_alpha2 = models.CharField(max_length=2)
     countryName = models.CharField(max_length=100)
 
+class LocalDistribution(models.Model):
+    stateName = models.CharField(max_length=50)
+
 class Plant(models.Model):
     plantScientificName =  models.CharField(max_length=255,unique=True)
     plantLocalName = models.TextField(null=True, blank=True)
@@ -54,6 +57,12 @@ class Plant(models.Model):
     distribution = models.ManyToManyField(
         Distribution,
         through="Plant_Distribution",
+        blank=True,
+        null=True
+    )
+    localDistribution = models.ManyToManyField(
+        LocalDistribution,
+        through="Plant_LocalDistribution",
         blank=True,
         null=True
     )
@@ -90,6 +99,11 @@ class Plant_Usage(models.Model):
 class Plant_Distribution(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     distID = models.ForeignKey(Distribution,on_delete=models.CASCADE)
+
+# Bridge entity for plant and distribution
+class Plant_LocalDistribution(models.Model):
+    plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
+    localID = models.ForeignKey(LocalDistribution,on_delete=models.CASCADE)
 
 '''
 class RecordPermission(models.Model):
