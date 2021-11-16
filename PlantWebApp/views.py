@@ -196,7 +196,7 @@ def assignPermissionForm(request):
         permission_form = forms.PermissionForm(data=request.POST)
         if permission_form.is_valid():
 
-            #validate unique
+            #validate unique ** values
             permission_form.save()
             messages.success(request,('Your form has been submitted successfully.'))
             return redirect('user_home')

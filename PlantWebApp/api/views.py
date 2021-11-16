@@ -6,7 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 
 from PlantWebApp.models import Distribution, Plant, Profile, Images
 from django.contrib.auth.models import User
-from .serializers import PlantSerializer,UserProfileSerializer,PlantDetailSerializer, PlantDistSummarySerializer
+from .serializers import UserSerializer,PlantSerializer,UserProfileSerializer,PlantDetailSerializer, PlantDistSummarySerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Count
@@ -65,6 +65,13 @@ def PlantDistSummary(request):
     if request.method == 'GET':
         distData = Distribution.objects.annotate(num_plant=Count('plant'),).order_by('-num_plant') # Get total number of plant records based on each country (plant distribution) and order by plant count in distribution model in desc '-'
         serializer = PlantDistSummarySerializer(distData, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def UserPermission(request,id):
+    if request.method == 'GET':
+        user_list = User.objects.filter(profile__role=2).filter(profile__is_verified=True).exclude(id=request.user.id).exclude(permission__plantID=id) #list of researchers
+        serializer = UserSerializer(user_list, many=True)
         return Response(serializer.data)
 
 '''

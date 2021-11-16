@@ -40,23 +40,27 @@
     
             <div class="mb-3">
                 <label for="inputState" class="form-label">Select Plant</label>
-                    <select id="mySelect2" class="form-select" name="plantID" multiple="multiple">
+                    <select id="mySelect2" class="form-select" name="plantID" onchange="changeFunc(value);">
+                        <option></option>
                         {% for data in plant %}
                             <option value="{{ data.id }}">{{ data.plantScientificName }}</option>
                         {% endfor %}
                     </select>
             </div>
 
-       
-        <div class="mb-3">
-            <label for="inputState" class="form-label">Select User</label>
-                <select id="selectUser" class="form-select" name="allowed_user">
-                    <option></option>
-                    {% for dat in user_list %}
-                        <option value="{{ dat.id }}">{{ dat.first_name }} {{ dat.last_name }}</option>
-                    {% endfor %}
-                </select>
-        </div>
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Select User</label>
+                    <!--select id="selectUser" class="form-select" name="allowed_user">
+                        <option></option>
+                        {% for dat in user_list %}
+                            <option value="{{ dat.id }}">{{ dat.first_name }} {{ dat.last_name }}</option>
+                        {% endfor %}
+                    </select-->  
+                    <select id="selectUser" class="form-select" name="allowed_user" disabled>
+                        <option></option>
+                    </select>  
+
+            </div>
 
 
             <br><br>
@@ -72,27 +76,48 @@
 </div>
 <br><br>
 
-<!--script src="{% static '/js/plantform.js' %}"></script-->
-
 <script type="text/javascript">    
 
         //Select2js - ethnobotanical usage tags
         $(document).ready(function() {
             $('#mySelect2').select2({
                     'placeholder':'Select Plants...',
-                    allowClear: true,
+                    //allowClear: true,
                     //tags: true,
             });
 
             $('#selectUser').select2({
                     'placeholder':'Select User...',
+                    //allowClear: true,
             });
 
         });
-        //$("#mySelect2").val(Array.from("{{usearr|safe}}"));
-        //var tempstr = "{{usearr|safe}}".replace(/[^0-9,]/g, '').split(",");
-        //$("#mySelect2").val(tempstr);
+
+    //Query All input fields
+    function changeFunc(i) {
+        console.log(i);
+
+        var url = "http://127.0.0.1:8000/api/user-api/"+i
+
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data){
+            console.log(data)
+
+
+            var wrapper = document.querySelector("#selectUser")
+
+            for (var i in data){
+                item = `<option value="${data[i].id}"> ${data[i].first_name} ${data[i].last_name}</option>`
+                wrapper.innerHTML += item
+            }
+
+        })
+
+        document.getElementById("selectUser").disabled = false;
         
+    }
+    
 </script>
 
 
