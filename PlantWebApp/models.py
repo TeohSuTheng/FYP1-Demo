@@ -105,6 +105,11 @@ class Plant_LocalDistribution(models.Model):
     plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
     localID = models.ForeignKey(LocalDistribution,on_delete=models.CASCADE)
 
+class Permission(models.Model):
+    plantID = models.ForeignKey(Plant,on_delete=models.CASCADE)
+    allowed_user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    is_approved = models.BooleanField(default=False)
+
 '''
 class RecordPermission(models.Model):
     user = models.OneToOneField(

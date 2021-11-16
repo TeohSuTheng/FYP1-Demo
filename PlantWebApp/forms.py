@@ -1,6 +1,6 @@
 from django.db.models import fields
 from django.forms import formset_factory
-from .models import Distribution, Images, LocalDistribution, Plant, Rejection, Usage, Profile
+from .models import Distribution, Images, LocalDistribution, Plant, Rejection, Usage, Profile, Permission
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -56,6 +56,11 @@ class DistributionForm(ModelForm):
 class LocalDistForm(ModelForm):
     class Meta:
         model = LocalDistribution
+        fields = '__all__'
+
+class PermissionForm(ModelForm):
+    class Meta:
+        model = Permission
         fields = '__all__'
 
 class UserUpdateForm(ModelForm):

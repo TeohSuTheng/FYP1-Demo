@@ -152,33 +152,6 @@
         </div>
 
 {% else %}
-<!--nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #274e2c;">
-    <div class="container-fluid">
-        <!--a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{%url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{%url 'browse' %}">Browse</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{%url 'user_home' %}">Dashboard</a>
-            </li>
-            
-            </ul>
-        </div>
-        <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
-        <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
-      </div>
-</nav-->
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 " style="background-color: #2D442F">
@@ -186,57 +159,35 @@
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
-                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
-                        <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Plant Records </span> 
-                </a>
-                    <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="{%url 'display_form' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Add record</span></a>
-                            </li>
-                    </ul>
-                <!--ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline text-white">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{%url 'browse' %}" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Browse</span></a>
-                    </li>
-                    <li>
-                        <a href="{%url 'display_form' %}" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Add Plant</span></a>
-                    </li>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
 
-                    <!--Admin
+                    <!--Admin-->
                     <li>
                         
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Manage +</span> </a>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Plant Records +</span> </a>
                             <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
+                                    <a href="{%url 'display_form' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Add record</span></a>
+                            
                                 </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                                </li>
+                               
                             </ul>
-                    </li>-->
+                    </li>
 
-                    <!--li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">View Permissions +</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                                <a href="{%url 'display_permissionForm' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Permission Form</span></a>
                             </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                            <li class="w-100">
+                                <a href="{%url 'com_unverified' %}" class="nav-link px-0"> <span class="d-none d-sm-inline"> - Permission List</span></a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <!--li>
                         <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Manage + </span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
@@ -257,8 +208,8 @@
                     <li>
                         <a href="#" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
-                    </li>
-                </ul-->
+                    </li-->
+                </ul>
                 
                 <hr>
                 <div class="dropdown pb-4">

@@ -187,6 +187,27 @@ def displayPlantForm(request):
 
     return render(request,'PlantWebApp/plant-form.html',{'state':state,'use': use,'dist':dist,'research_form':research_form})
 
+@login_required(login_url='user_login')
+def assignPermissionForm(request):
+    user_list = User.objects.filter(profile__role=2).filter(profile__is_verified=True).exclude(id=request.user.id) #list of researchers
+    plant = Plant.objects.filter(user_id=request.user.id).filter(admin_publish=True)
+
+    if request.method == "POST":
+        permission_form = forms.PermissionForm(data=request.POST)
+        if permission_form.is_valid():
+            permission_form.save()
+            messages.success(request,('Your form has been submitted successfully.'))
+            return redirect('user_home')
+        else:
+            messages.success(request,('There is an error in your form. Please try again.'))
+        
+    context = {
+        'user_list':user_list,
+        'plant':plant,
+    }
+    return render(request,'PlantWebApp/view-permission-form.html',context)
+
+
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
@@ -406,7 +427,6 @@ def UserRegister(request):
         return render(request, 'PlantWebApp/register-form.html',{'form':form,})
 
 def UserLogin(request):
-
     # User had already logged in
     if request.user.is_authenticated:
         return redirect('user_home')
@@ -1097,6 +1117,7 @@ def countryDataDetails(request,country):
 
 def usageDataDetails(request,use):
     return render(request,'PlantWebApp/usage-data-detail.html',{'use':use})
+
 
 '''
 @login_required(login_url='user_login')

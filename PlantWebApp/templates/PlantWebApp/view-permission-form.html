@@ -1,0 +1,86 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
+
+
+{% block content%}
+
+<style>
+    body{
+        background-color: rgba(255, 255, 255, 0.966);
+    }
+
+    h1, p{
+        padding-left: 25px;
+    }
+</style>
+
+<div class="container">
+
+<h1>View Permissions</h1><br>
+
+<p>Assign Users with Permissions to view research findings</p><br>
+
+    <form method="POST" enctype="multipart/form-data" action="{%url 'display_permissionForm' %}" id='p-form'>  <!--url name-->
+    <!--Can validate form using Bootstrap-->
+        {% csrf_token %}  <!--Token to prevent hackers from hijacking-->
+        <div class="container">
+    
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Select Plant</label>
+                    <select id="mySelect2" class="form-select" name="plantID" multiple="multiple">
+                        {% for data in plant %}
+                            <option value="{{ data.id }}">{{ data.plantScientificName }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+
+       
+        <div class="mb-3">
+            <label for="inputState" class="form-label">Select User</label>
+                <select id="selectUser" class="form-select" name="allowed_user">
+                    <option></option>
+                    {% for dat in user_list %}
+                        <option value="{{ dat.id }}">{{ dat.first_name }} {{ dat.last_name }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
+
+            <br><br>
+            <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success">Assign</button>
+            </div>
+            <br>
+        </div>
+
+        
+    </form>
+
+</div>
+<br><br><br>
+
+<!--script src="{% static '/js/plantform.js' %}"></script-->
+
+<script type="text/javascript">    
+
+        //Select2js - ethnobotanical usage tags
+        $(document).ready(function() {
+            $('#mySelect2').select2({
+                    'placeholder':'Select Plants...',
+                    allowClear: true,
+                    //tags: true,
+            });
+
+            $('#selectUser').select2({
+                    'placeholder':'Select User...',
+            });
+
+        });
+        //$("#mySelect2").val(Array.from("{{usearr|safe}}"));
+        //var tempstr = "{{usearr|safe}}".replace(/[^0-9,]/g, '').split(",");
+        //$("#mySelect2").val(tempstr);
+        
+</script>
+
+
+{% endblock content %}
