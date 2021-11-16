@@ -11,7 +11,9 @@ urlpatterns = [
     path('rejected-search-results/',views.displayRejectedResults,name='display_RejectedResults'),
     path('site-users-results/',views.displayUserResults,name='display_UsersResults'),
 
+    path('permission-del/<int:pk>',views.PermissionDeleteView.as_view(),name='permission_del'),
     path('permission-form/',views.assignPermissionForm,name='display_permissionForm'),
+    path('permission-list/',views.permissionList,name='display_permissionList'),
     path('form/',views.displayPlantForm,name='display_form'),
     path('plant/<int:id>',views.displayPlant,name='display_plant'),
     path('plant-api/<int:id>',views.displayPlantApi,name='displayPlantApi'),

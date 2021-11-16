@@ -1,7 +1,12 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
 
 {% block content%}
-<!--Site Admin Content header-->
+
+<!--django-bootstrap-modal-forms-->
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+
 <div class="content-header" style="padding-left:25px ;">
   <div class="row">
     <div class="col-sm-9">
@@ -9,31 +14,28 @@
     <div class="col">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Site Users</li>
+        <li class="breadcrumb-item active">Permission List</li>
       </ol>
     </div><!-- /.col -->
   </div><!-- /.row -->
 </div><br>
 
 <div class="container">
-<h2 align="center">Site Users</h2>
-<h5 align="center">To Be Verified</h5>
+<h2 align="center">Plant View Permission Lists</h2>
 <br>
-<h5>Admin Requests</h5>
-<p>{{admin_list.paginator.count}} request{{admin_list|pluralize}}</p>
+<br>
 
-{% if admin_list %}
  <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
-            <div class="col-1">
-                No.
+              <div class="col">
+                Plant Name
               </div>
               <div class="col">
-                Name
+                User Name
               </div>
               <div class="col">
-                Email
+                Status
               </div>
               <div class="col">
                 Actions
@@ -41,183 +43,54 @@
             </div>
         </h6>
         <div class="card-body">
-            {% for siteUser in admin_list%}
+          {% for data in permissions %}
+            
             <div class="row align-items-start">
-                <div class="col-1">
-                    <p class="card-text">{{ forloop.counter0|add:admin_list.start_index }}</p>
+                
+                <div class="col">
+                    <p class="card-text">{{data.plantID.plantScientificName}}</p>
                 </div>
                 <div class="col">
-                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
+                    <p class="card-text">{{data.allowed_user.first_name}} {{data.allowed_user.last_name}}</p>
                 </div>
                 <div class="col">
-                    <p class="card-text">{{siteUser.email}}</p>
+                   {% if data.is_approved %}
+                      <p class="card-text">Approved</p>
+                   {% else %}
+                      <p class="card-text" >Pending approval</p>
+                   {% endif %}
                 </div>
                 <div class="col">
-                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
-                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
-                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>       
+                  <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'permission_del' data.id%}">Delete</button>
                 </div>
                 <br><br><br>
             </div>
             {% endfor %}
 
         </div>
-    </div><br>
 
-    <nav aria-label="Page navigation example">
-      <ul class="pagination pagination-sm justify-content-center ">
-          {% if admin_list.has_previous %}
-              <li class="page-item"><a class="page-link" href="?page={{ admin_list.previous_page_number }}">&laquo;</a></li>
-          {% endif %}
-
-          <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                  Page {{admin_list.number}} of {{admin_list.paginator.num_pages}}
-              </a>
-          </li> <!--Page 1 of 3-->   
-
-          {% if admin_list.has_next %}
-              <li class="page-item"><a class="page-link" href="?page={{ admin_list.next_page_number }}">&raquo;</a></li>
-              <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
-          {% endif %}
-      </ul>
-  </nav><br>
-{% endif %}
-<br><br>
-
-<h5>Committee Requests</h5>
-<p>{{committee_list.paginator.count}} request{{committee_list|pluralize}}</p>
-
-{% if committee_list %}
- <div class="card">
-        <h6 class="card-header">
-            <div class="row align-items-start">
-            <div class="col-1">
-                No.
-              </div>
-              <div class="col">
-                Name
-              </div>
-              <div class="col">
-                Email
-              </div>
-              <div class="col">
-                Actions
-              </div>
-            </div>
-        </h6>
-        <div class="card-body">
-            {% for siteUser in committee_list%}
-            <div class="row align-items-start">
-                <div class="col-1">
-                    <p class="card-text">{{ forloop.counter0|add:committee_list.start_index }}</p>
-                </div>
-                <div class="col">
-                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
-                </div>
-                <div class="col">
-                    <p class="card-text">{{siteUser.email}}</p>
-                </div>
-                <div class="col">
-                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
-                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
-                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>  
-                </div>
-                <br><br><br>
-            </div>
-            {% endfor %}
-
+      <!--Modal Pop Up-->
+      <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content"></div>
         </div>
-    </div><br>
-    <!--Pagination-->
-    <nav aria-label="Page navigation example">
-      <ul class="pagination pagination-sm justify-content-center ">
-          {% if committee_list.has_previous %}
-              <li class="page-item"><a class="page-link" href="?page={{ committee_list.previous_page_number }}">&laquo;</a></li>
-          {% endif %}
-
-          <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                  Page {{committee_list.number}} of {{committee_list.paginator.num_pages}}
-              </a>
-          </li> <!--Page 1 of 3-->   
-
-          {% if committee_list.has_next %}
-              <li class="page-item"><a class="page-link" href="?page={{ committee_list.next_page_number }}">&raquo;</a></li>
-              <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
-          {% endif %}
-      </ul>
-  </nav><br>
-{% endif %}
-<br><br>
-
-
-<h5>Researcher Requests</h5>
-<p>{{researcher_list.paginator.count}} request{{researcher_list|pluralize}}</p>
-{% if researcher_list %}
- <div class="card">
-        <h6 class="card-header">
-            <div class="row align-items-start">
-            <div class="col-1">
-                No.
-              </div>
-              <div class="col">
-                Name
-              </div>
-              <div class="col">
-                Email
-              </div>
-              <div class="col">
-                Actions
-              </div>
-            </div>
-        </h6>
-        <div class="card-body">
-            {% for siteUser in researcher_list%}
-            <div class="row align-items-start">
-                <div class="col-1">
-                    <p class="card-text">{{ forloop.counter0|add:researcher_list.start_index }}</p>
-                </div>
-                <div class="col">
-                    <p class="card-text">{{siteUser.first_name}} {{siteUser.last_name}}</p>
-                </div>
-                <div class="col">
-                    <p class="card-text">{{siteUser.email}}</p>
-                </div>
-                <div class="col">
-                  <a href="{%url 'user_profile' siteUser.id%}" class="btn btn-sm btn-outline-primary">Details</a>
-                  <a href="{%url 'ProcessingVerification' siteUser.id%}" class="btn btn-sm btn-success">Verify</a>
-                  <a href="{%url 'user_delete' siteUser.id %}" class="btn btn-sm btn-danger">Delete</a>
-                </div>
-                <br><br><br>
-            </div>
-            {% endfor %}
-
-        </div>
-    </div><br>
-
-  <!--Pagination-->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination pagination-sm justify-content-center ">
-        {% if researcher_list.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ researcher_list.previous_page_number }}">&laquo;</a></li>
-        {% endif %}
-
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                Page {{researcher_list.number}} of {{researcher_list.paginator.num_pages}}
-            </a>
-        </li> <!--Page 1 of 3-->   
-
-        {% if researcher_list.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ researcher_list.next_page_number }}">&raquo;</a></li>
-            <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
-        {% endif %}
-    </ul>
-</nav>
-{% endif %}
+      </div>
 </div>
 
 
-<br><br>
+
+<br><br><br><br><br><br><br>
+
+<!--Javascript: Pop-up form-->
+<script type="text/javascript">
+  $(function () { 
+
+    // Delete book buttons - formURL is retrieved from the data of the element
+    $(".delete-tag").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+
+  })
+</script>
+
 {% endblock %}

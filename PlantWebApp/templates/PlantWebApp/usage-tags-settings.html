@@ -119,6 +119,7 @@
         <div class="modal-content"></div>
       </div>
     </div>
+
 <br><br><br>
 </div>
 
@@ -150,41 +151,3 @@
 </script>
 {% endblock %}
 
-<!--
-/*Javascript: Live Search for Usage Tags
-<script>
-$(function () {
-    const data = '{{qs_json}}'
-    const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
-    console.log(rdata)
-    const input = document.getElementById('searchquery')
-    console.log(input)
-
-    let filteredArr = []
-    input.addEventListener('keyup',(e)=>{
-      box.innerHTML = ""
-      filteredArr = rdata.filter(info=>info['usage_tag'].includes(e.target.value))
-      console.log(e.target.value)
-      console.log(filteredArr)
-      
-      if (filteredArr.length > 0){
-            filteredArr.map(info=>{
-                box.innerHTML += `
-                <div class="row">
-                  <div class="col-3"></div>
-                  <div class="col">${info['usage_tag']}</div>
-                  <div class="col-3">
-                    <button type="button" class="update-tag bs-modal btn btn-sm btn-primary" data-form-url="{% url 'usageTagsUpdate' 9998%}">Update</button>
-                    <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'usageTagsDelete' 9999%}">Delete</button>
-                  </div>
-                </div><br>
-                `.replace(9998,info['id']).replace(9999,info['id'])
-            })
-        } else {
-            box.innerHTML = "<b>No results found...</b>"
-        }
-    }
-    )});
-
-    popupform();
-</script> -->

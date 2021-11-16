@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from .models import Plant_LocalDistribution, Distribution, LocalDistribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection, Images
+from .models import Plant_LocalDistribution, Distribution, LocalDistribution, Profile, Usage, Plant, Plant_Usage, Plant_Distribution, Rejection, Images, Permission
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
@@ -195,6 +195,8 @@ def assignPermissionForm(request):
     if request.method == "POST":
         permission_form = forms.PermissionForm(data=request.POST)
         if permission_form.is_valid():
+
+            #validate unique
             permission_form.save()
             messages.success(request,('Your form has been submitted successfully.'))
             return redirect('user_home')
@@ -207,6 +209,14 @@ def assignPermissionForm(request):
     }
     return render(request,'PlantWebApp/view-permission-form.html',context)
 
+@login_required(login_url='user_login')
+def permissionList(request):
+    permissions = Permission.objects.filter(plantID__user=request.user).order_by('plantID__plantScientificName')
+    print(permissions)
+    context = {
+        'permissions':permissions,
+    }
+    return render(request,'PlantWebApp/view-permission-list.html',context)
 
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
@@ -1204,6 +1214,12 @@ class UsageTagDeleteView(BSModalDeleteView):
     template_name = 'PlantWebApp/usage-tags-del.html'
     success_message = 'Success: Plant Usage Tag deleted.'
     success_url = reverse_lazy('usageTagsSettings')
+
+class PermissionDeleteView(BSModalDeleteView):
+    model = Permission
+    template_name = 'PlantWebApp/view-permission-del.html'
+    success_message = 'Success: Permission deleted.'
+    success_url = reverse_lazy('display_permissionList')
 
 
 # Live Search for usage-tags-settings
