@@ -341,46 +341,45 @@ def UpdatePostView(request,pk):
             return render(request, 'PlantWebApp/update-form.html',context)
 
         # Verify data # CHECK unique
-        elif plant_form.is_valid() and use_form.is_valid()==False:
-            print('ok')
-            ## Check if usage tag is unique:
-            tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
-            if tag_exist:
-                messages.success(request,('The plant usage entered already exists in our database.'))
-                context = {
-                    'plantScientificName':plantdata.plantScientificName,
-                    'plantLocalName':plantdata.plantLocalName,
-                    "pmStem":plantdata.pmStem,
-                    "pmLeaf":plantdata.pmLeaf,
-                    "pmFlower": plantdata.pmFlower,
-                    "pmFruit": plantdata.pmFruit,
-                    "plantImg": plantdata.plantImg,
-                    "voucher_no":plantdata.voucher_no,
-                    "plantref":plantdata.plantref,
-                    "usearr":usearr,
-                    'use': use,
-                    'countryarr':countryarr,
-                    'dist':dist,
-                    'research_form':research_form,
-                    'state':state,
-                    'statearr':statearr
-                }
-                return render(request, 'PlantWebApp/update-form.html',context)
-            plant_form.save()
+        elif use_form.is_valid()==False:
+            if plant_form.is_valid():
+                ## Check if usage tag is unique:
+                tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
+                if tag_exist:
+                    messages.success(request,('The plant usage entered already exists in our database.'))
+                    context = {
+                        'plantScientificName':plantdata.plantScientificName,
+                        'plantLocalName':plantdata.plantLocalName,
+                        "pmStem":plantdata.pmStem,
+                        "pmLeaf":plantdata.pmLeaf,
+                        "pmFlower": plantdata.pmFlower,
+                        "pmFruit": plantdata.pmFruit,
+                        "plantImg": plantdata.plantImg,
+                        "voucher_no":plantdata.voucher_no,
+                        "plantref":plantdata.plantref,
+                        "usearr":usearr,
+                        'use': use,
+                        'countryarr':countryarr,
+                        'dist':dist,
+                        'research_form':research_form,
+                        'state':state,
+                        'statearr':statearr
+                    }
+                    return render(request, 'PlantWebApp/update-form.html',context)
+                plant_form.save()
 
-            for img in img_list:
-                Images.objects.create(plant=plantdata,image=img)
+                for img in img_list:
+                    Images.objects.create(plant=plantdata,image=img)
 
-            if plantdata.rejected:
-                print('ok')
-                plantdata.rejected = False
-                plantdata.save(update_fields=['rejected'])
+                if plantdata.rejected:
+                    print('ok')
+                    plantdata.rejected = False
+                    plantdata.save(update_fields=['rejected'])
 
+            if research_form.is_valid():
+                research_form.save()
             messages.success(request,('Plant record updated successfully.'))
-
             return redirect('user_home')
-
-        #elif plant_form.is_valid() and use_form.is_valid()==False:
     
     context = {
         'plantScientificName':plantdata.plantScientificName,

@@ -99,7 +99,6 @@ a:hover {
         <div class="mb-3">
             <label for="inputState" class="form-label">Plant Local Distribution</label>
                 <select id="selectLocal" class="form-control" name="localDistribution" multiple="multiple">
-                    <option></option>
                     {% for dat in state %}
                         <option value="{{ dat.id }}">{{ dat.stateName }}</option>
                     {% endfor %}
