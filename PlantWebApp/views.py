@@ -308,13 +308,11 @@ def UpdatePostView(request,pk):
 
     plantimages = Images.objects.filter(plant_id=pk)
 
-
-
     if request.method == "POST":
         img_list = request.FILES.getlist('images_list')
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
-        #research_form = forms.ResearchForm(request.POST,files=request.FILES,instance=plantdata)
+        research_form = forms.ResearchForm(request.POST,instance=plantdata)
 
         if use_form.is_valid():
             use_form.save()
@@ -344,7 +342,7 @@ def UpdatePostView(request,pk):
 
         # Verify data # CHECK unique
         elif plant_form.is_valid() and use_form.is_valid()==False:
-            
+            print('ok')
             ## Check if usage tag is unique:
             tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
             if tag_exist:
@@ -369,6 +367,7 @@ def UpdatePostView(request,pk):
                 }
                 return render(request, 'PlantWebApp/update-form.html',context)
             plant_form.save()
+
             for img in img_list:
                 Images.objects.create(plant=plantdata,image=img)
 
@@ -379,7 +378,9 @@ def UpdatePostView(request,pk):
 
             messages.success(request,('Plant record updated successfully.'))
 
-            return userHome(request)
+            return redirect('user_home')
+
+        #elif plant_form.is_valid() and use_form.is_valid()==False:
     
     context = {
         'plantScientificName':plantdata.plantScientificName,

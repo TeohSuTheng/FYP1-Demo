@@ -73,7 +73,7 @@ class Plant(models.Model):
     #sv_approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
-    research_data = RichTextField(null=True, blank=True)
+    research_data = RichTextField()
 
 class Images(models.Model):
     plant = models.ForeignKey(
