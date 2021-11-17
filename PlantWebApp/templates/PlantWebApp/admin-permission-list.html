@@ -1,0 +1,166 @@
+{% extends "PlantWebApp/base-dashboard.html" %}
+{% load static %}
+
+{% block content%}
+
+<!--django-bootstrap-modal-forms-->
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+
+<div class="content-header" style="padding-left:25px ;">
+  <div class="row">
+    <div class="col-sm-9">
+    </div><!-- /.col -->
+    <div class="col">
+      <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Permission List</li>
+      </ol>
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><br>
+
+<div class="container">
+<h2 align="center">Plant View Permission Lists</h2>
+<br>
+<br>
+
+<h5>Pending Approval</h5>
+ <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+              <div class="col">
+                Plant Name
+              </div>
+              <div class="col">
+                Researcher
+              </div>
+              <div class="col">
+                User Name
+              </div>
+              <div class="col">
+                Status
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+          {% for data in pendingPermissions %}
+            
+            <div class="row align-items-start">
+                
+                <div class="col">
+                    <p class="card-text">{{data.plantID.plantScientificName}}</p>
+                </div>
+                <div class="col">
+                  <p class="card-text">{{data.plantID.user.first_name}} {{data.plantID.user.last_name}}</p>
+              </div>
+                <div class="col">
+                    <p class="card-text">{{data.allowed_user.first_name}} {{data.allowed_user.last_name}}</p>
+                </div>
+                <div class="col">
+                   {% if data.is_approved %}
+                      <p class="card-text">Approved</p>
+                   {% else %}
+                      <p class="card-text" >Pending approval</p>
+                   {% endif %}
+                </div>
+                <div class="col">
+                  {% if data.is_approved %}
+                    <!--button type="button" class="btn btn-sm btn-success" disabled>Approved</button-->
+                  {% else %}
+                    <a href="{% url 'processing_permission' data.id%}" class="btn btn-sm btn-primary">Approve</a>
+                  {% endif %}
+                  <!--a href="#" class="btn btn-sm btn-primary">Disable</a-->
+                  <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'permission_del' data.id%}">Delete</button>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div></div><br>
+
+      <h5>Approved</h5>
+      <div class="card">
+        <h6 class="card-header">
+            <div class="row align-items-start">
+              <div class="col">
+                Plant Name
+              </div>
+              <div class="col">
+                Researcher
+              </div>
+              <div class="col">
+                User Name
+              </div>
+              <div class="col">
+                Status
+              </div>
+              <div class="col">
+                Actions
+              </div>
+            </div>
+        </h6>
+        <div class="card-body">
+          {% for data in permissions %}
+            
+            <div class="row align-items-start">
+                
+                <div class="col">
+                    <p class="card-text">{{data.plantID.plantScientificName}}</p>
+                </div>
+                <div class="col">
+                  <p class="card-text">{{data.plantID.user.first_name}} {{data.plantID.user.last_name}}</p>
+              </div>
+                <div class="col">
+                    <p class="card-text">{{data.allowed_user.first_name}} {{data.allowed_user.last_name}}</p>
+                </div>
+                <div class="col">
+                   {% if data.is_approved %}
+                      <p class="card-text">Approved</p>
+                   {% else %}
+                      <p class="card-text" >Pending approval</p>
+                   {% endif %}
+                </div>
+                <div class="col">
+                  {% if data.is_approved %}
+                    <!--button type="button" class="btn btn-sm btn-success" disabled>Approved</button-->
+                  {% else %}
+                    <a href="{% url 'processing_permission' data.id%}" class="btn btn-sm btn-primary">Approve</a>
+                  {% endif %}
+                  <!--a href="#" class="btn btn-sm btn-primary">Disable</a-->
+                  <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'permission_del' data.id%}">Delete</button>
+                </div>
+                <br><br><br>
+            </div>
+            {% endfor %}
+
+        </div></div>
+
+      <!--Modal Pop Up-->
+      <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content"></div>
+        </div>
+      </div>
+
+
+
+
+<br><br><br><br><br><br><br>
+
+<!--Javascript: Pop-up form-->
+<script type="text/javascript">
+  $(function () { 
+
+    // Delete book buttons - formURL is retrieved from the data of the element
+    $(".delete-tag").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+
+  })
+</script>
+
+{% endblock %}

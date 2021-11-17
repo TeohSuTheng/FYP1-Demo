@@ -218,6 +218,29 @@ def permissionList(request):
     }
     return render(request,'PlantWebApp/view-permission-list.html',context)
 
+@staff_member_required(login_url='user_login')
+def adminPermissionList(request):
+    permissions = Permission.objects.filter(is_approved=True).order_by('plantID__plantScientificName')
+    pendingPermissions = Permission.objects.filter(is_approved=False).order_by('plantID__plantScientificName')
+    print(permissions)
+    context = {
+        'permissions':permissions,
+        'pendingPermissions':pendingPermissions,
+    }
+    return render(request,'PlantWebApp/admin-permission-list.html',context)
+
+@staff_member_required(login_url='user_login')
+def ProcessingPermissionVerification(request,id):
+    processingPermission = Permission.objects.get(id=id)
+
+    if processingPermission:
+        processingPermission.is_approved = True
+        processingPermission.save(update_fields=['is_approved'])
+        messages.success(request,('Permission approved.'))
+        return redirect('admin_permissionList')
+    else:
+        adminPermissionList(request)
+
 def displayPlant(request,id):
     # Get queryset of usageID filter by plantID from Plant_Usage table
     plantUsageData = Plant_Usage.objects.filter(plantID=id).values_list('usageID', flat=True)
@@ -1219,7 +1242,7 @@ class PermissionDeleteView(BSModalDeleteView):
     model = Permission
     template_name = 'PlantWebApp/view-permission-del.html'
     success_message = 'Success: Permission deleted.'
-    success_url = reverse_lazy('display_permissionList')
+    success_url = reverse_lazy('user_home')
 
 
 # Live Search for usage-tags-settings
