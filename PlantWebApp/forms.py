@@ -14,7 +14,7 @@ class PlantForm(ModelForm):
     class Meta:
         model = Plant
         #fields = '__all__'  
-        fields = ('plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
+        fields = ('taxoKingdom','taxoDivision','taxoClass','taxoOrder','taxoFamily','taxoGenus','plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
         'pmFruit','plantImg','usage','voucher_no','distribution','localDistribution','plantref','research_data')
     # Widgets
 

@@ -36,6 +36,12 @@ class LocalDistribution(models.Model):
     stateName = models.CharField(max_length=50)
 
 class Plant(models.Model):
+    taxoKingdom =  models.CharField(max_length=100,null=True, blank=True)
+    taxoDivision =  models.CharField(max_length=100,null=True, blank=True)
+    taxoClass =  models.CharField(max_length=100,null=True, blank=True)
+    taxoOrder =  models.CharField(max_length=100,null=True, blank=True)
+    taxoFamily =  models.CharField(max_length=100,null=True, blank=True)
+    taxoGenus =  models.CharField(max_length=100,null=True, blank=True) 
     plantScientificName =  models.CharField(max_length=255,unique=True)
     plantLocalName = models.TextField(null=True, blank=True)
     pmStem = models.TextField(null=True, blank=True)

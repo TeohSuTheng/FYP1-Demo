@@ -119,6 +119,12 @@ def displayPlantForm(request):
             usearr.append(latest_use) #append the newly saved usage tag
 
             context_dict = {
+                'taxoKingdom':request.POST['taxoKingdom'],
+                'taxoDivision':request.POST['taxoDivision'],
+                'taxoClass' :request.POST['taxoClass'],
+                'taxoOrder' :request.POST['taxoOrder'],
+                'taxoFamily' :request.POST['taxoFamily'],
+                'taxoGenus' : request.POST['taxoGenus'],
                 'plantScientificName':plantScientificName, 
                 'plantLocalName':request.POST['plantLocalName'],
                 'pmStem':request.POST['pmStem'],
@@ -162,6 +168,12 @@ def displayPlantForm(request):
             usearr = request.POST.getlist('usage')
 
             context_dict = {
+                'taxoKingdom':request.POST['taxoKingdom'],
+                'taxoDivision':request.POST['taxoDivision'],
+                'taxoClass' :request.POST['taxoClass'],
+                'taxoOrder' :request.POST['taxoOrder'],
+                'taxoFamily' :request.POST['taxoFamily'],
+                'taxoGenus' : request.POST['taxoGenus'],
                 'plantScientificName':plantScientificName, 
                 'plantLocalName':request.POST['plantLocalName'],
                 'pmStem':request.POST['pmStem'],
@@ -325,6 +337,12 @@ def UpdatePostView(request,pk):
             usearr.append(latest_use) #append the newly saved usage tag ###
 
             context = {
+            'taxoKingdom':plantdata.taxoKingdom,
+            'taxoDivision':plantdata.taxoDivision,
+            'taxoClass' :plantdata.taxoClass,
+            'taxoOrder' :plantdata.taxoOrder,
+            'taxoFamily' :plantdata.taxoFamily,
+            'taxoGenus' :plantdata.taxoGenus,
             'plantScientificName':plantdata.plantScientificName,
             'plantLocalName':plantdata.plantLocalName,
             "pmStem":plantdata.pmStem,
@@ -352,6 +370,12 @@ def UpdatePostView(request,pk):
                 if tag_exist:
                     messages.success(request,('The plant usage entered already exists in our database.'))
                     context = {
+                        'taxoKingdom':plantdata.taxoKingdom,
+                        'taxoDivision':plantdata.taxoDivision,
+                        'taxoClass' :plantdata.taxoClass,
+                        'taxoOrder' :plantdata.taxoOrder,
+                        'taxoFamily' :plantdata.taxoFamily,
+                        'taxoGenus' :plantdata.taxoGenus,
                         'plantScientificName':plantdata.plantScientificName,
                         'plantLocalName':plantdata.plantLocalName,
                         "pmStem":plantdata.pmStem,
@@ -386,6 +410,12 @@ def UpdatePostView(request,pk):
             return redirect('user_home')
     
     context = {
+        'taxoKingdom':plantdata.taxoKingdom,
+        'taxoDivision':plantdata.taxoDivision,
+        'taxoClass' :plantdata.taxoClass,
+        'taxoOrder' :plantdata.taxoOrder,
+        'taxoFamily' :plantdata.taxoFamily,
+        'taxoGenus' :plantdata.taxoGenus,
         'plantScientificName':plantdata.plantScientificName,
         'plantLocalName':plantdata.plantLocalName,
         "pmStem":plantdata.pmStem,

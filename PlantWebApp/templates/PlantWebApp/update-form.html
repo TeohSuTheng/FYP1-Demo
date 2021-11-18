@@ -29,10 +29,27 @@ a:hover {
                 <label class="form-label" >Voucher / Specimen Number (if any)</label>
                 <input type="text" class="form-control" name="voucher_no" value="{{voucher_no}}">
             </div>
-            <div class="mb-3">
-                <label class="form-label" >Plant Scientific Name</label>
-                <p> {{plantScientificName}} </p>
-                <input type="hidden" class="form-control" name="plantScientificName" value="{{plantScientificName}}">
+            <label class="form-label">Plant Taxonomy</label>
+            <div class="input-group mb-3">
+               <input required type="text" class="form-control" placeholder="Kingdom" name="taxoKingdom" value="{{taxoKingdom}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Division" name="taxoDivision" value="{{taxoDivision}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Class" name="taxoClass" value="{{taxoClass}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Order" name="taxoOrder" value="{{taxoOrder}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Family" name="taxoFamily" value="{{taxoFamily}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Genus" name="taxoGenus" value="{{taxoGenus}}">
+            </div>
+            <div class="input-group mb-3">
+                <input required type="text" class="form-control" placeholder="Species" name="plantScientificName" value="{{plantScientificName}}">
             </div>
             
             <div class="mb-3">
