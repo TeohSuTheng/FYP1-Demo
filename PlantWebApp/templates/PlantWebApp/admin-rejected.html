@@ -64,10 +64,15 @@
                 </div>
                 <div class="col-4">
                     {% if user.is_staff %}
+                        {% if user.id == plant.user.id %}
                         <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
-                        <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-warning">Update</a-->
-                        <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify</a>
+                        <a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a>
                         <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                        {% else %}
+                        <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
+                        <!--a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify comments</a-->
+                        <a href="{% url 'delete_form' plant.id%}" class="btn btn-outline-danger">Delete</a>
+                        {% endif %}
                     {% else %}
                         <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-success">Details</a>
                         <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-warning">Modify comments</a>
@@ -80,7 +85,7 @@
         </div>
     </div>
 </div>
-<br>
+<br><br><br>
 <!--Pagination-->
 <section class = "pagination">
     <div class="container">

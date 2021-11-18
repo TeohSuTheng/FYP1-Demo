@@ -23,23 +23,37 @@
                 </div>
 
                 <br>
-                {% if user.is_staff  %}
+                {% if user.id == plant_info.user.id  %}
                   <p align="center">
-                    <a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Modify</a>
+                    <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
+                    <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+                  </p>
+                {% elif user.is_staff  %}
+                  <p align="center">
+                    <!--a href="{% url 'reject_form' plant_info.id%}" class="btn btn-warning">Modify</a-->
                     <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
                   </p>
-                {% elif user.id == plant_info.user.id  %}
-                  <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-danger">Delete</a>
                 {% endif %}
               </div>
             </div>
           <!--Published Records-->
-        {% elif plant_info.publish %}
+        {% elif plant_info.admin_publish %}
+            {% if user.id == plant_info.user.id or user.is_staff%}
             <p align="center">
               <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
               <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
             </p>
+            {% endif %}
           <!--To Be Verified Records-->
+        {% elif plant_info.committee_approved is False %}
+            {% if user.profile.role is 1 %} <!--Committee role-->
+            {% elif user.id == plant_info.user.id %}
+            <p align="center">
+              <a href="{% url 'update_form' plant_info.id%}" class="btn btn-dark">Update</a>
+              <a href="{% url 'delete_form' plant_info.id%}" class="btn btn-light">Delete</a>
+            </p>
+            {% else %}
+            {% endif %}
         {% else %}
             {% if user.is_staff %} 
                 <p align="center">

@@ -92,6 +92,17 @@
         </div>
         <div class="col-8">
             <p align="right"><small>Voucher No: {{plant_info.voucher_no}}</small></p>
+            <h4>Plant Taxonomy</h4>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item  list-group-item-success">Kingdom &ensp;{{plant_info.taxoKingdom}}</li>
+              <li class="list-group-item">Division &emsp;{{plant_info.taxoDivision}}</li>
+              <li class="list-group-item  list-group-item-success">Class &emsp;&emsp;&nbsp;{{plant_info.taxoClass}}</li>
+              <li class="list-group-item">Order &emsp;&ensp;&nbsp;{{plant_info.taxoOrder}}</li>
+              <li class="list-group-item  list-group-item-success">Family &emsp;&ensp;{{plant_info.taxoFamily}}</li>
+              <li class="list-group-item">Genus &emsp;&ensp;{{plant_info.taxoGenus}}</li>
+              <li class="list-group-item  list-group-item-success">Species &emsp;<i>{{plant_info.plantScientificName}}</i></li>
+            </ul>
+            
             <br>
             <h4>Plant Local Name</h4>
             <p>{{plant_info.plantLocalName}}</p><br>

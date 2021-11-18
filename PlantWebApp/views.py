@@ -404,6 +404,11 @@ def UpdatePostView(request,pk):
                     plantdata.rejected = False
                     plantdata.save(update_fields=['rejected'])
 
+                    # Delete Rejection object
+                    rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
+                    rejectdata.delete()
+                    
+
             if research_form.is_valid():
                 research_form.save()
             messages.success(request,('Plant record updated successfully.'))
