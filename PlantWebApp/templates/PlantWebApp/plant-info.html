@@ -126,11 +126,26 @@
             <h4>Reference</h4>
             <p>{{plant_info.plantref|linebreaks}}</p><br><br>
 
-            <!--if user/site admin/view-->
-            <hr>
-            <h4>Current Research</h4>
-            {{plant_info.research_data|safe}}
-            <br><br>
+            <!--if user/site admin/committee to view-->
+            {% if plant_info.user.id == user.id or user.profile.role is 0 or user.profile.role is 1 %}
+              <hr>
+              <h4>Current Research</h4>
+              {{plant_info.research_data|safe}}
+              <br><br>
+            {% endif %}
+
+            {% if permissions %}
+              <!--Viewers with permissions-->
+              {% for viewers in permissions %}
+                {% if viewers.allowed_user_id == user.id %}
+                  <hr>
+                  <h4>Current Research</h4>
+                  {{plant_info.research_data|safe}}
+                  <br><br>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
 
             <!--p class="h6">Created on: {{plant_info.created_at.date}} by <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p-->
             <p>Studied by: <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>

@@ -261,6 +261,9 @@ def displayPlant(request,id):
         country_name.append(Distribution.objects.order_by('countryName').filter(id=k)[0].countryName)
 
     plantdata = Plant.objects.get(id=id)
+
+    permissions = Permission.objects.filter(plantID=id)
+
     if plantdata.rejected:
         reject = Rejection.objects.get(plant_id=id)
 
@@ -279,6 +282,7 @@ def displayPlant(request,id):
         'country_name':country_name,
         'plantimages':plantimages,
         'states':states,
+        'permissions':permissions,
     }
 
     return render(request, 'PlantWebApp/plant-info.html',context)
