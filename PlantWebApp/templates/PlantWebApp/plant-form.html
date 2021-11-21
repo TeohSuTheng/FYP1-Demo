@@ -22,11 +22,40 @@
                 <input type="text" id="voucher_no" class="form-control" name="voucher_no" value="{{voucher_no}}">
             </div>
             <label class="form-label">Plant Taxonomy</label>
-            <div class="input-group mb-3">
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoKingdom" value="{{taxoKingdom}}">
+                <label for="floatingInput">Kingdom</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoDivision" value="{{taxoDivision}}"">
+                <label for="floatingInput">Phylum</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoClass" value="{{taxoClass}}">
+                <label for="floatingInput">Class</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoOrder" value="{{taxoOrder}}">
+                <label for="floatingInput">Order</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoFamily" value="{{taxoFamily}}">
+                <label for="floatingInput">Family</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="taxoGenus" value="{{taxoGenus}}">
+                <label for="floatingInput">Genus</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="plantScientificName" value="{{plantScientificName}}">
+                <label for="floatingInput">Species</label>
+            </div>
+            <!--div class="input-group mb-3">
                <input required type="text" class="form-control" placeholder="Kingdom" name="taxoKingdom" value="{{taxoKingdom}}">
             </div>
             <div class="input-group mb-3">
-                <input required type="text" class="form-control" placeholder="Division" name="taxoDivision" value="{{taxoDivision}}">
+                <input required type="text" class="form-control" placeholder="Phylum" name="taxoDivision" value="{{taxoDivision}}">
             </div>
             <div class="input-group mb-3">
                 <input required type="text" class="form-control" placeholder="Class" name="taxoClass" value="{{taxoClass}}">
@@ -42,7 +71,7 @@
             </div>
             <div class="input-group mb-3">
                 <input required type="text" class="form-control" placeholder="Species" name="plantScientificName" value="{{plantScientificName}}">
-            </div>
+            </div-->
             <div class="mb-3">
                 <label class="form-label">Plant Local Name</label>
                 <input type="text" class="form-control" name="plantLocalName" value="{{plantLocalName}}">

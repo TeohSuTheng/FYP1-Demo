@@ -95,7 +95,7 @@
             <h4>Plant Taxonomy</h4>
             <ul class="list-group list-group-flush">
               <li class="list-group-item  list-group-item-success">Kingdom &ensp;{{plant_info.taxoKingdom}}</li>
-              <li class="list-group-item">Division &emsp;{{plant_info.taxoDivision}}</li>
+              <li class="list-group-item">Phylum &emsp;&nbsp;{{plant_info.taxoDivision}}</li>
               <li class="list-group-item  list-group-item-success">Class &emsp;&emsp;&nbsp;{{plant_info.taxoClass}}</li>
               <li class="list-group-item">Order &emsp;&ensp;&nbsp;{{plant_info.taxoOrder}}</li>
               <li class="list-group-item  list-group-item-success">Family &emsp;&ensp;{{plant_info.taxoFamily}}</li>
@@ -154,8 +154,9 @@
 
             <!--if user/site admin/committee to view-->
             {% if plant_info.user.id == user.id or user.profile.role is 0 or user.profile.role is 1 %}
-              <hr>
+              
               <h4>Current Research</h4>
+              <hr>
               {{plant_info.research_data|safe}}
               <br><br>
             {% endif %}
@@ -164,8 +165,9 @@
               <!--Viewers with permissions-->
               {% for viewers in permissions %}
                 {% if viewers.allowed_user_id == user.id %}
-                  <hr>
+                  
                   <h4>Current Research</h4>
+                  <hr>
                   {{plant_info.research_data|safe}}
                   <br><br>
                 {% endif %}
