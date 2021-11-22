@@ -146,18 +146,22 @@ a:hover {
 
             <div class="mb-3">
                 <label for="formFile" class="form-label">Plant Parts Image Upload (Multiple files) </label>
-                <input class="form-control" type="file" name="images_list" multiple>
+                <input class="form-control" type="file" name="images_list" id="images_list" multiple onchange="javascript:updateList()"/>
             </div>
 
-            {% if plantimages %}
+            <p>Selected images: -</p>
+            <div id="imgList"></div>
+
+
             <div class="images-box">
-                    {% for img in plantimages %}
-                      <a href="#" id="{{img.id}}" onclick="runDelScript(this.id);return false;" >
-                        <img src="{{img.image.url}}" class="img-fluid" alt="" style="height: 150px; object-fit: contain;">
-                      </a>
-                    {% endfor %}
+                {% if plantimages %}
+                        {% for img in plantimages %}
+                        <a href="#" id="{{img.id}}" onclick="runDelScript(this.id);return false;" >
+                            <img src="{{img.image.url}}" class="img-fluid" alt="" style="height: 150px; object-fit: contain;">
+                        </a>
+                        {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
 
             <hr>
             <div class="mb-3">
@@ -209,6 +213,17 @@ a:hover {
 
 
         });
+
+        // Show list of files uploaded
+        updateList = function() {
+            var input = document.getElementById('images_list');
+            var output = document.getElementById('imgList');
+            var children = "";
+            for (var i = 0; i < input.files.length; ++i) {
+                children += '<li>' + input.files.item(i).name + '</li>';
+            }
+            output.innerHTML = '<ul>'+children+'</ul>';
+        }
 
         //Clean all non-numeric numbers except ',' in string 
         //Split into array by ','

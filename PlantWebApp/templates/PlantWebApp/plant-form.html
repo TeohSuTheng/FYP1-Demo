@@ -155,8 +155,12 @@
 
             <div class="mb-3">
                 <label for="formFile" class="form-label">Plant Parts Image Upload (Multiple files) </label>
-                <input class="form-control" type="file" name="images_list" multiple>
+                <input class="form-control" type="file" name="images_list" id="images_list" multiple onchange="javascript:updateList()"/>
             </div>
+
+            <p>Selected images: -</p>
+            <div id="imgList"></div>
+            <br>
 
             
 
@@ -197,6 +201,17 @@
             console.log(url)
             imgBox.innerHTML = '<img src="'+url+'" style="width:250px;height: 350px;">'
         })
+
+        // Show list of files uploaded
+        updateList = function() {
+            var input = document.getElementById('images_list');
+            var output = document.getElementById('imgList');
+            var children = "";
+            for (var i = 0; i < input.files.length; ++i) {
+                children += '<li>' + input.files.item(i).name + '</li>';
+            }
+            output.innerHTML = '<ul>'+children+'</ul>';
+        }
 
         //Select2js - ethnobotanical usage tags
         $(document).ready(function() {
