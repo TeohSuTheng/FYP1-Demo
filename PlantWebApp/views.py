@@ -563,7 +563,6 @@ def get_all_logged_in_users():
 
 @login_required(login_url='user_login')
 def userHome(request):
-    #if request.user.is_staff:
     if request.user.profile.role == 0: #Role Id 0 - Admin
 
         total_plant = Plant.objects.count() # Get total number of plant records stored
@@ -908,6 +907,8 @@ def usage_chart(request):
         'labels': labels,
         'data': data,
     })
+
+
 
 @staff_member_required(login_url='user_login')
 def unpubList(request):

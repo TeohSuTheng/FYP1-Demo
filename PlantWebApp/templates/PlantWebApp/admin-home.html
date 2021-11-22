@@ -297,6 +297,34 @@
               </div>
             </div>
             <!-- /.col-md-6 -->
+            <br>
+
+            <div class="row">
+              <!--Local Distribution-->
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                      <h5 class="card-title">Plant Specimens in Malaysia</h5>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">State</th>
+                            <th scope="col">Total Records</th>
+                          </tr>
+                        </thead>
+                        <tbody id="wrapper-tbody">
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
 
                        
         </div>
@@ -329,6 +357,31 @@
 
 <!--svgMap.js-->
 <script>
+
+    //Get Local Distribution count
+    var wrapperBody = document.querySelector("#wrapper-tbody")
+
+    var url = "http://127.0.0.1:8000/api/plant-local-api/"
+
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data){
+      console.log(data)
+      let count = 1
+
+      for (i in data)
+      {
+        var item = `<tr>
+                        <th scope="row">${count}</th>
+                        <td>${data[i].stateName}</td>
+                        <td>${data[i].num_plant}</td>
+                    </tr>
+                `
+
+                wrapperBody.innerHTML += item
+                count += 1
+      }
+      })   
 
     var map
     var country_dict = {}
@@ -524,7 +577,33 @@
             map.options.data.values = country_dict
 
 
-          })
+          }) 
+          
+          //Get Local Distribution count
+    var wrapperBody = document.querySelector("#wrapper-tbody")
+
+    var url = "http://127.0.0.1:8000/api/plant-local-api/"
+
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data){
+      console.log(data)
+      wrapperBody.innerHTML = ``
+      let count = 1
+
+      for (i in data)
+      {
+        var item = `<tr>
+                        <th scope="row">${count}</th>
+                        <td>${data[i].stateName}</td>
+                        <td>${data[i].num_plant}</td>
+                    </tr>
+                `
+
+                wrapperBody.innerHTML += item
+                count += 1
+      }
+      }) 
     }
     var seconds = 15; // seconds, edit here
     setInterval(refresh,seconds * 1000);

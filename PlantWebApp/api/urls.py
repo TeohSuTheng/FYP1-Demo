@@ -15,7 +15,6 @@ urlpatterns = [
     #path('sv-api/',views.SupervisorList, name='SupervisorList'),
     path('images-api/<int:id>',views.image_delete_rest_endpoint, name='Images'),
     path('user-api/<int:id>',views.UserPermission, name='userPermission'),
-    
-    
-    #path('usage-tags-settings/',views.UseListApi,name='usageTagsSettings'),
+    path('plant-local-api/',views.PlantLocalDistSummary, name='PlantLocalDistSummary'),
+
 ]

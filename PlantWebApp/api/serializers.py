@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from PlantWebApp.models import Distribution, Images, Permission, Plant, Profile, Usage
+from PlantWebApp.models import Distribution, Images, Permission, Plant, Profile, Usage, LocalDistribution
 from django.contrib.auth.models import User
 
 # Serialize Django object into json
@@ -36,6 +36,12 @@ class DistributionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Distribution
         fields = "__all__"
+
+class LocalDistributionSerializer(serializers.ModelSerializer):
+    num_plant = serializers.IntegerField(read_only=True)
+    class Meta:
+        model = LocalDistribution
+        fields = ['id','stateName','num_plant',]
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
