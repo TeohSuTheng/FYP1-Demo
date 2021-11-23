@@ -52,6 +52,7 @@ class PlantDetailSerializer(serializers.ModelSerializer):
     usage = UsageSerializer(many = True, read_only=True)
     user = UserSerializer(read_only=True)
     distribution = DistributionSerializer(many = True, read_only=True)
+    #local_dist = StateSerializer(many = True, read_only=True)
     class Meta:
         model = Plant
         fields = "__all__"

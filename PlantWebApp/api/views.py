@@ -40,6 +40,13 @@ def countryData(request,country):
         return Response(serializer.data)
 
 @api_view(['GET'])
+def stateData(request,state):
+    if request.method == 'GET':
+        results = Plant.objects.annotate(search = SearchVector('localDistribution__stateName')).filter(search=SearchQuery(state)).distinct('id')
+        serializer = PlantSerializer(results,many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
 def usageData(request,use):
     if request.method == 'GET':
         results = Plant.objects.annotate(search = SearchVector('usage__usage_tag')).filter(search=SearchQuery(use)).distinct('id')

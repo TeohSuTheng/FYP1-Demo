@@ -1188,6 +1188,9 @@ def userPageView(request,id):
 def countryDataDetails(request,country):
     return render(request,'PlantWebApp/country-data-detail.html',{'country':country})
 
+def stateDataDetails(request,state):
+    return render(request,'PlantWebApp/state-data-detail.html',{'state':state})
+
 def usageDataDetails(request,use):
     return render(request,'PlantWebApp/usage-data-detail.html',{'use':use})
 

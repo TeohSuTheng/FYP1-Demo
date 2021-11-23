@@ -67,6 +67,7 @@ urlpatterns = [
 
     path('browse-name-api/',views.browse_api,name='browse-api'),
     path('country-data-detail/<str:country>',views.countryDataDetails,name="countryDataDetails" ),
+    path('state-data-detail/<str:state>',views.stateDataDetails,name="stateDataDetails" ),
     path('usage-data-detail/<str:use>',views.usageDataDetails,name="usageDataDetails" ),
     path('user-page/<int:id>',views.userPageView,name='user_page'),
 
