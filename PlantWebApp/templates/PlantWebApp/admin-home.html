@@ -596,7 +596,7 @@
       {
         var item = `<tr>
                         <th scope="row">${count}</th>
-                        <td>${data[i].stateName}</td>
+                        <td><a id="country-anchor" href="http://127.0.0.1:8000/state-data-detail/${data[i].stateName}">${data[i].stateName}</a></td>
                         <td>${data[i].num_plant}</td>
                     </tr>
                 `

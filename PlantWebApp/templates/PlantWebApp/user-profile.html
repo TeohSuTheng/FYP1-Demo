@@ -61,6 +61,24 @@
         .then((resp) => resp.json())
         .then(function(data){
             console.log(data)
+
+            var roleStr = ""
+
+            console.log(data.profile.role)
+            if (data.profile.role == 0)
+            {
+                roleStr = "Site Administrator"
+            }
+            else if (data.profile.role == 1)
+            {
+                roleStr = "Committee"
+            }
+            else
+            {
+                roleStr = "Researcher"
+            }
+
+
             var item = `
                 <div class="row">
                     <div class="col-sm-3">First Name:</div>
@@ -102,7 +120,7 @@
             </div><br>
             <div class="row">
                 <div class="col-sm-3">Role:</div>
-                <div class="col-sm">${data.profile.role.role_name}</div>
+                <div class="col-sm">${roleStr}</div>
             </div>`
 
             wrapper.innerHTML += item
