@@ -10,8 +10,7 @@
       {% for field in form %}
         <div class="form-group{% if field.errors %} invalid{% endif %}">
           <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-          <span style="padding-left:5em">{{ field }}</div>
-          <br>
+          <span style="padding-left:5em">{{ field }}</span><br>
           {% for error in field.errors %}
             <p class="help-block" style="color: red;">{{ error }}</p>
           {% endfor %}

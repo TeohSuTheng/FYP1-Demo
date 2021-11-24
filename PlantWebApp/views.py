@@ -831,7 +831,7 @@ def siteUserEnable(request,id):
 
 @staff_member_required(login_url='user_login')
 def usageTagsSettings(request):
-    use_queryset = Usage.objects.all().order_by('created_at')
+    use_queryset = Usage.objects.all().order_by('-created_at')
     full_list = Usage.objects.all().values('usage_tag').distinct()
 
     # Set up Pagination
