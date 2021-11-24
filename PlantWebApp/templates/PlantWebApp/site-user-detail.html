@@ -78,7 +78,13 @@
                     </div><br>
                     <div class="row">
                         <div class="col-sm-5">Job Position:</div>
-                        <div class="col-sm">{{user_info.profile.role}}</div>
+                        {% if user_info.profile.role == 0 %}
+                            <div class="col-sm">Site Administrator</div>
+                        {% elif user_info.profile.role == 1%}
+                            <div class="col-sm">Committee Board</div>
+                        {% else %}
+                            <div class="col-sm">Researcher</div>
+                        {% endif %}
                     </div><br>
                 </div>
             </div>
