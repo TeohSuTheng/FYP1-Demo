@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.db.models.fields import IntegerField
 
 class Profile(models.Model):
 
@@ -80,6 +81,9 @@ class Plant(models.Model):
     rejected = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     research_data = RichTextField(null=True, blank=True)
+    #collection_specimen = IntegerField(null=True, blank=True)
+    #collection_extract = IntegerField(null=True, blank=True)
+    #collection_powder = IntegerField(null=True, blank=True)
 
 class Images(models.Model):
     plant = models.ForeignKey(

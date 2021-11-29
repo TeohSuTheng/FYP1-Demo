@@ -154,6 +154,7 @@ def displayPlantForm(request):
             plantdat = plant_form.save(commit=False)
             plantdat.research_data = research_form.data['research_data']
             plantdat.user = request.user
+            #plantdat - collection
             plantdat.save()
             plant_form.save()
 
