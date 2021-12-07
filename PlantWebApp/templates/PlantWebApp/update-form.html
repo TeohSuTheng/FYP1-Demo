@@ -163,10 +163,27 @@ a:hover {
                 {% endif %}
             </div>
 
-            <hr>
-            <div class="mb-3">
-                {{research_form.media}}
-                {{research_form.as_p}}
+            {% if user == plantdata.user %}
+ 
+                <style>
+                    #research-dat {
+                        display:inline;
+                    }
+                </style>
+            {% else %}
+                <style>
+                    #research-dat {
+                        display:none;
+                    }
+                </style>
+            {% endif %}
+
+            <div id="research-dat">
+                <hr>
+                <div class="mb-3" >
+                    {{research_form.media}}
+                    {{research_form.as_p}}
+                </div>
             </div>
 
             <br>
@@ -224,6 +241,8 @@ a:hover {
             }
             output.innerHTML = '<ul>'+children+'</ul>';
         }
+
+        
 
         //Clean all non-numeric numbers except ',' in string 
         //Split into array by ','

@@ -329,7 +329,8 @@ def UpdatePostView(request,pk):
         img_list = request.FILES.getlist('images_list')
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
-        research_form = forms.ResearchForm(request.POST,instance=plantdata)
+        #if request.user is plantdata.user:
+        #research_form = forms.ResearchForm(request.POST,instance=plantdata)
 
         if use_form.is_valid():
             use_form.save()
@@ -412,10 +413,12 @@ def UpdatePostView(request,pk):
 
             if research_form.is_valid():
                 research_form.save()
+
             messages.success(request,('Plant record updated successfully.'))
             return redirect('user_home')
     
     context = {
+        'plantdata':plantdata,
         'taxoKingdom':plantdata.taxoKingdom,
         'taxoDivision':plantdata.taxoDivision,
         'taxoClass' :plantdata.taxoClass,
