@@ -1,4 +1,5 @@
 {% extends "PlantWebApp/base-no-nav.html" %}
+{% load static %}
 
 {% block content%}
 
@@ -6,6 +7,10 @@
 <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.1.1/dist/svgMap.min.css" rel="stylesheet">
+
+<!--Chart Scroll-->
+<link rel="stylesheet" href="{% static '/css/adminHomeStyle.css' %}">
+
 <style>
 tr:hover {background-color: rgba(211, 223, 212, 0.733);}
 .list-group-item:hover {background-color: rgba(211, 223, 212, 0.733);}
@@ -185,7 +190,9 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
             </p><br>
             
             <h4>Reference</h4>
-            <p>{{plant_info.plantref|linebreaks}}</p><br><br>
+            <div class="ref-scroll">
+              <p>{{plant_info.plantref|linebreaks}}</p>
+            </div><br><br>
 
             <!--if user/site admin/committee to view-->
             {% if plant_info.user.id == user.id or user.profile.role is 0 or user.profile.role is 1 %}

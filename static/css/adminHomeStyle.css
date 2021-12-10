@@ -16,6 +16,15 @@ div.vertical-scroll {
     white-space: nowrap;
 }
 
+div.ref-scroll {
+  margin: 4px, 4px;
+  padding: 4px;
+  width: 750px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
 
 /*Scroll bar*/
 /* width */

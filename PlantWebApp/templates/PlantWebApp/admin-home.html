@@ -180,7 +180,7 @@
                         <thead>
                           <tr>
                             <th scope="col"></th>
-                            <th scope="col">Name</th>
+                            <!--th scope="col">Name</th-->
                             <th scope="col">Username</th>
                             <th scope="col-1"></th>
                           </tr>
@@ -189,7 +189,7 @@
                           {% for u in logged_users %}
                           <tr>
                             <th scope="row">{{ forloop.counter0|add:logged_users.start_index }}</th>
-                            <td>{{u.first_name}} {{u.last_name}}</td>
+                            <!--td>{{u.first_name}} {{u.last_name}}</td-->
                             <td>{{u.username}}</td>
                             <td><span class="text-success"><i class="fas fa-circle fa-xs"></i></span></td>
                           </tr>
@@ -226,7 +226,7 @@
                         <thead>
                           <tr>
                             <th scope="col"></th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Username</th>
                             <th scope="col">Last Logged In</th>
                             <th scope="col-1"></th>
                           </tr>
@@ -235,7 +235,7 @@
                           {% for u in logged_out_users %}
                           <tr>
                             <th scope="row">{{ forloop.counter0|add:logged_out_users.start_index }}</th>
-                            <td>{{u.first_name}} {{u.last_name}}</td>
+                            <td>{{u.username}}</td>
                             <td>{{u.last_login}}</td>
                             <td><span class="text-secondary"><i class="fas fa-circle fa-xs"></i></span></td>
                           </tr>
