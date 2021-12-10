@@ -674,8 +674,10 @@ def userProfileUpdate(request,id):
     if request.method == "POST":
         u_form = forms.UserUpdateForm(request.POST, instance=user_data)
         p_form = forms.UserProfileForm(request.POST, instance=user_data.profile)
+        print('ok')
 
         if u_form.is_valid() and p_form.is_valid(): 
+            print('ok')
             u_form.save()
             p_form.save()
             messages.success(request,'Updated successfully.')
