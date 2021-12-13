@@ -1,6 +1,12 @@
 {% extends "PlantWebApp/base-dashboard.html" %}
 
 {% block content %}
+
+<!--Data Tables-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+
+
 <!--Site Admin Content header-->
 <div class="content-header" style="padding-left:25px ;">
     <div class="row">
@@ -19,6 +25,35 @@
     <p align="center" style="color: white;"><span style="background-color:rgb(42, 119, 106);">| To Be Verified |</span></p>
     <br>
 
+    <div class="container">
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Scientific Name</th>
+                <th>Researcher</th>
+                <th>Created At</th>
+                <th>Details</th>
+                <th>Verify</th>
+                <th>Reject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plant in plants%}
+                <tr>
+                    
+                    <td>{{plant.plantScientificName}}</td>
+                    <td>{{plant.user.first_name}} {{plant.user.last_name}}</td>
+                    <td>{{plant.created_at}}</td>
+                    <td> <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-primary">Details</a></td>
+                    <td><a href="{% url 'com_verifying' plant.id%}" class="btn btn-outline-success">Verify</a></td>
+                    <td><a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-danger">Reject</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+
+    </div>
     <!--Search Bar>
     <div class="row">
         <div class="col-sm-8"></div><!-- /.col >
@@ -34,6 +69,7 @@
         </div><!-- /.col >
       </div><!-- /.row -->
 
+    <!--***Original***>
     <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">
@@ -65,18 +101,18 @@
                 <div class="col-3">
                     <a href="{% url 'display_plant' plant.id%}" class="btn btn-outline-primary">Details</a>
                     <a href="{% url 'com_verifying' plant.id%}" class="btn btn-outline-success">Verify</a>
-                    <!--a href="{% url 'update_form' plant.id%}" class="btn btn-outline-primary">Update</a-->
+ 
                     <a href="{% url 'reject_form' plant.id%}" class="btn btn-outline-danger">Reject</a>
-                    <!--a href="{% url 'delete_form' plant.id%}" class="btn btn-light">Delete</a-->
+
                 </div>
                 <br><br><br>
             </div>
             {% endfor %}
 
         </div>
-    </div><br>
+    </div--><br>
 
-<!--Pagination-->
+<!--Pagination>
 <section class = "pagination">
     <div class="container">
         <nav aria-label="Page navigation example">
@@ -89,18 +125,24 @@
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
                         Page {{plants.number}} of {{plants.paginator.num_pages}}
                     </a>
-                </li> <!--Page 1 of 3-->   
+                </li> <!--Page 1 of 3>   
 
                 {% if plants.has_next %}
                     <li class="page-item"><a class="page-link" href="?page={{ plants.next_page_number }}">&raquo;</a></li>
-                    <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li-->
+                    <!--li class="page-item"><a class="page-link" href="?page={{plants.paginator.num_pages}}">Last &raquo;</a></li>
                 {% endif %}
             </ul>
         </nav>
     </div>
-</section>    <br><br> <br>   <br><br> <br> <br> <br> 
+</section-->    <br><br> <br>   <br><br> <br> <br> <br> 
 
 
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
 
 {% endblock content %}
