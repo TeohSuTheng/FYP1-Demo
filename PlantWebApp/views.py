@@ -625,7 +625,8 @@ def userHome(request):
     elif request.user.profile.role == 1: # Role id 1 - Committee
         #approved_list = Plant.objects.filter(commitee_approved=True).order_by('plantScientificName')
         approved_list_count = Plant.objects.filter(committee_approved=True).count
-        unapproved_list_count = Plant.objects.filter(committee_approved=False).count
+        unapproved_list_count = Plant.objects.filter(committee_approved=False).filter(rejected=False).count
+        #print(Plant.objects.filter(committee_approved=False).filter(rejected=False))
         rejected_list_count = Plant.objects.filter(rejected=True).count
 
         context = {
