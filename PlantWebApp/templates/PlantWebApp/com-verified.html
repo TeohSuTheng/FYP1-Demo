@@ -20,7 +20,7 @@
     </div><!-- /.row -->
 </div>
 
-<div class="container">
+<div class="container" style="min-height: 100vh;">
     <h2 align="center">Plant Records</h2>
     <p align="center" style="color: white;"><span style="background-color:darkslategray;">| Verified |</span></p>
     <br>
@@ -106,7 +106,7 @@
 
 </div>
 <br>
-<!--Pagination-->
+<!--Pagination>
 <section class = "pagination">
     <div class="container">
         <nav aria-label="Page navigation example">
@@ -115,14 +115,14 @@
                     <li class="page-item"><a class="page-link" href="?page={{ plants.previous_page_number }}">Previous</a></li>
                 {% endif %}
 
-                <!--Page Number Boxes-->
+                <!--Page Number Boxes>
                 {% for pg in page_num %}
                     {% if plants.number == forloop.counter %}
                         <li class="page-item active" aria-current="page">
                             <span class="page-link">{{ forloop.counter }}</span>
                         </li>
                     {% else %}
-                        <!--** LImit page-->
+                        <!--** LImit page>
                         <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{forloop.counter}}</a></li>
                     {% endif %}
                 {% endfor %}    
@@ -133,7 +133,7 @@
             </ul>
         </nav>
     </div>
-</section>    <br><br>
+</section>    <br-->
 
 <script>
     $(document).ready(function() {

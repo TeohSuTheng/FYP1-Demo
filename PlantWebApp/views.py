@@ -211,7 +211,7 @@ def assignPermissionForm(request):
 
             #validate unique ** values
             permission_form.save()
-            messages.success(request,('Permission updated successfully.'))
+            messages.success(request,('Success: Permission updated.'))
             return redirect('user_home')
         else:
             messages.success(request,('There is an error in your form. Please try again.'))

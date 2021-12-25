@@ -11,6 +11,19 @@
 </style>
 
 <div class="container">
+    <div class="content-header" style="padding-left:25px ;">
+        <div class="row">
+          <div class="col-sm-9">
+          </div><!-- /.col -->
+          <div class="col">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
+              <li class="breadcrumb-item active">Add plant</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div>
+
 <h1 style="padding-left: 25px;">Add Plant Record</h1><br>
 
     <form method="POST" enctype="multipart/form-data" action="{%url 'display_form' %}" id='p-form'>  <!--url name-->

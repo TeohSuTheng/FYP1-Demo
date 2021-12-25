@@ -17,7 +17,7 @@
                 <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{% url 'user_home' %}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'siteUsersList' %}">Site Users</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'siteUserDetail' user_data.id%}">{{user_data.first_name}} {{user_data.last_name}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'siteUserDetail' user_data.id%}">{{user_data.username}}</a></li>
                 <li class="breadcrumb-item active">Update</li>
                 </ol>
             </div><!-- /.col -->
@@ -42,7 +42,7 @@
       {% endif %}
 
       <!--Main Content-->
-      <div class="container-fluid">
+      <div class="container-fluid" style="min-height: 100vh;">
         <form method="POST" action="" id='p-form'>
             {% csrf_token %}
             <!--Basic Data-->
