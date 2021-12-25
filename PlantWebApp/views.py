@@ -211,7 +211,7 @@ def assignPermissionForm(request):
 
             #validate unique ** values
             permission_form.save()
-            messages.success(request,('Your form has been submitted successfully.'))
+            messages.success(request,('Permission updated successfully.'))
             return redirect('user_home')
         else:
             messages.success(request,('There is an error in your form. Please try again.'))
@@ -233,15 +233,17 @@ def permissionList(request):
 
 @staff_member_required(login_url='user_login')
 def adminPermissionList(request):
-    permissions = Permission.objects.filter(is_approved=True).order_by('plantID__plantScientificName')
-    pendingPermissions = Permission.objects.filter(is_approved=False).order_by('plantID__plantScientificName')
+    permissions = Permission.objects.all().order_by('plantID__plantScientificName')
+    #permissions = Permission.objects.filter(is_approved=True).order_by('plantID__plantScientificName')
+    #pendingPermissions = Permission.objects.filter(is_approved=False).order_by('plantID__plantScientificName')
     print(permissions)
     context = {
         'permissions':permissions,
-        'pendingPermissions':pendingPermissions,
+        #'pendingPermissions':pendingPermissions,
     }
     return render(request,'PlantWebApp/admin-permission-list.html',context)
 
+'''Delete'''
 @staff_member_required(login_url='user_login')
 def ProcessingPermissionVerification(request,id):
     processingPermission = Permission.objects.get(id=id)

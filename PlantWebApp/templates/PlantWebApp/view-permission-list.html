@@ -54,11 +54,13 @@
                     <p class="card-text">{{data.allowed_user.first_name}} {{data.allowed_user.last_name}}</p>
                 </div>
                 <div class="col">
+                  <p class="card-text">Approved</p>
+                  <!--
                    {% if data.is_approved %}
                       <p class="card-text">Approved</p>
                    {% else %}
                       <p class="card-text" >Pending approval</p>
-                   {% endif %}
+                   {% endif %}-->
                 </div>
                 <div class="col">
                   <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'permission_del' data.id%}">Delete</button>
