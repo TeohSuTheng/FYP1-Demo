@@ -48,6 +48,11 @@ class UserProfileForm(ModelForm):
         model = Profile
         fields = ['institution','dept'] #'__all__'  ['institution','dept','sv_id','role'] 
 
+class RegUserProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['institution','dept','role'] 
+
 class DistributionForm(ModelForm):
     class Meta:
         model = Distribution

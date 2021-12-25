@@ -476,7 +476,7 @@ def UserRegister(request):
             lname = request.POST['last_name']
             uname = request.POST['username']
             email = request.POST['email']
-            profile_form = forms.UserProfileForm(request.POST)
+            profile_form = forms.RegUserProfileForm(request.POST)
 
             if profile_form.is_valid():
                 print("ok ah")
@@ -568,7 +568,6 @@ def get_all_logged_in_users():
 @login_required(login_url='user_login')
 def userHome(request):
     if request.user.profile.role == 0: #Role Id 0 - Admin
-
         total_plant = Plant.objects.count() # Get total number of plant records stored
         plant_pub = Plant.objects.filter(admin_publish=True).count() # Get total number of plant records published
         use_tag = Usage.objects.count() # Get total number of usage tags stored

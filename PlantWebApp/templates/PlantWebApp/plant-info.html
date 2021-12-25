@@ -91,7 +91,7 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
             <div class="col-3">
               <!--a href="{% url 'display_plantImg' plant_info.id%}" target="_blank"--> 
                 <a href="{{plant_info.plantImg.url}}" target="_blank"> 
-                <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: 350px;">
+                <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: auto;">
               </a>
               <div class="row">
                 {% for img in plantimages %}
