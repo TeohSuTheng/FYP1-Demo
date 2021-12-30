@@ -362,7 +362,11 @@ def UpdatePostView(request,pk):
             'dist':dist,
             'research_form':research_form,
             'state':state,
-            'statearr':statearr
+            'statearr':statearr,
+            'voucher':plantdata.voucher,
+            'powder':plantdata.powder,
+            'extract':plantdata.extract,
+            'oil':plantdata.oil,
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -395,7 +399,11 @@ def UpdatePostView(request,pk):
                         'dist':dist,
                         'research_form':research_form,
                         'state':state,
-                        'statearr':statearr
+                        'statearr':statearr,
+                        'voucher':plantdata.voucher,
+                        'powder':plantdata.powder,
+                        'extract':plantdata.extract,
+                        'oil':plantdata.oil,
                     }
                     return render(request, 'PlantWebApp/update-form.html',context)
                 plant_form.save()
@@ -443,7 +451,11 @@ def UpdatePostView(request,pk):
         'research_form':research_form,
         'plantimages':plantimages,
         'state':state,
-        'statearr':statearr
+        'statearr':statearr,
+        'voucher':plantdata.voucher,
+        'powder':plantdata.powder,
+        'extract':plantdata.extract,
+        'oil':plantdata.oil,
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 

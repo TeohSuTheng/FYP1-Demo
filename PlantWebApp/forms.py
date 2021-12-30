@@ -15,7 +15,7 @@ class PlantForm(ModelForm):
         model = Plant
         #fields = '__all__'  
         fields = ('taxoKingdom','taxoDivision','taxoClass','taxoOrder','taxoFamily','taxoGenus','plantScientificName','plantLocalName','pmStem','pmLeaf','pmFlower',
-        'pmFruit','plantImg','usage','voucher_no','distribution','localDistribution','plantref','research_data')
+        'pmFruit','plantImg','usage','voucher_no','distribution','localDistribution','plantref','research_data','voucher','powder','extract','oil')
     # Widgets
 
 class ImageForm(ModelForm):

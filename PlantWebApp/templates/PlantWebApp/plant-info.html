@@ -188,6 +188,26 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
                {{j}}, 
             {% endfor %}
             </p><br>
+
+            <h4>CENAR Collections</h4>
+            <table class="table table-sm table-warning">
+              <thead>
+                <tr>
+                  <th scope="col">Voucher</th>
+                  <th scope="col">Extract</th>
+                  <th scope="col">Powder</th>
+                  <th scope="col">Essential Oil</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{plant_info.voucher}}</td>
+                  <td>{{plant_info.extract}}</td>
+                  <td>{{plant_info.powder}}</td>
+                  <td>{{plant_info.oil}}</td>
+                </tr>
+              </tbody>
+            </table>
             
             <h4>Reference</h4>
             <div class="ref-scroll" style="background-color: rgba(239, 252, 237, 0.26); ">
@@ -216,6 +236,9 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
               {% endfor %}
             {% endif %}
 
+
+
+            <br><br>
 
             <!--p class="h6">Created on: {{plant_info.created_at.date}} by <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p-->
             <p>Studied by: <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>

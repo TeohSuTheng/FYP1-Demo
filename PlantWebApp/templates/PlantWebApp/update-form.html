@@ -20,11 +20,36 @@ a:hover {
 
 
 <div class="container">
-<h1>Update Plant Information</h1>
+
+<h1 style="padding-left: 25px;">Update Plant Information</h1>
+
 <form method="POST" enctype="multipart/form-data" action="">  <!--url name-->
     <!--Can validate form using Bootstrap-->
         {% csrf_token %}  <!--Token to prevent hackers from hijacking-->
         <div class="container">
+
+            {% if user.profile.role == 0 %}
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label for="inputEmail4" class="form-label">Voucher</label>
+                    <input type="text" id="voucher" class="form-control" name="voucher" value="{{voucher}}" >
+                </div>
+                <div class="col-md-2">
+                    <label for="inputEmail4" class="form-label">Powder</label>
+                    <input type="text" id="powder" class="form-control" name="powder" value="{{powder}}">
+                </div>
+                <div class="col-md-2">
+                    <label for="inputEmail4" class="form-label">Extract</label>
+                    <input type="text" id="extract" class="form-control" name="extract" value="{{extract}}">
+                </div>
+                <div class="col-md-2">
+                    <label for="inputEmail4" class="form-label">Essential oil</label>
+                    <input type="text" id="oil" class="form-control" name="oil" value="{{oil}}">
+                </div>
+            </div>
+            
+            <br>
+            {% endif %}
             <div class="mb-3">
                 <label class="form-label" >Voucher / Specimen Number (if any)</label>
                 <input type="text" class="form-control" name="voucher_no" value="{{voucher_no}}">
