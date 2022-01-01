@@ -17,5 +17,6 @@ urlpatterns = [
     path('images-api/<int:id>',views.image_delete_rest_endpoint, name='Images'),
     path('user-api/<int:id>',views.UserPermission, name='userPermission'),
     path('plant-local-api/',views.PlantLocalDistSummary, name='PlantLocalDistSummary'),
-
+    path('plant-collection-api/',views.PlantCollection, name='PlantCollection'),
+    
 ]

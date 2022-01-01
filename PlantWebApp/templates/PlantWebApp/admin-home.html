@@ -301,7 +301,7 @@
 
             <div class="row">
               <!--Local Distribution-->
-              <div class="col-lg-12">
+              <div class="col-lg-6">
                 <div class="card">
                   <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
@@ -324,15 +324,41 @@
                   </div>
                 </div>
               </div>
-
             </div>
 
+            <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                      <h5 class="card-title">CENAR Collections</h5>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="vertical-scroll">
+                      <table class="table table-warning table-hover">
+                        <thead>
+                          <tr>
+
+                            <th scope="col">Collection</th>
+                            <th scope="col">Total Records</th>
+                          </tr>
+                        </thead>
+                        <tbody id="wrapper-collection">
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+              </div>
+
+
+
                        
-        </div>
+            </div>
               
 
 
 </div>
+<div style="height: 30px;"></div>
 </section>
 
 <!--Usage Chart Size Adjustments-->
@@ -359,6 +385,44 @@
 <!--svgMap.js-->
 <script>
 
+  function getCollection(){
+   // GET CENAR collections
+  var wrapperColl = document.querySelector("#wrapper-collection")
+
+  var url = "http://127.0.0.1:8000/api/plant-collection-api/"
+
+  fetch(url)
+  .then((resp) => resp.json())
+  .then(function(data){
+    console.log(data.plantdict.Extract)
+    
+    
+    var item = `<tr>
+                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Extract">Extract</a></td>
+                      <td>${data.plantdict.Extract}</td>
+                </tr>
+                <tr>
+                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Oil">Oil</a></td>
+                      <td>${data.plantdict.Oil}</td>
+                </tr>
+                <tr>
+                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Powder">Powder</a></td>
+                      <td>${data.plantdict.Powder}</td>
+                </tr>
+                <tr>
+                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Voucher">Voucher</a></td>
+                      <td>${data.plantdict.Voucher}</td>
+                </tr>
+              `
+
+    wrapperColl.innerHTML = item
+    
+  })   
+};
+
+getCollection()
+
+function getLocaldist(){
     //Get Local Distribution count
     var wrapperBody = document.querySelector("#wrapper-tbody")
 
@@ -382,7 +446,10 @@
                 wrapperBody.innerHTML += item
                 count += 1
       }
-      })   
+      })  
+};
+
+ getLocaldist();
 
     var map
     var country_dict = {}
@@ -556,6 +623,10 @@
                 $('#user_no').replaceWith($('#user_no',dat));
 
                 $('.country-tb-wrapper').replaceWith($('.country-tb-wrapper',dat));
+                //$('#wrapper-collection').replaceWith($('#wrapper-collection',dat));
+                //console.log(dat)
+                //wrapper-collection
+                //wrapper-tbody
 
                 // Refresh User Activity Section
                 $('#user-activity').replaceWith($('#user-activity',dat));
@@ -579,8 +650,11 @@
 
 
           }) 
-          
-          //Get Local Distribution count
+    
+    getCollection();
+    getLocaldist();
+
+    //Get Local Distribution count
     var wrapperBody = document.querySelector("#wrapper-tbody")
 
     var url = "http://127.0.0.1:8000/api/plant-local-api/"
@@ -606,6 +680,7 @@
       }
       }) 
     }
+
     var seconds = 15; // seconds, edit here
     setInterval(refresh,seconds * 1000);
 </script>

@@ -1,3 +1,5 @@
+import collections
+from django.db.models.aggregates import Sum
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -26,7 +28,7 @@ def pubPlantList(request):
         paginator = PageNumberPagination()
         paginator.page_size = 10
 
-        plant_list = Plant.objects.filter(publish=True).order_by('plantScientificName')
+        plant_list = Plant.objects.filter(admin_publish=True).order_by('plantScientificName')
         result_page = paginator.paginate_queryset(plant_list, request) 
         serializer = PlantSerializer(result_page,many=True)
         
@@ -66,6 +68,16 @@ def PlantDetail(request,id):
         plantdata = Plant.objects.get(id=id)
         serializer = PlantDetailSerializer(plantdata)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def PlantCollection(request):
+    if request.method == 'GET':
+        plantdata = Plant.objects.all().order_by('plantScientificName')
+        plantdict = plantdata.aggregate(Extract=Sum('extract'))
+        plantdict.update(plantdata.aggregate(Oil=Sum('oil')))
+        plantdict.update(plantdata.aggregate(Powder=Sum('powder')))
+        plantdict.update(plantdata.aggregate(Voucher=Sum('voucher')))
+        return Response({'plantdict': plantdict})
 
 @api_view(['GET'])
 def PlantDistSummary(request):

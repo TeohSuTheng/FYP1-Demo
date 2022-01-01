@@ -928,8 +928,6 @@ def usage_chart(request):
         'data': data,
     })
 
-
-
 @staff_member_required(login_url='user_login')
 def unpubList(request):
     # Arrange in the order from earliest to latest
@@ -990,6 +988,23 @@ def displayPublishedResults(request):
         plants = p.get_page(page)
 
         return render(request,'PlantWebApp/admin-verified.html', {'plants':plants})
+    else:
+        verified(request)
+
+@staff_member_required(login_url='user_login')
+def displayCollections(request,collect):
+    if request.method == "GET":
+
+        if collect == 'Extract':
+            plants = Plant.objects.filter(extract__gt=0)
+        elif collect == 'Oil':
+            plants = Plant.objects.filter(oil__gt=0)
+        elif collect == 'Powder':
+            plants = Plant.objects.filter(powder__gt=0)
+        else:
+            plants = Plant.objects.filter(voucher__gt=0)
+
+        return render(request,'PlantWebApp/collection-data-detail.html', {'plants':plants,'collect':collect})
     else:
         verified(request)
 

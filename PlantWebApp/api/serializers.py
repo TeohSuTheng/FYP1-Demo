@@ -65,7 +65,6 @@ class PlantDistSummarySerializer(serializers.ModelSerializer):
         model = Distribution
         fields = ['id','country_alpha2','countryName','num_plant',]
 
-
 '''
 class SupervisorSerializer(serializers.ModelSerializer):
     class Meta:
