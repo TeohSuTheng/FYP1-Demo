@@ -332,7 +332,7 @@ def UpdatePostView(request,pk):
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
         #if request.user is plantdata.user:
-        #research_form = forms.ResearchForm(request.POST,instance=plantdata)
+        research_form = forms.ResearchForm(request.POST,instance=plantdata)
 
         if use_form.is_valid():
             use_form.save()
@@ -420,8 +420,10 @@ def UpdatePostView(request,pk):
                     rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
                     rejectdata.delete()
                     
+            #research_form.save()
 
             if research_form.is_valid():
+                print('ok')
                 research_form.save()
 
             messages.success(request,('Plant record updated successfully.'))
