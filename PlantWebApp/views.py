@@ -331,10 +331,12 @@ def UpdatePostView(request,pk):
         img_list = request.FILES.getlist('images_list')
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
-        #if request.user is plantdata.user:
         research_form = forms.ResearchForm(request.POST,instance=plantdata)
+        print('ok1')
+        
 
         if use_form.is_valid():
+            print('ok')
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
             usearr = request.POST.getlist('usage') # Added
@@ -371,10 +373,23 @@ def UpdatePostView(request,pk):
             return render(request, 'PlantWebApp/update-form.html',context)
 
         # Verify data # CHECK unique
-        elif use_form.is_valid()==False:
+        else:
+
+            if plant_form.is_valid or research_form.is_valid():
+                if plantdata.rejected: #location
+                    
+                    plantdata.rejected = False
+                    plantdata.save(update_fields=['rejected'])
+
+                    # Delete Rejection object
+                    rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
+                    rejectdata.delete()
+                    
+            #print('use form')
             if plant_form.is_valid():
                 ## Check if usage tag is unique:
                 tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
+            
                 if tag_exist:
                     messages.success(request,('The plant usage entered already exists in our database.'))
                     context = {
@@ -411,19 +426,8 @@ def UpdatePostView(request,pk):
                 for img in img_list:
                     Images.objects.create(plant=plantdata,image=img)
 
-                if plantdata.rejected:
-                    print('ok')
-                    plantdata.rejected = False
-                    plantdata.save(update_fields=['rejected'])
-
-                    # Delete Rejection object
-                    rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
-                    rejectdata.delete()
-                    
-            #research_form.save()
-
             if research_form.is_valid():
-                print('ok')
+                print('okk')
                 research_form.save()
 
             messages.success(request,('Plant record updated successfully.'))
