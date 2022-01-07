@@ -143,6 +143,7 @@ def displayPlantForm(request):
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
+            print('okk')
             ## Check if usage tag is unique:
             tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
 
@@ -155,6 +156,18 @@ def displayPlantForm(request):
             plantdat.research_data = research_form.data['research_data']
             plantdat.user = request.user
             #plantdat - collection
+            if plantdat.voucher==None:
+                plantdat.voucher=0
+
+            if plantdat.powder==None:
+                plantdat.powder=0
+
+            if plantdat.extract==None:
+                plantdat.extract=0
+
+            if plantdat.oil==None:
+                plantdat.oil=0
+
             plantdat.save()
             plant_form.save()
 
@@ -165,6 +178,7 @@ def displayPlantForm(request):
             #get plant_id pass to another view method?
             return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist, 'research_form':research_form})
         else:
+            print(plant_form.errors)
             plantScientificName = request.POST['plantScientificName']
             usearr = request.POST.getlist('usage')
 
