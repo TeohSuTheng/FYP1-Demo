@@ -57,7 +57,7 @@
               </li>
               </ul>
           </div>
-          <span class='hello-msg'>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
+          <span class='hello-msg'>Hello, {{request.user.username}}</span>
           <span><a class="nav-link active" href="{%url 'logout' %}">Logout</a></span>
         </div>
     </nav>

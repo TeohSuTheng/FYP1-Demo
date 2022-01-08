@@ -384,8 +384,6 @@ def UpdatePostView(request,pk):
 
         # Verify data # CHECK unique
         else:
-            print(plant_form.errors)     
-            
             if plant_form.is_valid():
                 ## Check if usage tag is unique:
                 tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
@@ -441,6 +439,8 @@ def UpdatePostView(request,pk):
                 for img in img_list:
                     Images.objects.create(plant=plantdata,image=img)
 
+
+        
             if research_form.is_valid():
                 research_form.save()
 
