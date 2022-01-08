@@ -49,11 +49,39 @@ a:hover {
             </div>
             
             <br>
-            {% endif %}
             <div class="mb-3">
                 <label class="form-label" >Voucher / Specimen Number (if any)</label>
                 <input type="text" class="form-control" name="voucher_no" value="{{voucher_no}}">
             </div>
+            {% else %}
+            <div class="hidden-container" style="display: none;">
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label for="inputEmail4" class="form-label">Voucher</label>
+                        <input type="text" id="voucher" class="form-control" name="voucher" value="{{voucher}}" >
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputEmail4" class="form-label">Powder</label>
+                        <input type="text" id="powder" class="form-control" name="powder" value="{{powder}}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputEmail4" class="form-label">Extract</label>
+                        <input type="text" id="extract" class="form-control" name="extract" value="{{extract}}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputEmail4" class="form-label">Essential oil</label>
+                        <input type="text" id="oil" class="form-control" name="oil" value="{{oil}}">
+                    </div>
+                </div>
+                
+                <br>
+                <div class="mb-3">
+                    <label class="form-label" >Voucher / Specimen Number (if any)</label>
+                    <input type="text" class="form-control" name="voucher_no" value="{{voucher_no}}">
+                </div>
+            </div>
+            {% endif %}
+            
             <label class="form-label">Plant Taxonomy</label>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInput" name="taxoKingdom" value="{{taxoKingdom}}">
@@ -80,7 +108,7 @@ a:hover {
                 <label for="floatingInput">Genus</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" name="plantScientificName" value="{{plantScientificName}}" disabled>
+                <input type="text" class="form-control" id="floatingInput" name="plantScientificName" value="{{plantScientificName}}">
                 <label for="floatingInput">Species</label>
             </div>
             
@@ -166,7 +194,7 @@ a:hover {
             </div>
 
             <div id="img-box">
-                <img src="{{plantImg.url}}" alt="" style="width:250px;height: 350px;">
+                <img src="{{plantImg.url}}" alt="" style="width:auto;height: 350px;">
             </div><br>
 
             <div class="mb-3">

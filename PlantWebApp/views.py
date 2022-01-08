@@ -143,7 +143,6 @@ def displayPlantForm(request):
             messages.success(request,('Usage tag added.'))
             return render(request,'PlantWebApp/plant-form.html',context_dict)  
         elif plant_form.is_valid() and use_form.is_valid()==False:
-            print('okk')
             ## Check if usage tag is unique:
             tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
 
@@ -178,7 +177,7 @@ def displayPlantForm(request):
             #get plant_id pass to another view method?
             return render(request,'PlantWebApp/plant-form.html',{'use': use,'dist':dist, 'research_form':research_form})
         else:
-            print(plant_form.errors)
+            #print(plant_form.errors)
             plantScientificName = request.POST['plantScientificName']
             usearr = request.POST.getlist('usage')
 
@@ -346,11 +345,8 @@ def UpdatePostView(request,pk):
         use_form = forms.UsageForm(request.POST)
         plant_form = forms.PlantForm(request.POST,files=request.FILES, instance=plantdata)
         research_form = forms.ResearchForm(request.POST,instance=plantdata)
-        print('ok1')
         
-
         if use_form.is_valid():
-            print('ok')
             use_form.save()
             latest_use = Usage.objects.latest('id') #get the id of the newly added usage object
             usearr = request.POST.getlist('usage') # Added
@@ -388,18 +384,8 @@ def UpdatePostView(request,pk):
 
         # Verify data # CHECK unique
         else:
-
-            if plant_form.is_valid or research_form.is_valid():
-                if plantdata.rejected: #location
-                    
-                    plantdata.rejected = False
-                    plantdata.save(update_fields=['rejected'])
-
-                    # Delete Rejection object
-                    rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
-                    rejectdata.delete()
-                    
-            #print('use form')
+            print(plant_form.errors)     
+            
             if plant_form.is_valid():
                 ## Check if usage tag is unique:
                 tag_exist = Usage.objects.filter(usage_tag=request.POST['usage_tag'])
@@ -435,14 +421,38 @@ def UpdatePostView(request,pk):
                         'oil':plantdata.oil,
                     }
                     return render(request, 'PlantWebApp/update-form.html',context)
+
+                plantdata = plant_form.save(commit=False)
+                if plantdata.voucher==None:
+                        plantdata.voucher=0
+
+                if plantdata.powder==None:
+                        plantdata.powder=0
+
+                if plantdata.extract==None:
+                        plantdata.extract=0
+
+                if plantdata.oil==None:
+                        plantdata.oil=0
+
+                plantdata.save()
                 plant_form.save()
 
                 for img in img_list:
                     Images.objects.create(plant=plantdata,image=img)
 
             if research_form.is_valid():
-                print('okk')
                 research_form.save()
+
+            if plant_form.is_valid or research_form.is_valid():
+                if plantdata.rejected:
+                    
+                    plantdata.rejected = False
+                    plantdata.save(update_fields=['rejected'])
+
+                    # Delete Rejection object
+                    rejectdata = Rejection.objects.get(plant=pk) #get object from Plant table
+                    rejectdata.delete()
 
             messages.success(request,('Plant record updated successfully.'))
             return redirect('user_home')

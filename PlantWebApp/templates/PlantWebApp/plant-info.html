@@ -104,8 +104,13 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
             </div>
         </div>
         <div class="col"></div>
+
+        
         <div class="col-8">
+        <!--if site admin to view-->
+        {% if user.profile.role is 0 %}
             <p align="right"><small>Voucher No: {{plant_info.voucher_no}}</small></p>
+        {% endif %}
 
             <h4>Plant Taxonomy</h4>
 
@@ -182,7 +187,7 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
             </p>
             <div id="svgMap"></div><br><br>
 
-            <h4>Plant Local Distribution</h4>
+            <h4>Area of Plant Collection</h4>
             <p>
             {% for j in states %}
                {{j}}, 
