@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-$*)jr&e)z*ukepwmmz)ozy)vz)i@g*%l%n11m_(2ersny)hz2p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['digital-plant-herbarium.herokuapp.com']
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # During development only ****
