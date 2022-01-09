@@ -7,11 +7,14 @@ defusedxml==0.7.1
 diff-match-patch==20200713
 Django==3.2.3
 django-bootstrap-modal-forms==2.2.0
+django-ckeditor==6.1.0
 django-cleanup==5.2.0
 django-import-export==2.5.0
+django-js-asset==1.2.2
 djangorestframework==3.12.4
 et-xmlfile==1.1.0
 folium==0.12.1
+gunicorn==20.1.0
 httpie==2.4.0
 idna==3.2
 Jinja2==3.0.1
