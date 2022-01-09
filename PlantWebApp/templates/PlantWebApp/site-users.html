@@ -73,7 +73,9 @@
                 </div>
                 <div class="col">
                     <a href="{% url 'siteUserDetail' siteUser.id%}" class="btn btn-success">Records</a>
-                    <a href="{%url 'siteUserDisable' siteUser.id %}" class="btn btn-danger">Disable</a>
+                    {% if siteUser.id != 2 %}
+                      <a href="{%url 'siteUserDisable' siteUser.id %}" class="btn btn-danger">Disable</a>
+                    {% endif %}
                 </div>
                 <br><br><br>
             </div>

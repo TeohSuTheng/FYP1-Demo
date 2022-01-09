@@ -92,7 +92,9 @@
                 <a href="{% url 'user_profile_update' user_info.id %}" class="btn btn-primary">Edit Profile</a>
                 <a href="{% url 'AdminResetPassword' user_info.id %}" class="btn btn-warning">Reset Password</a>
                 {% if user_info.is_active %}
-                    <a href="{%url 'siteUserDisable' user_info.id %}" class="btn btn-danger">Disable User</a>
+                    {% if user_info.id != 2 %}
+                        <a href="{%url 'siteUserDisable' user_info.id %}" class="btn btn-danger">Disable User</a>
+                    {% endif %}                
                 {% else %}
                     <a href="{%url 'siteUserEnable' user_info.id %}" class="btn btn-secondary">Enable User</a>
                     <a href="{%url 'user_delete' user_info.id %}" class="btn btn-danger">Delete User</a>

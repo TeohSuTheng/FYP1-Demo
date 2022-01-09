@@ -190,7 +190,7 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
               </tbody>
             </table><br>
             
-            <h4>Reference</h4>
+            <h4>Reference/Relevant Publications</h4>
             <div class="ref-scroll" style="background-color: rgba(239, 252, 237, 0.26); ">
               <p>{{plant_info.plantref|linebreaks}}</p>
             </div><br><br>
@@ -202,9 +202,10 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
               <hr>
               {{plant_info.research_data|safe}}
               <br><br>
-            {% endif %}
+              <p>Studied by: <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>
+            
 
-            {% if permissions %}
+            {% elif permissions %}
               <!--Viewers with permissions-->
               {% for viewers in permissions %}
                 {% if viewers.allowed_user_id == user.id %}
@@ -213,20 +214,22 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
                   <hr>
                   {{plant_info.research_data|safe}}
                   <br><br>
+                  <p>Studied by: <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>
+                {% else %}
+                  <br><p>Please contact cenar@um.edu.my for further research information</p>
                 {% endif %}
               {% endfor %}
+
+            {% else %}
+              <br><p>Please contact cenar@um.edu.my for further research information</p>
             {% endif %}
 
             <br>
 
-            {% if plant_info.user.id == user.id or user.profile.role is 0 or user.profile.role is 1  %}
-              <p>Studied by: <a href="{% url 'user_page' plant_info.user.id%}">{{plant_info.user.first_name}} {{plant_info.user.last_name}}</a></p>
-            {% else %}
-              <p>Please contact cenar@um.edu.my for further research information</p>
-            {% endif %}
+
         </div>
     </div>
-    <br><br><br>
+    <br>
 
     <script>
       //Convert to array

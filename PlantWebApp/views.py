@@ -216,7 +216,7 @@ def displayPlantForm(request):
 @login_required(login_url='user_login')
 def assignPermissionForm(request):
     user_list = User.objects.filter(profile__role=2).filter(profile__is_verified=True).exclude(id=request.user.id) #list of researchers
-    plant = Plant.objects.filter(user_id=request.user.id).filter(admin_publish=True)
+    plant = Plant.objects.all().filter(admin_publish=True)
 
     if request.method == "POST":
         permission_form = forms.PermissionForm(data=request.POST)
