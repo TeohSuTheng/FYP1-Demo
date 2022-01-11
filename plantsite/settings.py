@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG_VALUE')=='True')
 
-ALLOWED_HOSTS = ['digital-plant-herbarium.herokuapp.com'] #'127.0.0.1',
+ALLOWED_HOSTS = ['127.0.0.1','digital-plant-herbarium.herokuapp.com'] #'127.0.0.1',
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # During development only ****
