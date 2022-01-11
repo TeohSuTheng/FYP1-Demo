@@ -90,7 +90,7 @@
         var unpubWrapper = document.querySelector("#card-body-unpublished")
         var rejectWrapper = document.querySelector("#card-body-rejected")
         
-        var url = "http://127.0.0.1:8000/api/browse-state-api/{{state}}"
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/browse-state-api/{{state}}"
         console.log(url)
 
         fetch(url)
@@ -113,7 +113,7 @@
                                 <p class="card-text">${plant_list[i].plantLocalName}</p>
                             </div>
                             <div class="col">
-                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                                <a href="https://digital-plant-herbarium.herokuapp.com/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
                             </div>
 
                             <br><br><br>
@@ -134,7 +134,7 @@
                                 <p class="card-text">${plant_list[i].plantLocalName}</p>
                             </div>
                             <div class="col">
-                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                                <a href="https://digital-plant-herbarium.herokuapp.com/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
                             </div>
 
                             <br><br><br>
@@ -154,7 +154,7 @@
                                 <p class="card-text">${plant_list[i].plantLocalName}</p>
                             </div>
                             <div class="col">
-                                <a href="http://127.0.0.1:8000/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                                <a href="https://digital-plant-herbarium.herokuapp.com/plant/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
                             </div>
 
                             <br><br><br>

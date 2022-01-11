@@ -97,7 +97,7 @@
     function changeFunc(i) {
         console.log(i);
 
-        var url = "http://127.0.0.1:8000/api/user-api/"+i
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/user-api/"+i
 
         fetch(url)
         .then((resp) => resp.json())

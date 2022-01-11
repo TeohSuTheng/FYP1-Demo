@@ -104,7 +104,7 @@
         var wrapper = document.querySelector(".card-body")
         var pagination = document.querySelector(".pagination-wrapper")
         
-        var url = "http://127.0.0.1:8000/api/browse-name-api/"
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/browse-name-api/"
 
         fetch(url)
         .then((resp) => resp.json())
@@ -124,7 +124,7 @@
                             <p class="card-text">${plant_list[i].plantLocalName}</p>
                         </div>
                         <div class="col">
-                            <a href="http://127.0.0.1:8000/plant-api/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
+                            <a href="https://digital-plant-herbarium.herokuapp.com/plant-api/${plant_list[i].id}" class="btn btn-outline-success">Details</a>
                         </div>
 
                         <br><br><br>

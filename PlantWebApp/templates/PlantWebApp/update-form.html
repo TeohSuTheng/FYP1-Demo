@@ -313,7 +313,7 @@ a:hover {
             console.log(id)
 
             $.ajax({
-            url: 'http://127.0.0.1:8000/plant/delete-image/'+id, //The URL you defined in urls.py
+            url: 'https://digital-plant-herbarium.herokuapp.com/plant/delete-image/'+id, //The URL you defined in urls.py
             success: function(data) {
                 $("#"+id).remove();
             }
@@ -321,19 +321,6 @@ a:hover {
     });
         }
 
-        /*
-        function CallDelAPIFunction(id){
-            var url = "http://127.0.0.1:8000/api/images-api/"+id
-
-            fetch(url,{
-                method: 'DELETE',
-                })
-                .then(res => res.text()) // or res.json()
-                .then(res => console.log(res))
-
-            location.reload();
-
-        }*/
         
     </script>
 

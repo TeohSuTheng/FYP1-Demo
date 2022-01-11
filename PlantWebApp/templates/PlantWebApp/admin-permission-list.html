@@ -25,63 +25,6 @@
 <br>
 <br>
 
-<!--h5>Pending Approval</h5>
- <div class="card">
-        <h6 class="card-header">
-            <div class="row align-items-start">
-              <div class="col">
-                Plant Name
-              </div>
-              <div class="col">
-                Researcher
-              </div>
-              <div class="col">
-                User Name
-              </div>
-              <div class="col">
-                Status
-              </div>
-              <div class="col">
-                Actions
-              </div>
-            </div>
-        </h6>
-        <div class="card-body">
-          {% for data in pendingPermissions %}
-            
-            <div class="row align-items-start">
-                
-                <div class="col">
-                    <p class="card-text">{{data.plantID.plantScientificName}}</p>
-                </div>
-                <div class="col">
-                  <p class="card-text">{{data.plantID.user.first_name}} {{data.plantID.user.last_name}}</p>
-              </div>
-                <div class="col">
-                    <p class="card-text">{{data.allowed_user.first_name}} {{data.allowed_user.last_name}}</p>
-                </div>
-                <div class="col">
-                   {% if data.is_approved %}
-                      <p class="card-text">Approved</p>
-                   {% else %}
-                      <p class="card-text" >Pending approval</p>
-                   {% endif %}
-                </div>
-                <div class="col">
-                  {% if data.is_approved %}
-                    <!--button type="button" class="btn btn-sm btn-success" disabled>Approved</button>
-                  {% else %}
-                    <a href="{% url 'processing_permission' data.id%}" class="btn btn-sm btn-primary">Approve</a>
-                  {% endif %}
-                  <!--a href="#" class="btn btn-sm btn-primary">Disable</a>
-                  <button type="button" class="delete-tag bs-modal btn btn-sm btn-danger" data-form-url="{% url 'permission_del' data.id%}">Delete</button>
-                </div>
-                <br><br><br>
-            </div>
-            {% endfor %}
-
-        </div></div><br-->
-
       <div class="card">
         <h6 class="card-header">
             <div class="row align-items-start">

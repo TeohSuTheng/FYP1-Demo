@@ -146,7 +146,7 @@
                             {% for key,val in country_dict.items %} 
                             <tr>
                               <th scope="row">{{ forloop.counter}}</th>
-                              <td><a id="country-anchor" href="http://127.0.0.1:8000/country-data-detail/{{key}}">{{ key }}</a> </td>
+                              <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/country-data-detail/{{key}}">{{ key }}</a> </td>
                               <td>{{ val }}</td>
                             </tr>
                             {% endfor %}
@@ -388,7 +388,7 @@
    // GET CENAR collections
   var wrapperColl = document.querySelector("#wrapper-collection")
 
-  var url = "http://127.0.0.1:8000/api/plant-collection-api/"
+  var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-collection-api/"
 
   fetch(url)
   .then((resp) => resp.json())
@@ -397,19 +397,19 @@
     
     
     var item = `<tr>
-                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Extract">Extract</a></td>
+                      <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/collection-detail/Extract">Extract</a></td>
                       <td>${data.plantdict.Extract}</td>
                 </tr>
                 <tr>
-                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Oil">Oil</a></td>
+                      <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/collection-detail/Oil">Oil</a></td>
                       <td>${data.plantdict.Oil}</td>
                 </tr>
                 <tr>
-                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Powder">Powder</a></td>
+                      <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/collection-detail/Powder">Powder</a></td>
                       <td>${data.plantdict.Powder}</td>
                 </tr>
                 <tr>
-                      <td><a id="country-anchor" href="http://127.0.0.1:8000/collection-detail/Voucher">Voucher</a></td>
+                      <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/collection-detail/Voucher">Voucher</a></td>
                       <td>${data.plantdict.Voucher}</td>
                 </tr>
               `
@@ -425,7 +425,7 @@ function getLocaldist(){
     //Get Local Distribution count
     var wrapperBody = document.querySelector("#wrapper-tbody")
 
-    var url = "http://127.0.0.1:8000/api/plant-local-api/"
+    var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-local-api/"
 
     fetch(url)
     .then((resp) => resp.json())
@@ -437,7 +437,7 @@ function getLocaldist(){
       {
         var item = `<tr>
                         <th scope="row">${count}</th>
-                        <td><a id="country-anchor" href="http://127.0.0.1:8000/state-data-detail/${data[i].stateName}">${data[i].stateName}</a></td>
+                        <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/state-data-detail/${data[i].stateName}">${data[i].stateName}</a></td>
                         <td>${data[i].num_plant}</td>
                     </tr>
                 `
@@ -456,7 +456,7 @@ function getLocaldist(){
     // Get SVG data from plant-dist-api API
     function buildList(){
 
-        var url = "http://127.0.0.1:8000/api/plant-dist-api/"
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-dist-api/"
 
         fetch(url)
         .then((resp) => resp.json())
@@ -633,7 +633,7 @@ function getLocaldist(){
         }
         );
 
-        var url = "http://127.0.0.1:8000/api/plant-dist-api/"
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-dist-api/"
 
         fetch(url)
         .then((resp) => resp.json())
@@ -656,7 +656,7 @@ function getLocaldist(){
     //Get Local Distribution count
     var wrapperBody = document.querySelector("#wrapper-tbody")
 
-    var url = "http://127.0.0.1:8000/api/plant-local-api/"
+    var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-local-api/"
 
     fetch(url)
     .then((resp) => resp.json())
@@ -669,7 +669,7 @@ function getLocaldist(){
       {
         var item = `<tr>
                         <th scope="row">${count}</th>
-                        <td><a id="country-anchor" href="http://127.0.0.1:8000/state-data-detail/${data[i].stateName}">${data[i].stateName}</a></td>
+                        <td><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/state-data-detail/${data[i].stateName}">${data[i].stateName}</a></td>
                         <td>${data[i].num_plant}</td>
                     </tr>
                 `

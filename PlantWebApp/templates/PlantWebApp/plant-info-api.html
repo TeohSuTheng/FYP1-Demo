@@ -33,7 +33,7 @@
       function buildList(){
           var wrapperTitle = document.querySelector(".wrapper-title")
           
-          var url = "http://127.0.0.1:8000/api/plant-detail-api/{{id}}"
+          var url = "https://digital-plant-herbarium.herokuapp.com/api/plant-detail-api/{{id}}"
   
           fetch(url)
           .then((resp) => resp.json())
@@ -116,7 +116,7 @@
               wrapperTitle = document.querySelector(".wrapper-end")
               var item = `
                 <p>${data.plantref}</p><br><br>
-                <p class="h6">Created by <a href="http://127.0.0.1:8000/user-page/${data.user.id}">${data.user.first_name} ${data.user.last_name}</a></p>
+                <p class="h6">Created by <a href="https://digital-plant-herbarium.herokuapp.com/user-page/${data.user.id}">${data.user.first_name} ${data.user.last_name}</a></p>
               `
               wrapperTitle.innerHTML += item
  
