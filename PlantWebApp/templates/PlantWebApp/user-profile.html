@@ -54,8 +54,9 @@
     function buildList(){
         var wrapper = document.querySelector(".wrapper")
         var wrapperBtn = document.querySelector(".btn-wrapper")
-        
-        var url = "http://127.0.0.1:8000/api/user-data-api/{{id}}"
+
+        //https://digital-plant-herbarium.herokuapp.com/
+        var url = "https://digital-plant-herbarium.herokuapp.com/api/user-data-api/{{id}}"
 
         fetch(url)
         .then((resp) => resp.json())
@@ -128,8 +129,8 @@
             if (data.profile.is_verified == false){
                 item = `
                 <p align="center">
-                    <a href="http://127.0.0.1:8000/site-user-processing/${data.id}" class="btn btn-outline-primary">Verify Account</a>
-                    <a href="http://127.0.0.1:8000/user-delete/${data.id}" class="btn btn-outline-danger">Delete Account</a>
+                    <a href="https://digital-plant-herbarium.herokuapp.com/site-user-processing/${data.id}" class="btn btn-outline-primary">Verify Account</a>
+                    <a href="https://digital-plant-herbarium.herokuapp.com/user-delete/${data.id}" class="btn btn-outline-danger">Delete Account</a>
                 </p>
                 `
                 wrapperBtn.innerHTML = item
