@@ -73,7 +73,7 @@
                     <p class="card-text">{{ forloop.counter0|add:uses.start_index }}</p>
                 </div>
                 <div class="col">
-                    <p class="card-text"><a id="country-anchor" href="http://127.0.0.1:8000/usage-data-detail/{{use.usage_tag}}">{{use.usage_tag}}</a></p>
+                    <p class="card-text"><a id="country-anchor" href="https://digital-plant-herbarium.herokuapp.com/usage-data-detail/{{use.usage_tag}}">{{use.usage_tag}}</a></p>
                 </div>
                 <div class="col-2">
                   {% if use.is_verified %}
