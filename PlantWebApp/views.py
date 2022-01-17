@@ -34,8 +34,6 @@ from django.template import RequestContext, context
 # Import Pagination Libraries
 from django.core.paginator import Paginator
 
-# .order_by('?') - Plant of the day
-
 def home(request):
     """
     Display elements in home page
