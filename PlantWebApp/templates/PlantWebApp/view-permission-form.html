@@ -106,6 +106,7 @@
 
 
             var wrapper = document.querySelector("#selectUser")
+            wrapper.innerHTML = ``
 
             for (var i in data){
                 item = `<option value="${data[i].id}"> ${data[i].first_name} ${data[i].last_name}</option>`
