@@ -1315,7 +1315,7 @@ def processingComVerification(request,id):
     plantdata.save(update_fields=['committee_approved'])
 
     # ** Add message - plant published
-    return committeeVerified(request)
+    return committeeUnverified(request)
 
 #@permission_required('polls.add_choice')
 
