@@ -491,34 +491,6 @@ function getLocaldist(){
     buildList()
 
 
-    /*Convert to array
-    var country_list ="{{country_list|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",");
-    var country_record_arr = "{{country_record|safe}}".replace(/[^a-zA-Z0-9,]+/g, "").split(",")
-    var country_dict = {};
-    
-    for (let i = 0; i < country_list.length ; i++)
-    {
-      var tmp = country_list[i]
-      country_dict[tmp] = {'plant':country_record_arr[i]};
-      //country_dict[tmp] = {'plant':''};
-    }
-
-    var map = new svgMap({
-    targetElementID: 'svgMap',
-    data: {
-      data: {
-        plant: {
-          name: 'Plant Record(s)',
-          format: '{0}'
-        },
-      },
-      applyData: 'plant',
-      values: country_dict
-    }
-  });*/
-
-
-
 /*Chart.js*/
 
   function updateChart()

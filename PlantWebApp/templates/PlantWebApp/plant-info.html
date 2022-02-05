@@ -89,20 +89,20 @@ tr:hover {background-color: rgba(211, 223, 212, 0.733);}
         <div class="row">
           <!--Image Carousel-->
             <div class="col-3">
-              <!--a href="{% url 'display_plantImg' plant_info.id%}" target="_blank"--> 
-                <a href="{{plant_info.plantImg.url}}" target="_blank"> 
-                <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: auto;">
-              </a>
-              <div class="row">
-                {% for img in plantimages %}
-                <div class="col-md-4 p-3">
-                  <a href="{{img.image.url}}" target="_blank">
-                    <img src="{{img.image.url}}" class="img-fluid" alt="" style="height: 100px; object-fit: contain;">
+                  <!--a href="{% url 'display_plantImg' plant_info.id%}" target="_blank"--> 
+                  <a href="{{plant_info.plantImg.url}}" target="_blank"> 
+                    <img src="{{plant_info.plantImg.url}}" alt="" class="img-thumbnail" style="width:250px;height: auto;">
                   </a>
+                <div class="row">
+                    {% for img in plantimages %}
+                    <div class="col-md-4 p-3">
+                      <a href="{{img.image.url}}" target="_blank">
+                        <img src="{{img.image.url}}" class="img-fluid" alt="" style="height: 100px; object-fit: contain;">
+                      </a>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
         <div class="col"></div>
 
         
