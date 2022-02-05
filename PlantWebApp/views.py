@@ -918,7 +918,7 @@ def browse(request):
     plant_list = Plant.objects.filter(admin_publish=True).order_by('plantScientificName')
 
     # Set up Pagination
-    p = Paginator(plant_list, 10)
+    p = Paginator(plant_list, 8)
     page = request.GET.get('page')
     plants = p.get_page(page)
 
