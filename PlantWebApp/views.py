@@ -84,6 +84,7 @@ def displaySearchResults(request):
         print(results)
 
         # CREATE EXTENSION pg_trgm; at postgresql
+        # measure the similarity of two strings by counting the number of trigrams they share
         if not results: #result queryset is empty
             trig_vector = (TrigramSimilarity('plantScientificName', searchquery)+TrigramSimilarity('plantLocalName', searchquery))
             suggest = Plant.objects.annotate(similarity=trig_vector).filter(similarity__gt=0.1).filter(admin_publish=True).order_by('-similarity')
@@ -377,6 +378,7 @@ def UpdatePostView(request,pk):
             'powder':plantdata.powder,
             'extract':plantdata.extract,
             'oil':plantdata.oil,
+            'author': plantdata.user,
         }
             return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -415,6 +417,7 @@ def UpdatePostView(request,pk):
                         'powder':plantdata.powder,
                         'extract':plantdata.extract,
                         'oil':plantdata.oil,
+                        'author': plantdata.user,
                     }
                     return render(request, 'PlantWebApp/update-form.html',context)
 
@@ -484,6 +487,7 @@ def UpdatePostView(request,pk):
         'powder':plantdata.powder,
         'extract':plantdata.extract,
         'oil':plantdata.oil,
+        'author': plantdata.user,
     }
     return render(request, 'PlantWebApp/update-form.html',context)
 
